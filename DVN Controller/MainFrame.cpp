@@ -1,7 +1,7 @@
 #include "MainFrame.h"
 
 MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
-	SetMinSize(wxSize(1000, 700));
+	SetMinSize(wxSize(1000, 710));
 
 	base = this;
 

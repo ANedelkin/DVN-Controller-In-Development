@@ -2,6 +2,7 @@
 #include "Global.h"
 #include "Scenario.h"
 #include "ScenCtrl.h"
+#include "BandsPanel.h"
 
 class ScenariosPanel : public wxPanel
 {
@@ -12,9 +13,9 @@ private:
 	wxStaticBoxSizer* scenSizer;
 	ScenCtrl* curScen;
 
-	wxStaticBox* bandsList;
+	wxStaticBox* bandsBox;
 	wxStaticBoxSizer* bandsSizer;
-	wxPanel* bandsPanel = nullptr;
+	BandsPanel* bandsPanel = nullptr;
 
 	void ChangeSelection(ScenCtrl* scenCtrl);
 
