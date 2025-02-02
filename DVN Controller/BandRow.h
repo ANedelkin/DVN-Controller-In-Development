@@ -14,8 +14,8 @@ private:
 
     void InitForeground() {
         name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, wxSize(250, -1), wxTE_PROCESS_ENTER);
-        startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetStartValue(bandNum)), wxDefaultPosition, wxSize(150, -1), wxTE_PROCESS_ENTER);
-        endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetEndValue(bandNum)), wxDefaultPosition, wxSize(150, -1), wxTE_PROCESS_ENTER);
+        startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetStartValue(bandNum)), wxDefaultPosition, wxSize(110, -1), wxTE_PROCESS_ENTER);
+        endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetEndValue(bandNum)), wxDefaultPosition, wxSize(110, -1), wxTE_PROCESS_ENTER);
 
         name->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
         startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
@@ -81,6 +81,13 @@ public:
 
         Bind(wxEVT_SIZE, &BandRow::OnResize, this);
         //Bind(wxEVT_PAINT, &BandRow::OnPaint, this);
+    }
+
+    void ChangeScenario(Scenario* scenario) {
+        this->scenario = scenario;
+        name->SetValue(scenario->GetName(bandNum));
+        startValue->SetValue(to_string(scenario->GetStartValue(bandNum)));
+        endValue->SetValue(to_string(scenario->GetEndValue(bandNum)));
     }
 
     Status Rename() {

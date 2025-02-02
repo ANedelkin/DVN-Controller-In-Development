@@ -22,6 +22,9 @@
     <Filter Include="Header Files\Scenarios">
       <UniqueIdentifier>{090081ab-1567-4a03-be6a-47e508144d43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Output">
+      <UniqueIdentifier>{ec703ff8-9cae-45da-8abe-52b5ff38be2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -95,5 +98,10 @@
     <ClInclude Include="ScenariosPanel.h">
       <Filter>Header Files\Scenarios</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\x64\Release\DVN Controller.exe">
+      <Filter>Output</Filter>
+    </None>
   </ItemGroup>
 </Project>

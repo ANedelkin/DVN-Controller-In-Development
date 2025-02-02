@@ -6,9 +6,13 @@ class BandsPanel : public wxPanel
 {
 private:
 	Scenario* scenario;
+
+	array<BandRow*, BANDS_COUNT> bandRows;
 public:
-	wxScrolled<wxPanel>* table;
+	wxPanel* content;
 	wxBoxSizer* tableSizer;
 
 	BandsPanel(wxWindow* parent, Scenario* scenario);
+
+	void ChangeScenario(Scenario* scenario);
 };

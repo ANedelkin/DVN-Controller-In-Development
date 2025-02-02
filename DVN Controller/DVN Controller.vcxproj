@@ -169,6 +169,9 @@
     <ClInclude Include="ScenCtrl.h" />
     <ClInclude Include="ScenCtrlO.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\x64\Release\DVN Controller.exe" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

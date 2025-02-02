@@ -1,23 +1,21 @@
 #include "BandsPanel.h"
 
 BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : wxPanel(parent) {
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxHORIZONTAL);
     
-    wxPanel* mainPanel = new wxPanel(this);
-    wxPanel* labelsPanel = new wxPanel(mainPanel);
-    table = new wxScrolled<wxPanel>(mainPanel);
+    wxPanel* table = new wxPanel(this);
+    wxPanel* labels = new wxPanel(table);
+    content = new wxPanel(table);
 
-    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* labelsSizer = new wxBoxSizer(wxHORIZONTAL);
     tableSizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* contentSizer = new wxBoxSizer(wxVERTICAL);
 
-    //mainPanel->SetBackgroundColour(wxColour(240, 240, 240));
+    wxFont labelsFont = wxFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
-    wxFont labelsFont = wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
-
-    wxStaticText* nameLabel = new wxStaticText(labelsPanel, wxID_ANY, "Name", wxDefaultPosition, wxSize(250, -1));
-    wxStaticText* startValueLabel = new wxStaticText(labelsPanel, wxID_ANY, "Start frequecy", wxDefaultPosition, wxSize(150, -1));
-    wxStaticText* endValueLabel = new wxStaticText(labelsPanel, wxID_ANY, "End frequency", wxDefaultPosition, wxSize(150, -1));
+    wxStaticText* nameLabel = new wxStaticText(labels, wxID_ANY, "Name", wxDefaultPosition, wxSize(250, -1));
+    wxStaticText* startValueLabel = new wxStaticText(labels, wxID_ANY, "Start frequecy", wxDefaultPosition, wxSize(110, -1));
+    wxStaticText* endValueLabel = new wxStaticText(labels, wxID_ANY, "End frequency", wxDefaultPosition, wxSize(110, -1));
 
     nameLabel->SetFont(labelsFont);
     startValueLabel->SetFont(labelsFont);
@@ -28,25 +26,32 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : wxPanel(parent) {
     labelsSizer->Add(startValueLabel, 0, wxRIGHT | wxALIGN_CENTER, 5);
     labelsSizer->Add(endValueLabel, 0, wxALIGN_CENTER);
 
-    labelsPanel->SetSizerAndFit(labelsSizer);
-    
-    table->SetScrollRate(0, 10);
+    labels->SetSizerAndFit(labelsSizer);
 
     this->scenario = scenario;
 
-    for (size_t i = 0; i < BANDS_COUNT; i++) {
-        BandRow* row = new BandRow(table, scenario, i);
-        tableSizer->Add(row, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 15);
+    for (char i = 0; i < BANDS_COUNT; i++) {
+        bandRows[i] = new BandRow(content, scenario, i);
+        contentSizer->Add(bandRows[i], 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
     }
+
+    content->SetSizerAndFit(contentSizer);
+
+    tableSizer->Add(labels, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+    tableSizer->Add(content, 1, wxEXPAND);
 
     table->SetSizerAndFit(tableSizer);
 
-    mainSizer->Add(labelsPanel, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 15);
-    mainSizer->Add(table, 1, wxEXPAND);
+    mainSizer->Add(table, 0, wxTOP | wxBOTTOM | wxEXPAND, 10);
+    this->SetSizerAndFit(mainSizer);
+}
 
-    mainPanel->SetSizerAndFit(mainSizer);
-
-    sizer->Add(mainPanel, 0, wxTOP | wxBOTTOM | wxEXPAND, 20);
-    this->SetSizerAndFit(sizer);
+void BandsPanel::ChangeScenario(Scenario* scen)
+{
+    this->scenario = scen;
+    for (char i = 0; i < BANDS_COUNT; i++)
+    {
+        bandRows[i]->ChangeScenario(scen);
+    }
 }
 
