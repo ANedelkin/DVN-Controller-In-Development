@@ -5,11 +5,17 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : wxPanel(parent) {
     
     wxPanel* table = new wxPanel(this);
     wxPanel* labels = new wxPanel(table);
-    content = new wxPanel(table);
+    wxScrolled<wxPanel>* scrollWrapper = new wxScrolled<wxPanel>(table);
+    content = new wxPanel(scrollWrapper);
+
+    scrollWrapper->SetScrollRate(0, 5);
 
     wxBoxSizer* labelsSizer = new wxBoxSizer(wxHORIZONTAL);
     tableSizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* scrollSizer = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* contentSizer = new wxBoxSizer(wxVERTICAL);
+
+    //Labels:
 
     wxFont labelsFont = wxFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
@@ -21,12 +27,15 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : wxPanel(parent) {
     startValueLabel->SetFont(labelsFont);
     endValueLabel->SetFont(labelsFont);
     
-    labelsSizer->AddSpacer(20);
-    labelsSizer->Add(nameLabel, 0, wxRIGHT | wxALIGN_CENTER, 5);
-    labelsSizer->Add(startValueLabel, 0, wxRIGHT | wxALIGN_CENTER, 5);
+    labelsSizer->AddSpacer(10);
+    labelsSizer->Add(nameLabel, 0, wxALIGN_CENTER | wxRIGHT, 10);
+    labelsSizer->Add(startValueLabel, 0, wxALIGN_CENTER | wxRIGHT, 10);
     labelsSizer->Add(endValueLabel, 0, wxALIGN_CENTER);
+    labelsSizer->AddSpacer(10);
 
     labels->SetSizerAndFit(labelsSizer);
+
+    //!Labels
 
     this->scenario = scenario;
 
@@ -37,8 +46,12 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : wxPanel(parent) {
 
     content->SetSizerAndFit(contentSizer);
 
+    scrollSizer->Add(content, 1, wxEXPAND | wxRIGHT, 15);
+
+    scrollWrapper->SetSizerAndFit(scrollSizer);
+
     tableSizer->Add(labels, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
-    tableSizer->Add(content, 1, wxEXPAND);
+    tableSizer->Add(scrollWrapper, 1, wxEXPAND);
 
     table->SetSizerAndFit(tableSizer);
 

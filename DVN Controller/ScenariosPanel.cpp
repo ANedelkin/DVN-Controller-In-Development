@@ -34,7 +34,7 @@ void ScenariosPanel::AddScenario(Scenario* scen)
 	scenCtrl->Bind(wxEVT_LEFT_UP, &ScenariosPanel::OnScenSelect, this);
 }
 
-void ScenariosPanel::ChangeSelection(ScenCtrl* scenCtrl) //TODO: Optimize drawing by not creating a new BandsPanel, but just changing it values
+void ScenariosPanel::ChangeSelection(ScenCtrl* scenCtrl)
 {
 	Freeze();
 

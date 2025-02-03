@@ -7,6 +7,8 @@
 class BandRow : public wxWindow
 {
 private:
+    bool toBeInited = true;
+
     Scenario* scenario;
     char bandNum;
 
@@ -39,12 +41,14 @@ private:
     }
 
     void OnResize(wxSizeEvent& e) {
-        background->SetSize(GetSize());
-        name->Raise();
-        startValue->Raise();
-        endValue->Raise();
-        Unbind(wxEVT_SIZE, &BandRow::OnResize, this);
-        e.Skip();
+        if (toBeInited) {
+            background->SetSize(GetSize());
+            name->Raise();
+            startValue->Raise();
+            endValue->Raise();
+            e.Skip();
+            toBeInited = false;
+        }
     }
     void OnNameEnter(wxCommandEvent& e) {
         if (!Rename())
