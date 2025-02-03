@@ -17,11 +17,13 @@ private:
     void InitForeground();
 
     void OnResize(wxSizeEvent& e);
+
     void OnNameEnter(wxCommandEvent& e);
     void OnStartEnter(wxCommandEvent& e);
     void OnEndEnter(wxCommandEvent& e);
     void OnFocus(wxFocusEvent& e);
 public:
+    wxStaticText* num;
     wxTextCtrl* name;
     wxTextCtrl* startValue;
     wxTextCtrl* endValue;

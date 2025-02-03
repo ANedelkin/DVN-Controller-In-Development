@@ -12,6 +12,7 @@ private:
 	wxStaticBox* scenList;
 	wxStaticBoxSizer* scenSizer;
 	ScenCtrl* curScen;
+	Scenario* placeHolder = new Scenario();
 
 	wxStaticBox* bandsBox;
 	wxStaticBoxSizer* bandsSizer;

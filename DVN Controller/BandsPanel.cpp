@@ -27,7 +27,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : wxPanel(parent) {
     startValueLabel->SetFont(labelsFont);
     endValueLabel->SetFont(labelsFont);
     
-    labelsSizer->AddSpacer(10);
+    labelsSizer->AddSpacer(35);
     labelsSizer->Add(nameLabel, 0, wxALIGN_CENTER | wxRIGHT, 10);
     labelsSizer->Add(startValueLabel, 0, wxALIGN_CENTER | wxRIGHT, 10);
     labelsSizer->Add(endValueLabel, 0, wxALIGN_CENTER);
