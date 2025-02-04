@@ -7,8 +7,8 @@ wxWindow* focused = nullptr;
 char ctrlHeight = 0;
 
 map<int, string> errorMessages = {
-    {StartValueOutOfBounds , "Start value outside bonds!"},
-    {EndValueOutOfBounds, "End value outside bonds!"},
+    {StartValueOutOfBounds , "Start value outside bounds!"},
+    {EndValueOutOfBounds, "End value outside bounds!"},
     {StartValueHigherThanEndvalue, "Start value higher than end value!"},
     {EndValueLowerThanStartValue, "End value lower than start value!"},
     {BandAtLastPlace, "The range between the start and end values of the last band of this range cannot include the value {}!"},

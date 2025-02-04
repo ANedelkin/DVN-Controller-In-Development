@@ -14,13 +14,16 @@ private:
 
     wxButton* background;
 
+    wxButton* onOffBtn;
+
     void InitForeground();
+    void BindEventHandlers();
+    void SetUpSizers();
 
     void OnResize(wxSizeEvent& e);
 
     void OnNameEnter(wxCommandEvent& e);
-    void OnStartEnter(wxCommandEvent& e);
-    void OnEndEnter(wxCommandEvent& e);
+    void OnFreqEnter(wxCommandEvent& e);
     void OnFocus(wxFocusEvent& e);
 public:
     wxStaticText* num;
@@ -32,5 +35,5 @@ public:
     void ChangeScenario(Scenario* scenario);
 
     Status Rename();
-    Status ChangeStartValue();
+    Status ChangeFreqs();
 };

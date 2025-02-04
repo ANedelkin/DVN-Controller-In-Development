@@ -36,9 +36,9 @@ public:
 		Load load("");
 		getline(stream, load.name);
 		string scenario;
-		for (char i = 0; i < bandsCount && getline(stream, scenario); i++) {
+		for (char i = 0; i < BANDS_COUNT && getline(stream, scenario); i++) {
 			ScenarioPreset preset = ScenarioPreset::ToScenarioPreset(scenario);
-			for (char j = 0; j < bandsCount; j++)
+			for (char j = 0; j < BANDS_COUNT; j++)
 			{
 				load.scenarios.push_back(Scenario(preset.name));
 				load.scenarios[i].SetBandValues(j, preset.bands[j].startValue, preset.bands[j].endValue);

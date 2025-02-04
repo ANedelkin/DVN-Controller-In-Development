@@ -15,17 +15,15 @@ void BandRow::OnResize(wxSizeEvent& e) {
 }
 void BandRow::OnNameEnter(wxCommandEvent& e) {
     if (!Rename())
+        focused = nullptr;
         base->SetFocus();
     e.Skip();
 }
-void BandRow::OnStartEnter(wxCommandEvent& e) {
-    if (!Rename())
+void BandRow::OnFreqEnter(wxCommandEvent& e) {
+    if (!ChangeFreqs()) {
+        focused = nullptr;
         base->SetFocus();
-    e.Skip();
-}
-void BandRow::OnEndEnter(wxCommandEvent& e) {
-    if (!Rename())
-        base->SetFocus();
+    }
     e.Skip();
 }
 void BandRow::OnFocus(wxFocusEvent& e) {
@@ -53,19 +51,29 @@ void BandRow::InitForeground() {
     name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, wxSize(250, -1), wxTE_PROCESS_ENTER);
     startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetStartValue(bandNum)), wxDefaultPosition, wxSize(110, -1), wxTE_PROCESS_ENTER);
     endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetEndValue(bandNum)), wxDefaultPosition, wxSize(110, -1), wxTE_PROCESS_ENTER);
+    //onOffBtn = new wxButton(this, wxID_ANY, scenario->GetSt)
 
+    BindEventHandlers();
+    SetUpSizers();
+}
+
+void BandRow::BindEventHandlers()
+{
     name->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
 
     name->Bind(wxEVT_TEXT_ENTER, &BandRow::OnNameEnter, this);
-    startValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnStartEnter, this);
-    endValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnEndEnter, this);
+    startValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnFreqEnter, this);
+    endValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnFreqEnter, this);
 
     name->SetClientData((void*)BandName);
-    startValue->SetClientData((void*)Start);
-    endValue->SetClientData((void*)End);
+    startValue->SetClientData((void*)Freq);
+    endValue->SetClientData((void*)Freq);
+}
 
+void BandRow::SetUpSizers()
+{
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->AddSpacer(10);
     sizer->Add(num, 0, wxALIGN_CENTER | wxRIGHT | wxTOP | wxBOTTOM, 10);
@@ -85,15 +93,32 @@ void BandRow::ChangeScenario(Scenario* scenario) {
 
 Status BandRow::Rename() {
     string newName = name->GetLineText(0).ToStdString();
-    Status stat = BandPreset::Validate(newName);
+    Status stat = scenario->Rename(newName, bandNum);
     if (stat) {
-        wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxICON_ERROR);
-        dialog.ShowModal();
+        wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
+        dialog.SetOKCancelLabels("Enter new name", "Keep old name");
+        int id = dialog.ShowModal();
+        if (id == wxID_CANCEL) {
+            name->SetValue(scenario->GetName(bandNum));
+            return Success;
+        }
     }
-    else scenario->Rename(newName, bandNum);
     return stat;
 }
-Status BandRow::ChangeStartValue() {
-    int newStart = std::stoi(startValue->GetLineText(0).ToStdString());
-    return Success;
+Status BandRow::ChangeFreqs() {
+    int newStart = stoi(startValue->GetLineText(0).ToStdString());
+    int newEnd = stoi(endValue->GetLineText(0).ToStdString());
+    
+    Status stat = scenario->SetBandValues(bandNum, newStart, newEnd);
+    if (stat) {
+        wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
+        dialog.SetOKCancelLabels("Enter new value", "Keep old value");
+        int id = dialog.ShowModal();
+        if (id == wxID_CANCEL) {
+            startValue->SetValue(to_string(scenario->GetStartValue(bandNum)));
+            endValue->SetValue(to_string(scenario->GetEndValue(bandNum)));
+            return Success;
+        }
+    }
+    return stat;
 }

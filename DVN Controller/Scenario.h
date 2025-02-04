@@ -27,47 +27,50 @@ public:
 		if (endValue != -1 && startValue > endValue) return StartValueHigherThanEndvalue;
 		if (startValue < GetStartValueBorder(i) || startValue > GetEndValueBorder(i)) return StartValueOutOfBounds;
 		if (endValue > GetEndValueBorder(i)) return EndValueOutOfBounds;
-		if (endValue < startValue) return EndValueLowerThanStartValue;
+		if (endValue != -1 && endValue < startValue) return EndValueLowerThanStartValue;
+
 		int invalidValue = bandRanges[GetRangeIndex(i)][2];
+
 		if (startValue == GetStartValueBorder(i) && endValue == GetEndValueBorder(i)) {
 			for (char j = 0; j < BANDS_COUNT; j++) {
 				if (GetRangeIndex(j) == GetRangeIndex(i) && j != i) Disable(j);
 			}
 			goto success;
 		}
-		if (GetStartValue(i) < invalidValue && GetEndValue(i) > invalidValue) {
-			if (startValue > invalidValue || endValue < invalidValue) {
-				int rangeEnd = BANDS_COUNT - 1;
-				for (; rangeEnd > i && (GetRangeIndex(rangeEnd) != GetRangeIndex(i)); rangeEnd--);
-				bool f = true;
-				for (char j = i + 1; j <= rangeEnd; j++) {
-					if (IsEnabled(j) && (f && (GetStartValue(j) != -1 || GetEndValue(j) != -1) || !f)) {
-						Enable(j);
-						break;
-					}
-					if (j == rangeEnd) {
-						f = false;
-						j = i + 1;
-					}
-				}
-			}
-		}
-		else if (startValue < invalidValue && endValue > invalidValue) {
-			int rangeEnd = BANDS_COUNT - 1;
-			for (; rangeEnd > i && (GetRangeIndex(rangeEnd) != GetRangeIndex(i)); rangeEnd--);
-			if (rangeEnd == BANDS_COUNT - 1) return BandAtLastPlace;
-			bool f = true;
-			for (char j = rangeEnd; j > i; j--) {
-				if (IsEnabled(j) && (f && (GetStartValue(j) == -1) && (GetEndValue(j) == -1) || !f)) {
-					Disable(j);
-					break;
-				}
-				if (j == i + 1) {
-					f = false;
-					j = rangeEnd;
-				}
-			}
-		}
+
+		//if (GetStartValue(i) < invalidValue && GetEndValue(i) > invalidValue) {
+		//	if (startValue > invalidValue || endValue < invalidValue) {
+		//		int rangeEnd = BANDS_COUNT - 1;
+		//		for (; rangeEnd > i && (GetRangeIndex(rangeEnd) != GetRangeIndex(i)); rangeEnd--);
+		//		bool f = true;
+		//		for (char j = i + 1; j <= rangeEnd; j++) {
+		//			if (IsEnabled(j) && (f && (GetStartValue(j) != -1 || GetEndValue(j) != -1) || !f)) {
+		//				Enable(j);
+		//				break;
+		//			}
+		//			if (j == rangeEnd) {
+		//				f = false;
+		//				j = i + 1;
+		//			}
+		//		}
+		//	}
+		//}
+		//else if (startValue < invalidValue && endValue > invalidValue) {
+		//	int rangeEnd = BANDS_COUNT - 1;
+		//	for (; rangeEnd > i && (GetRangeIndex(rangeEnd) != GetRangeIndex(i)); rangeEnd--);
+		//	if (rangeEnd == BANDS_COUNT - 1) return BandAtLastPlace;
+		//	bool f = true;
+		//	for (char j = rangeEnd; j > i; j--) {
+		//		if (IsEnabled(j) && (f && (GetStartValue(j) == -1) && (GetEndValue(j) == -1) || !f)) {
+		//			Disable(j);
+		//			break;
+		//		}
+		//		if (j == i + 1) {
+		//			f = false;
+		//			j = rangeEnd;
+		//		}
+		//	}
+		//}
 	success:
 		bands[i].startValue = startValue;
 		bands[i].endValue = endValue;
@@ -87,6 +90,9 @@ public:
 		return Success;
 	}
 	Status Rename(string name, char i) {
+		if (name.length() == 0) return NameWhitespace;
+		if (all_of(name.begin(), name.end(), [](unsigned char c) { return std::isspace(c); })) return NameWhitespace;
+
 		bands[i].name = name;
 		return Success;
 	}
@@ -97,7 +103,7 @@ public:
 	int GetStartValueBorder(char i) const { return bandRanges[bands[i].rangeIndex][0]; }
 	int GetEndValueBorder(char i) const { return bandRanges[bands[i].rangeIndex][1]; }
 	bool IsEnabled(char i) const { return bands[i].enabled; }
-	bool IsWorking(char i) const { return bands[i].working; }
+	bool IsActive(char i) const { return bands[i].working; }
 	void Enable(char i) {
 		bands[i].enabled = true;
 	}
