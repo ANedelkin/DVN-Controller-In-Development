@@ -9,6 +9,7 @@ void BandRow::OnResize(wxSizeEvent& e) {
         name->Raise();
         startValue->Raise();
         endValue->Raise();
+        statBtn->Raise();
         e.Skip();
         toBeInited = false;
     }
@@ -16,13 +17,27 @@ void BandRow::OnResize(wxSizeEvent& e) {
 void BandRow::OnNameEnter(wxCommandEvent& e) {
     if (!Rename())
         focused = nullptr;
-        base->SetFocus();
+    base->SetFocus();
     e.Skip();
 }
 void BandRow::OnFreqEnter(wxCommandEvent& e) {
     if (!ChangeFreqs()) {
         focused = nullptr;
         base->SetFocus();
+    }
+    e.Skip();
+}
+void BandRow::OnStatusChanged(wxMouseEvent& e)
+{
+    if (scenario->IsActive(bandNum)) {
+        scenario->TurnOff(bandNum);
+        statBtn->SetForegroundColour(wxColour(*wxRED));
+        statBtn->SetLabel("OFF");
+    }
+    else {
+        scenario->TurnOn(bandNum);
+        statBtn->SetForegroundColour(DARK_GREEN);
+        statBtn->SetLabel("ON");
     }
     e.Skip();
 }
@@ -51,7 +66,10 @@ void BandRow::InitForeground() {
     name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, wxSize(250, -1), wxTE_PROCESS_ENTER);
     startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetStartValue(bandNum)), wxDefaultPosition, wxSize(110, -1), wxTE_PROCESS_ENTER);
     endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetEndValue(bandNum)), wxDefaultPosition, wxSize(110, -1), wxTE_PROCESS_ENTER);
-    //onOffBtn = new wxButton(this, wxID_ANY, scenario->GetSt)
+    bool active = scenario->IsActive(bandNum);
+    statBtn = new wxButton(this, wxID_ANY, active ? "ON" : "OFF");
+    statBtn->SetBackgroundColour(wxColour(*wxWHITE));
+    statBtn->SetForegroundColour(wxColour(active ? *wxGREEN : *wxRED));
 
     BindEventHandlers();
     SetUpSizers();
@@ -70,6 +88,8 @@ void BandRow::BindEventHandlers()
     name->SetClientData((void*)BandName);
     startValue->SetClientData((void*)Freq);
     endValue->SetClientData((void*)Freq);
+
+    statBtn->Bind(wxEVT_LEFT_UP, &BandRow::OnStatusChanged, this);
 }
 
 void BandRow::SetUpSizers()
@@ -79,7 +99,8 @@ void BandRow::SetUpSizers()
     sizer->Add(num, 0, wxALIGN_CENTER | wxRIGHT | wxTOP | wxBOTTOM, 10);
     sizer->Add(name, 0, wxRIGHT | wxTOP | wxBOTTOM, 10);
     sizer->Add(startValue, 0, wxRIGHT | wxTOP | wxBOTTOM, 10);
-    sizer->Add(endValue, 0, wxTOP | wxBOTTOM, 10);
+    sizer->Add(endValue, 0, wxRIGHT | wxTOP | wxBOTTOM, 10);
+    sizer->Add(statBtn, 0, wxTOP | wxBOTTOM, 10);
     sizer->AddSpacer(10);
     this->SetSizerAndFit(sizer);
 }
@@ -108,7 +129,7 @@ Status BandRow::Rename() {
 Status BandRow::ChangeFreqs() {
     int newStart = stoi(startValue->GetLineText(0).ToStdString());
     int newEnd = stoi(endValue->GetLineText(0).ToStdString());
-    
+
     Status stat = scenario->SetBandValues(bandNum, newStart, newEnd);
     if (stat) {
         wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);

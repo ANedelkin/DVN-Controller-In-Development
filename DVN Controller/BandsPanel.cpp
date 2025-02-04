@@ -22,15 +22,18 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : wxPanel(parent) {
     wxStaticText* nameLabel = new wxStaticText(labels, wxID_ANY, "Name", wxDefaultPosition, wxSize(250, -1));
     wxStaticText* startValueLabel = new wxStaticText(labels, wxID_ANY, "Start frequecy", wxDefaultPosition, wxSize(110, -1));
     wxStaticText* endValueLabel = new wxStaticText(labels, wxID_ANY, "End frequency", wxDefaultPosition, wxSize(110, -1));
+    wxStaticText* activeLabel = new wxStaticText(labels, wxID_ANY, "Status");
 
     nameLabel->SetFont(labelsFont);
     startValueLabel->SetFont(labelsFont);
     endValueLabel->SetFont(labelsFont);
+    activeLabel->SetFont(labelsFont);
     
     labelsSizer->AddSpacer(35);
-    labelsSizer->Add(nameLabel, 0, wxALIGN_CENTER | wxRIGHT, 10);
-    labelsSizer->Add(startValueLabel, 0, wxALIGN_CENTER | wxRIGHT, 10);
-    labelsSizer->Add(endValueLabel, 0, wxALIGN_CENTER);
+    labelsSizer->Add(nameLabel, 0, wxALIGN_CENTER | wxRIGHT, 11);
+    labelsSizer->Add(startValueLabel, 0, wxALIGN_CENTER | wxRIGHT, 11);
+    labelsSizer->Add(endValueLabel, 0, wxALIGN_CENTER | wxRIGHT, 11);
+    labelsSizer->Add(activeLabel, 0, wxALIGN_CENTER);
     labelsSizer->AddSpacer(10);
 
     labels->SetSizerAndFit(labelsSizer);
