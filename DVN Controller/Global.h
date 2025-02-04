@@ -46,3 +46,7 @@ enum InputType {
     BandName,
     Freq,
 };
+
+//Colours
+
+#define DARK_GREEN wxColour(0, 127, 14)

@@ -14,7 +14,7 @@ private:
 
     wxButton* background;
 
-    wxButton* onOffBtn;
+    wxButton* statBtn;
 
     void InitForeground();
     void BindEventHandlers();
@@ -24,6 +24,7 @@ private:
 
     void OnNameEnter(wxCommandEvent& e);
     void OnFreqEnter(wxCommandEvent& e);
+    void OnStatusChanged(wxMouseEvent& e);
     void OnFocus(wxFocusEvent& e);
 public:
     wxStaticText* num;
