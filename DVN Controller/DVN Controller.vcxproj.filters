@@ -48,6 +48,9 @@
     <ClCompile Include="NameSetter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BandRow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrame.h">

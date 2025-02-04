@@ -16,7 +16,12 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent) : wxPanel(parent)
 
 	bandsBox = new wxStaticBox(this, wxID_ANY, "Bands");
 	bandsSizer = new wxStaticBoxSizer(wxVERTICAL, bandsBox, "Bands");
+	
+	bandsPanel = new BandsPanel(bandsBox, placeHolder);
+	bandsSizer->Add(bandsPanel);
 	bandsBox->SetSizerAndFit(bandsSizer);
+
+	bandsPanel->Hide();
 
 	mainSizer->Add(bandsBox, 1, wxEXPAND | wxLEFT, 5);
 
@@ -34,7 +39,7 @@ void ScenariosPanel::AddScenario(Scenario* scen)
 	scenCtrl->Bind(wxEVT_LEFT_UP, &ScenariosPanel::OnScenSelect, this);
 }
 
-void ScenariosPanel::ChangeSelection(ScenCtrl* scenCtrl) //TODO: Optimize drawing by not creating a new BandsPanel, but just changing it values
+void ScenariosPanel::ChangeSelection(ScenCtrl* scenCtrl)
 {
 	Freeze();
 
@@ -42,11 +47,8 @@ void ScenariosPanel::ChangeSelection(ScenCtrl* scenCtrl) //TODO: Optimize drawin
 	if (curScen) curScen->SetBackgroundColour(wxColour(255, 255, 255));
 	curScen = scenCtrl;
 
-	if (bandsPanel) bandsPanel->ChangeScenario(curScen->scenario);
-	else {
-		bandsPanel = new BandsPanel(bandsBox, curScen->scenario);
-		bandsSizer->Add(bandsPanel);
-	} 
+	bandsPanel->ChangeScenario(curScen->scenario);
+	if (!bandsPanel->IsShown()) bandsPanel->Show();
 
 	Thaw();
 	Layout();

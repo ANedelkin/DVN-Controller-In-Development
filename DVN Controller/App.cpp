@@ -9,6 +9,23 @@ private:
 			focused->SetFocus();
 			return Event_Processed;
 		}
+		else {
+			focused = nullptr;
+			base->SetFocus();
+			return Event_Skip;
+		}
+	}
+	int ChangeFreqs() {
+		BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
+		if (row->ChangeFreqs()) {
+			focused->SetFocus();
+			return Event_Processed;
+		}
+		else {
+			focused = nullptr;
+			base->SetFocus();
+			return Event_Skip;
+		}
 	}
 public:
     bool OnInit() {
@@ -24,6 +41,9 @@ public:
 				{
 				case BandName:
 					return RenameBand();
+					break;
+				case Freq:
+					return ChangeFreqs();
 					break;
 				}
 			}

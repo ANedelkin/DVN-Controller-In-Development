@@ -13,11 +13,6 @@ struct BandPreset {
 		this->endValue = endvalue;
 	}
 
-	static Status Validate(string name) {
-		
-		return Status::BandAtLastPlace;
-	}
-
 	static BandPreset ToBandPreset(string params) {
 		vector<string> values = Split(params, '|');
 		return BandPreset(values[0], stoi(values[1]), stoi(values[2]));

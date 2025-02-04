@@ -44,6 +44,5 @@ enum Tabs {
 enum InputType {
     ScenName,
     BandName,
-    Start,
-    End,
+    Freq,
 };
