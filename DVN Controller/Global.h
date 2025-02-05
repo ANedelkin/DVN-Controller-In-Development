@@ -13,6 +13,7 @@ extern char ctrlHeight;
 
 enum Status {
     Success,
+    BandUninitialized,
     StartValueOutOfBounds,
     EndValueOutOfBounds,
     StartValueHigherThanEndvalue,

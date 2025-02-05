@@ -35,9 +35,14 @@ void BandRow::OnStatusChanged(wxMouseEvent& e)
         statBtn->SetLabel("OFF");
     }
     else {
-        scenario->TurnOn(bandNum);
-        statBtn->SetForegroundColour(DARK_GREEN);
-        statBtn->SetLabel("ON");
+        Status stat = scenario->TurnOn(bandNum);
+        if (stat) {
+            wxMessageDialog(base, errorMessages[stat], "Error", wxICON_ERROR).ShowModal();
+        }
+        else {
+            statBtn->SetForegroundColour(DARK_GREEN);
+            statBtn->SetLabel("ON");
+        }
     }
     e.Skip();
 }
@@ -107,9 +112,15 @@ void BandRow::SetUpSizers()
 
 void BandRow::ChangeScenario(Scenario* scenario) {
     this->scenario = scenario;
+
     name->SetValue(scenario->GetName(bandNum));
     startValue->SetValue(to_string(scenario->GetStartValue(bandNum)));
     endValue->SetValue(to_string(scenario->GetEndValue(bandNum)));
+
+    bool active = scenario->IsActive(bandNum);
+    statBtn->SetLabel(active ? "ON" : "OFF");
+    statBtn->SetBackgroundColour(wxColour(*wxWHITE));
+    statBtn->SetForegroundColour(wxColour(active ? *wxGREEN : *wxRED));
 }
 
 Status BandRow::Rename() {
@@ -126,6 +137,7 @@ Status BandRow::Rename() {
     }
     return stat;
 }
+
 Status BandRow::ChangeFreqs() {
     int newStart = stoi(startValue->GetLineText(0).ToStdString());
     int newEnd = stoi(endValue->GetLineText(0).ToStdString());

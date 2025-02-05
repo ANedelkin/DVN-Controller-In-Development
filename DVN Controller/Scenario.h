@@ -25,9 +25,8 @@ public:
 
 	Status SetBandValues(char i, int startValue, int endValue) {
 		if (endValue != -1 && startValue > endValue) return StartValueHigherThanEndvalue;
-		if (startValue < GetStartValueBorder(i) || startValue > GetEndValueBorder(i)) return StartValueOutOfBounds;
-		if (endValue > GetEndValueBorder(i)) return EndValueOutOfBounds;
-		if (endValue != -1 && endValue < startValue) return EndValueLowerThanStartValue;
+		if (GetEndValue(i) != -1 && startValue < GetStartValueBorder(i) || startValue > GetEndValueBorder(i)) return StartValueOutOfBounds;
+		if (endValue > GetEndValueBorder(i) || GetStartValue(i) != -1 && endValue < GetStartValueBorder(i)) return EndValueOutOfBounds;
 
 		int invalidValue = bandRanges[GetRangeIndex(i)][2];
 
@@ -77,8 +76,12 @@ public:
 		return Success;
 	}
 
-	void TurnOn(char i) {
-		bands[i].working = true;
+	Status TurnOn(char i) {
+		if (bands[i].startValue != -1 && bands[i].endValue != -1) {
+			bands[i].working = true;
+			return Success;
+		}
+		return BandUninitialized;
 	}
 	void TurnOff(char i) {
 		bands[i].working = false;
