@@ -25,9 +25,8 @@ public:
 
 	Status SetBandValues(char i, int startValue, int endValue) {
 		if (endValue != -1 && startValue > endValue) return StartValueHigherThanEndvalue;
-		if (startValue < GetStartValueBorder(i) || startValue > GetEndValueBorder(i)) return StartValueOutOfBounds;
-		if (endValue > GetEndValueBorder(i)) return EndValueOutOfBounds;
-		if (endValue != -1 && endValue < startValue) return EndValueLowerThanStartValue;
+		if (GetEndValue(i) != -1 && startValue < GetStartValueBorder(i) || startValue > GetEndValueBorder(i)) return StartValueOutOfBounds;
+		if (endValue > GetEndValueBorder(i) || endValue < GetStartValueBorder(i)) return EndValueOutOfBounds;
 
 		int invalidValue = bandRanges[GetRangeIndex(i)][2];
 
