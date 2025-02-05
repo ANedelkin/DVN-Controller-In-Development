@@ -43,17 +43,12 @@ void ScenariosPanel::AddScenario(Scenario* scen)
 
 void ScenariosPanel::ChangeSelection(ScenCtrl* scenCtrl)
 {
-	Freeze();
-
 	scenCtrl->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
 	if (curScen) curScen->SetBackgroundColour(wxColour(255, 255, 255));
 	curScen = scenCtrl;
 
 	bandsPanel->ChangeScenario(curScen->scenario);
 	if (!bandsPanel->IsShown()) bandsPanel->Show();
-
-	Thaw();
-	Layout();
 }
 
 void ScenariosPanel::OnScenSelect(wxMouseEvent& e)
