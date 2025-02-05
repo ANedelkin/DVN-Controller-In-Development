@@ -13,7 +13,7 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 	toolBar->AddTool(wxID_ABOUT, wxT("About"), wxArtProvider::GetBitmap(wxART_INFORMATION));
 	toolBar->Realize();
 
-	devCtrl = new wxControl(toolBar, devComboBoxID);
+	devCtrl = new wxControl(toolBar, DEV_COMBOBOX_ID);
 	wxBoxSizer* devCtrlSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxComboBox* devComboBox = new wxComboBox(devCtrl, wxID_ANY, "", wxDefaultPosition, wxSize(150, -1), 0, nullptr, wxCB_READONLY);
 	wxStaticText* label = new wxStaticText(devCtrl, wxID_ANY, "Select jammer: ");
@@ -45,7 +45,7 @@ void MainFrame::NewScenario()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
 	nameSetter->ShowModal();
-	scenariosPanel->AddScenario(new Scenario(nameSetter->name));
+	if (nameSetter->ok) scenariosPanel->AddScenario(new Scenario(nameSetter->name));
 }
 
 void MainFrame::NewLoad()
@@ -59,7 +59,7 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 		toolBar->InsertTool(4, wxID_DOWN, wxT("Extract from jammer"), wxArtProvider::GetBitmap(wxART_GO_DOWN));
 	}
 	else {
-		toolBar->RemoveTool(devComboBoxID);
+		toolBar->RemoveTool(DEV_COMBOBOX_ID);
 		devCtrl->Hide();
 		toolBar->RemoveTool(wxID_UP);
 		toolBar->RemoveTool(wxID_DOWN);
