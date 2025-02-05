@@ -35,9 +35,14 @@ void BandRow::OnStatusChanged(wxMouseEvent& e)
         statBtn->SetLabel("OFF");
     }
     else {
-        scenario->TurnOn(bandNum);
-        statBtn->SetForegroundColour(DARK_GREEN);
-        statBtn->SetLabel("ON");
+        Status stat = scenario->TurnOn(bandNum);
+        if (stat) {
+            wxMessageDialog(base, errorMessages[stat], "Error", wxICON_ERROR).ShowModal();
+        }
+        else {
+            statBtn->SetForegroundColour(DARK_GREEN);
+            statBtn->SetLabel("ON");
+        }
     }
     e.Skip();
 }
@@ -126,6 +131,7 @@ Status BandRow::Rename() {
     }
     return stat;
 }
+
 Status BandRow::ChangeFreqs() {
     int newStart = stoi(startValue->GetLineText(0).ToStdString());
     int newEnd = stoi(endValue->GetLineText(0).ToStdString());

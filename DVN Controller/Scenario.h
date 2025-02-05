@@ -77,8 +77,12 @@ public:
 		return Success;
 	}
 
-	void TurnOn(char i) {
-		bands[i].working = true;
+	Status TurnOn(char i) {
+		if (bands[i].startValue != -1 && bands[i].endValue != -1) {
+			bands[i].working = true;
+			return Success;
+		}
+		return BandUninitialized;
 	}
 	void TurnOff(char i) {
 		bands[i].working = false;

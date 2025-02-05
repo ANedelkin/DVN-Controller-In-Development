@@ -8,7 +8,7 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent) : wxPanel(parent)
 
 	scenList = new wxStaticBox(this, wxID_ANY, "Scenarios");
 	scenSizer = new wxStaticBoxSizer(wxVERTICAL, scenList, "Scenarios");
-	scenSizer->AddSpacer(5);
+	scenSizer->AddSpacer(38);
 	scenList->SetSizerAndFit(scenSizer);
 	scenList->SetMinSize(wxSize(210, -1));
 
