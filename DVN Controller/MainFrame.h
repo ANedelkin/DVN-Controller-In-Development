@@ -16,7 +16,7 @@ private:
 	wxStaticText* emptyText;
 
 	wxControl* devCtrl;
-	#define devComboBoxID 1001
+	#define DEV_COMBOBOX_ID wxID_HIGHEST + 1
 
 	void NewBand();
 	void NewScenario();
@@ -24,7 +24,6 @@ private:
 
 	void OnTabChanged(wxNotebookEvent& e);
 	void OnNew(wxCommandEvent& e);
-	void OnCaptureLost(wxMouseCaptureLostEvent& e);
 public:
 	BandsPanel* bandsPanel;
 	MainFrame(const string& title);

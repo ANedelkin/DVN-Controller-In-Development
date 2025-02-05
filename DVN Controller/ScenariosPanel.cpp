@@ -26,11 +26,13 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent) : wxPanel(parent)
 	mainSizer->Add(bandsBox, 1, wxEXPAND | wxLEFT, 5);
 
 	this->SetSizerAndFit(mainSizer);
+
+	Bind(wxEVT_COMMAND_MENU_SELECTED, &ScenariosPanel::OnScenDelete, this);
 }
 
 void ScenariosPanel::AddScenario(Scenario* scen)
 {
-	ScenCtrl* scenCtrl = new ScenCtrl(scenList, scen);
+	ScenCtrl* scenCtrl = new ScenCtrl(scenList, this, scen);
 	scenarios.push_back(scenCtrl);
 	scenSizer->Add(scenCtrl, 0, wxEXPAND | wxBOTTOM, 10);
 	ChangeSelection(scenCtrl);
@@ -59,4 +61,26 @@ void ScenariosPanel::OnScenSelect(wxMouseEvent& e)
 	ScenCtrl* scenCtrl = dynamic_cast<ScenCtrl*>(e.GetEventObject());
 	if (scenCtrl != curScen) ChangeSelection(scenCtrl);
 	e.Skip();
+}
+
+void ScenariosPanel::OnScenDelete(wxCommandEvent& e)
+{
+	wxMessageDialog dialog(base, "If you delete the scenario you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
+	if (dialog.ShowModal() == wxID_YES) {
+		int i = find(scenarios.begin(), scenarios.end(), e.GetEventObject()) - scenarios.begin();
+		scenarios.erase(scenarios.begin() + i);
+		if (curScen == e.GetEventObject()) {
+			if (scenarios.size() > 0) {
+				if (i < scenarios.size()) ChangeSelection(scenarios[i]);
+				else ChangeSelection(scenarios[i - 1]);
+			}
+			else {
+				bandsPanel->Hide();
+				curScen = nullptr;
+			}
+		}
+		scenSizer->Remove(1 + i);
+		Layout();
+		dynamic_cast<wxWindowBase*>(e.GetEventObject())->Destroy();
+	}
 }

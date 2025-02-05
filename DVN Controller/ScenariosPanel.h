@@ -21,6 +21,8 @@ private:
 	void ChangeSelection(ScenCtrl* scenCtrl);
 
 	void OnScenSelect(wxMouseEvent& e);
+
+	void OnScenDelete(wxCommandEvent& e);
 public:
 	ScenariosPanel(wxWindow* parent);
 
