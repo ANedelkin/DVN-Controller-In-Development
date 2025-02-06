@@ -1,9 +1,9 @@
 #pragma once
 #include "Global.h"
-#include "Scenario.h"
 #include "NameSetter.h"
+#include "DVNFileData.h"
 
-class ScenCtrl : public wxButton {
+class SideMenuCtrl : public wxButton {
 private:
 	wxPanel* mainPanel;
 
@@ -14,10 +14,10 @@ private:
 
 	}
 	void OnRename(wxCommandEvent& e) {
-		NameSetter* nameSetter = new NameSetter(base, "Enter scenario name", Scenario::ValidateName);
+		NameSetter* nameSetter = new NameSetter(base, "Enter scenario name", DVNFileData::ValidateName);
 		nameSetter->ShowModal();
 		if (nameSetter->ok) {
-			scenario->Rename(nameSetter->name);
+			data->Rename(nameSetter->name);
 			SetLabel(nameSetter->name);
 		}
 	}
@@ -27,9 +27,9 @@ private:
 		mainPanel->GetEventHandler()->ProcessEvent(eOut);
 	}
 public:
-	Scenario* scenario;
-	ScenCtrl(wxWindow* parent, wxPanel* mainPanel, Scenario* scenario) : wxButton(parent, wxID_ANY, scenario->GetName(), wxDefaultPosition, wxSize(-1, 43)) {
-		this->scenario = scenario;
+	DVNFileData* data;
+	SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* data) : wxButton(parent, wxID_ANY, data->GetName(), wxDefaultPosition, wxSize(-1, 43)) {
+		this->data = data;
 		this->mainPanel = mainPanel;
 		SetBackgroundColour(wxColour(255, 255, 255));
 
@@ -44,10 +44,10 @@ public:
 		contextMenu->Append(rename);
 		contextMenu->Append(deleteItem);
 
-		contextMenu->Bind(wxEVT_MENU, &ScenCtrl::OnRename, this, rename->GetId());
-		contextMenu->Bind(wxEVT_MENU, &ScenCtrl::OnDelete, this, deleteItem->GetId());
+		contextMenu->Bind(wxEVT_MENU, &SideMenuCtrl::OnRename, this, rename->GetId());
+		contextMenu->Bind(wxEVT_MENU, &SideMenuCtrl::OnDelete, this, deleteItem->GetId());
 
 
-		Bind(wxEVT_RIGHT_UP, &ScenCtrl::OnContextMenu, this);
+		Bind(wxEVT_RIGHT_UP, &SideMenuCtrl::OnContextMenu, this);
 	}
 };

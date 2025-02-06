@@ -1,24 +1,25 @@
 #pragma once
 #include "Global.h"
 #include "Scenario.h"
-#include "ScenCtrl.h"
+#include "SideMenuCtrl.h"
 #include "BandsPanel.h"
 
 class ScenariosPanel : public wxPanel
 {
 private:
-	vector<ScenCtrl*> scenarios;
+	//vector<
+	vector<SideMenuCtrl*> scenarios;
 	
 	wxStaticBox* scenList;
 	wxStaticBoxSizer* scenSizer;
-	ScenCtrl* curScen;
+	SideMenuCtrl* curScen;
 	Scenario* placeHolder = new Scenario();
 
 	wxStaticBox* bandsBox;
 	wxStaticBoxSizer* bandsSizer;
 	BandsPanel* bandsPanel = nullptr;
 
-	void ChangeSelection(ScenCtrl* scenCtrl);
+	void ChangeSelection(SideMenuCtrl* scenCtrl);
 
 	void OnScenSelect(wxMouseEvent& e);
 

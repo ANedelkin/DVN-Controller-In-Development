@@ -23,23 +23,14 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 	devCtrl->Hide();
 
 	notebook = new wxNotebook(this, wxID_ANY);
-	//bandsPanel = new BandsPanel(notebook);
 	scenariosPanel = new ScenariosPanel(notebook);
 	loadsPanel = new wxPanel(notebook);
-	//notebook->AddPage(bandsPanel, "Bands");
 	notebook->AddPage(scenariosPanel, "Scenarios");
 	notebook->AddPage(loadsPanel, "Loads");	
 	
 	notebook->Bind(wxEVT_NOTEBOOK_PAGE_CHANGED, &MainFrame::OnTabChanged, this);
 	toolBar->Bind(wxEVT_TOOL, &MainFrame::OnNew, this, wxID_NEW);
 }
-
-//void MainFrame::NewBand() //FIX: Bands not added to the bands list
-//{
-//	BandRow* row = new BandRow(bandsPanel->table, new BandPreset());
-//	bandsPanel->tableSizer->Add(row, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 15);
-//	bandsPanel->Layout();
-//}
 
 void MainFrame::NewScenario()
 {

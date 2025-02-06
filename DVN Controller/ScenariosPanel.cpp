@@ -32,7 +32,7 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent) : wxPanel(parent)
 
 void ScenariosPanel::AddScenario(Scenario* scen)
 {
-	ScenCtrl* scenCtrl = new ScenCtrl(scenList, this, scen);
+	SideMenuCtrl* scenCtrl = new SideMenuCtrl(scenList, this, scen);
 	scenarios.push_back(scenCtrl);
 	scenSizer->Add(scenCtrl, 0, wxEXPAND | wxBOTTOM, 10);
 	ChangeSelection(scenCtrl);
@@ -41,19 +41,19 @@ void ScenariosPanel::AddScenario(Scenario* scen)
 	scenCtrl->Bind(wxEVT_LEFT_UP, &ScenariosPanel::OnScenSelect, this);
 }
 
-void ScenariosPanel::ChangeSelection(ScenCtrl* scenCtrl)
+void ScenariosPanel::ChangeSelection(SideMenuCtrl* scenCtrl)
 {
 	scenCtrl->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
 	if (curScen) curScen->SetBackgroundColour(wxColour(255, 255, 255));
 	curScen = scenCtrl;
 
-	bandsPanel->ChangeScenario(curScen->scenario);
+	bandsPanel->ChangeScenario(dynamic_cast<Scenario*>(curScen->data));
 	if (!bandsPanel->IsShown()) bandsPanel->Show();
 }
 
 void ScenariosPanel::OnScenSelect(wxMouseEvent& e)
 {
-	ScenCtrl* scenCtrl = dynamic_cast<ScenCtrl*>(e.GetEventObject());
+	SideMenuCtrl* scenCtrl = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
 	if (scenCtrl != curScen) ChangeSelection(scenCtrl);
 	e.Skip();
 }

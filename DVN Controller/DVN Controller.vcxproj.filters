@@ -51,6 +51,15 @@
     <ClCompile Include="BandRow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LoadsPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DVNFileData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenario.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrame.h">
@@ -100,6 +109,12 @@
     </ClInclude>
     <ClInclude Include="ScenariosPanel.h">
       <Filter>Header Files\Scenarios</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadsPanel.h">
+      <Filter>Header Files\Loads</Filter>
+    </ClInclude>
+    <ClInclude Include="DVNFileData.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

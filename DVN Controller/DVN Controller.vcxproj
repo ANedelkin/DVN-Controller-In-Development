@@ -145,11 +145,14 @@
   <ItemGroup>
     <ClCompile Include="BandRow.cpp" />
     <ClCompile Include="BandsPanel.cpp" />
+    <ClCompile Include="DVNFileData.cpp" />
     <ClCompile Include="Global.cpp" />
+    <ClCompile Include="LoadsPanel.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="ModelConstants.cpp" />
     <ClCompile Include="NameSetter.cpp" />
+    <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="ScenariosPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,18 +160,18 @@
     <ClInclude Include="BandPreset.h" />
     <ClInclude Include="BandRow.h" />
     <ClInclude Include="BandsPanel.h" />
-    <ClInclude Include="EventFilter.h" />
+    <ClInclude Include="DVNFileData.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="Load.h" />
+    <ClInclude Include="LoadsPanel.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="ModelConstants.h" />
     <ClInclude Include="NameSetter.h" />
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="ScenarioPreset.h" />
     <ClInclude Include="ScenariosPanel.h" />
-    <ClInclude Include="ScenCtrl.h" />
-    <ClInclude Include="ScenCtrlO.h" />
+    <ClInclude Include="SideMenuCtrl.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\x64\Release\DVN Controller.exe" />
