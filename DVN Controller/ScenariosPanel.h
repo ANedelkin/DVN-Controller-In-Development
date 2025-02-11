@@ -1,13 +1,16 @@
 #pragma once
 #include "Global.h"
 #include "Scenario.h"
+#include "Load.h"
+
 #include "SideMenuCtrl.h"
 #include "BandsPanel.h"
 
 class ScenariosPanel : public wxPanel
 {
 private:
-	//vector<
+	Load* load;
+
 	vector<SideMenuCtrl*> scenarios;
 	
 	wxStaticBox* scenList;
@@ -17,7 +20,7 @@ private:
 
 	wxStaticBox* bandsBox;
 	wxStaticBoxSizer* bandsSizer;
-	BandsPanel* bandsPanel = nullptr;
+	BandsPanel* bandsPanel;
 
 	void ChangeSelection(SideMenuCtrl* scenCtrl);
 
@@ -26,7 +29,10 @@ private:
 	void OnScenDelete(wxCommandEvent& e);
 public:
 	ScenariosPanel(wxWindow* parent);
+	ScenariosPanel(wxWindow* parent, Load* load);
 
 	void AddScenario(Scenario* scen);
+
+	void ChangeLoad(Load* load);
 };
 

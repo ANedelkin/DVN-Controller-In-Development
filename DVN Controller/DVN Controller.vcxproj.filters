@@ -25,6 +25,18 @@
     <Filter Include="Output">
       <UniqueIdentifier>{ec703ff8-9cae-45da-8abe-52b5ff38be2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Bands">
+      <UniqueIdentifier>{d93fc7dc-79a0-4daa-90e5-b5f5923c6311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenarios">
+      <UniqueIdentifier>{a504ce2c-2a8e-4cee-8d53-db742026aa08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loads">
+      <UniqueIdentifier>{c9ad8b40-0e48-46a2-9dd4-96d2406923ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Other classes">
+      <UniqueIdentifier>{74dc76ab-4341-43a9-b04b-202e2163b4b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -39,26 +51,32 @@
     <ClCompile Include="ModelConstants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BandsPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScenariosPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NameSetter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BandRow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Bands</Filter>
     </ClCompile>
-    <ClCompile Include="LoadsPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DVNFileData.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="BandsPanel.cpp">
+      <Filter>Source Files\Bands</Filter>
     </ClCompile>
     <ClCompile Include="Scenario.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Scenarios</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadsPanel.cpp">
+      <Filter>Source Files\Loads</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenariosPanel.cpp">
+      <Filter>Source Files\Scenarios</Filter>
+    </ClCompile>
+    <ClCompile Include="DVNFileData.cpp">
+      <Filter>Source Files\Other classes</Filter>
+    </ClCompile>
+    <ClCompile Include="NameSetter.cpp">
+      <Filter>Source Files\Other classes</Filter>
+    </ClCompile>
+    <ClCompile Include="SideNotebook.cpp">
+      <Filter>Source Files\Other classes</Filter>
+    </ClCompile>
+    <ClCompile Include="SideNotebookPanel.cpp">
+      <Filter>Source Files\Other classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,17 +113,8 @@
     <ClInclude Include="ScenarioPreset.h">
       <Filter>Header Files\Scenarios</Filter>
     </ClInclude>
-    <ClInclude Include="EventFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BandRow.h">
       <Filter>Header Files\Bands</Filter>
-    </ClInclude>
-    <ClInclude Include="ScenCtrlO.h">
-      <Filter>Header Files\Scenarios</Filter>
-    </ClInclude>
-    <ClInclude Include="ScenCtrl.h">
-      <Filter>Header Files\Scenarios</Filter>
     </ClInclude>
     <ClInclude Include="ScenariosPanel.h">
       <Filter>Header Files\Scenarios</Filter>
@@ -114,6 +123,15 @@
       <Filter>Header Files\Loads</Filter>
     </ClInclude>
     <ClInclude Include="DVNFileData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SideMenuCtrl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SideNotebook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SideNotebookPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

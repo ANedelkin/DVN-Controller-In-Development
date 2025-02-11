@@ -1,28 +1,32 @@
 #pragma once
 
 #include "Global.h"
+#include "Scenario.h"
+#include "Load.h"
 
-//class LoadsPanel : public wxPanel
-//{
-//private:
-//	vector<ScenCtrl*> scenarios;
-//
-//	wxStaticBox* scenList;
-//	wxStaticBoxSizer* scenSizer;
-//	ScenCtrl* curScen;
-//	Scenario* placeHolder = new Scenario();
-//
-//	wxStaticBox* bandsBox;
-//	wxStaticBoxSizer* bandsSizer;
-//	BandsPanel* bandsPanel = nullptr;
-//
-//	void ChangeSelection(ScenCtrl* scenCtrl);
-//
-//	void OnScenSelect(wxMouseEvent& e);
-//
-//	void OnScenDelete(wxCommandEvent& e);
-//public:
-//	ScenariosPanel(wxWindow* parent);
-//
-//	void AddScenario(Scenario* scen);
-//};
+#include "BandsPanel.h"
+#include "SideMenuCtrl.h"
+#include "ScenariosPanel.h"
+
+class LoadsPanel : public wxPanel
+{
+private:
+	vector<SideMenuCtrl*> loads;
+
+	wxStaticBox* loadsList;
+	wxStaticBoxSizer* loadsSizer;
+	SideMenuCtrl* curLoad;
+	Load* placeHolder = new Load("");
+
+	ScenariosPanel* scenPanel;
+
+	void ChangeSelection(SideMenuCtrl* loadCtrl);
+
+	void OnLoadSelect(wxMouseEvent& e);
+
+	void OnLoadDelete(wxCommandEvent& e);
+public:
+	LoadsPanel(wxWindow* parent);
+
+	void AddLoad(Load* load);
+};

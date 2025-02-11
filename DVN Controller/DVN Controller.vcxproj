@@ -154,6 +154,8 @@
     <ClCompile Include="NameSetter.cpp" />
     <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="ScenariosPanel.cpp" />
+    <ClCompile Include="SideNotebook.cpp" />
+    <ClCompile Include="SideNotebookPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BandInfo.h" />
@@ -172,6 +174,8 @@
     <ClInclude Include="ScenarioPreset.h" />
     <ClInclude Include="ScenariosPanel.h" />
     <ClInclude Include="SideMenuCtrl.h" />
+    <ClInclude Include="SideNotebook.h" />
+    <ClInclude Include="SideNotebookPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\x64\Release\DVN Controller.exe" />

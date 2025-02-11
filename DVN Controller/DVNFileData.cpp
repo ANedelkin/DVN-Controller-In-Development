@@ -26,6 +26,11 @@ Status DVNFileData::ValidateName(string& name)
 	return Success;
 }
 
+string DVNFileData::SaveString() const
+{
+	return string();
+}
+
 void DVNFileData::Save() const
 {
 	if (!exists(folder)) create_directory(folder);
