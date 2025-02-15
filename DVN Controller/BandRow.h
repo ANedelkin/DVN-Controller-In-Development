@@ -4,7 +4,7 @@
 #include "Scenario.h"
 #include "BandPreset.h"
 
-class BandRow : public wxWindow
+class BandRow : public wxPanel
 {
 private:
     bool toBeInited = true;

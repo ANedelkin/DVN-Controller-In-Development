@@ -51,7 +51,7 @@ void BandRow::OnFocus(wxFocusEvent& e) {
     e.Skip();
 }
 
-BandRow::BandRow(wxWindow* parent, Scenario* scenario, char bandNum) : wxWindow(parent, wxID_ANY) {
+BandRow::BandRow(wxWindow* parent, Scenario* scenario, char bandNum) : wxPanel(parent, wxID_ANY) {
     this->scenario = scenario;
     this->bandNum = bandNum;
 

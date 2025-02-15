@@ -42,9 +42,9 @@ void MainFrame::CreateToolBar()
 	#define CTRL_HEIGHT 30
 
 	newBtn = new wxButton(toolBar, wxID_ANY, "New");
-	newBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_PLUS));
+	//newBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_PLUS));
 	addBtn = new wxButton(toolBar, wxID_ANY, "Add existing");
-	addBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_OPEN));
+	//addBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_OPEN));
 
 	separator = new wxStaticLine(toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVERTICAL);
 
@@ -55,9 +55,9 @@ void MainFrame::CreateToolBar()
 
 
 	loadToBtn = new wxButton(toolBar, wxID_UP, "Load to jammer");
-	loadToBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_GO_UP));
+	//loadToBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_GO_UP));
 	loadFromBtn = new wxButton(toolBar, wxID_DOWN, "Load from jammer");
-	loadFromBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_GO_DOWN));
+	//loadFromBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_GO_DOWN));
 	loadToBtn->Hide();
 	loadFromBtn->Hide();
 
@@ -70,7 +70,7 @@ void MainFrame::CreateToolBar()
 	toolBarSizer->Add(addBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(separator, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(selJammLabel, 0, wxALIGN_CENTER | wxALL, PADDING);
-	toolBarSizer->Add(devComboBox, 0, wxALIGN_CENTER | wxRIGHT | wxTOP | wxBOTTOM, PADDING);
+	toolBarSizer->Add(devComboBox, 0, wxALIGN_CENTER | wxRIGHT | wxTOP | wxBOTTOM, PADDING + 1);
 	toolBarSizer->Add(loadToBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(loadFromBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->AddStretchSpacer();
