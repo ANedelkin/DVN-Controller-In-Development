@@ -1,6 +1,9 @@
 #include "MainFrame.h"
 
 MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
+	wxIcon icon(ICON);
+	SetIcon(icon);
+
 	SetMinSize(FromDIP(wxSize(1122, 710)));
 
 	base = this;

@@ -1,6 +1,8 @@
 #pragma once
 #include "Global.h"
 
+#include "Icon.xpm"
+
 #include "NameSetter.h"
 #include "BandsPanel.h"
 #include "SideNotebook.h"
