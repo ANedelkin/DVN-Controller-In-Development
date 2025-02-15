@@ -170,6 +170,8 @@
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="ModelConstants.h" />
     <ClInclude Include="NameSetter.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="ScenarioPreset.h" />
     <ClInclude Include="ScenariosPanel.h" />
@@ -179,6 +181,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\x64\Release\DVN Controller.exe" />
+    <None Include="Icon.xpm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DVN Controller.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
