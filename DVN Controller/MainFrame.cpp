@@ -45,9 +45,8 @@ void MainFrame::CreateToolBar()
 	#define CTRL_HEIGHT 30
 
 	newBtn = new wxButton(toolBar, wxID_ANY, "New");
-	//newBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_PLUS));
+	saveBtn = new wxButton(toolBar, wxID_ANY, "Save");
 	addBtn = new wxButton(toolBar, wxID_ANY, "Add existing");
-	//addBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_OPEN));
 
 	separator = new wxStaticLine(toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVERTICAL);
 
@@ -58,18 +57,16 @@ void MainFrame::CreateToolBar()
 
 
 	loadToBtn = new wxButton(toolBar, wxID_UP, "Load to jammer");
-	//loadToBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_GO_UP));
 	loadFromBtn = new wxButton(toolBar, wxID_DOWN, "Load from jammer");
-	//loadFromBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_GO_DOWN));
 	loadToBtn->Hide();
 	loadFromBtn->Hide();
 
 	aboutBtn = new wxButton(toolBar, wxID_ANY, "About");
-	//aboutBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_HELP));
 
 	#define PADDING FromDIP(5)
 
 	toolBarSizer->Add(newBtn, 0, wxEXPAND | wxALL, PADDING);
+	toolBarSizer->Add(saveBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(addBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(separator, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(selJammLabel, 0, wxALIGN_CENTER | wxALL, PADDING);
@@ -119,14 +116,26 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 void MainFrame::OnNew(wxMouseEvent& e) {
 	switch (notebook->GetSelection())
 	{
-	//case 0:
-	//	NewBand();
-	//	break;
 	case Scenarios:
 		NewScenario();
 		break;
 	case Loads:
 		NewLoad();
+		break;
+	default:
+		break;
+	}
+}
+
+void MainFrame::OnSave(wxMouseEvent& e)
+{
+	switch (notebook->GetSelection())
+	{
+	case Scenarios:
+		
+		break;
+	case Loads:
+		
 		break;
 	default:
 		break;
