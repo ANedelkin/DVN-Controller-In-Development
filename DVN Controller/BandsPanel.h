@@ -1,18 +1,21 @@
 #pragma once
 #include "Global.h"
+
+#include "SideNotebookPanel.h"
 #include "BandRow.h"
 
-class BandsPanel : public wxPanel
+class BandsPanel : public SideNotebookPanel
 {
 private:
-	Scenario* scenario;
-
 	array<BandRow*, BANDS_COUNT> bandRows;
 public:
+	wxPanel* table;
 	wxPanel* content;
 	wxBoxSizer* tableSizer;
 
 	BandsPanel(wxWindow* parent, Scenario* scenario);
 
-	void ChangeScenario(Scenario* scenario);
+	void ChangeSource(DVNFileData* source) override;
+	void Init() override;
+	void UnInit() override;
 };

@@ -4,14 +4,14 @@
 
 struct ScenarioPreset {
 	string name;
-	array<BandPreset, bandsCount> bands;
+	array<BandPreset, BANDS_COUNT> bands;
 
 	static ScenarioPreset ToScenarioPreset(string params) {
 		ScenarioPreset scenario;
 		stringstream stream(params);
 		getline(stream, scenario.name);
 		string band;
-		for (int i = 0; i < bandsCount && getline(stream, band); i++) {
+		for (int i = 0; i < BANDS_COUNT && getline(stream, band); i++) {
 			BandPreset preset = BandPreset::ToBandPreset(band);
 			scenario.bands[i].startValue = preset.startValue;
 			scenario.bands[i].endValue = preset.endValue;

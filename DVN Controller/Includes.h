@@ -1,5 +1,7 @@
 #pragma once
 
+#include <wx/log.h> 
+
 #include <wx/wx.h>
 #include <wx/artprov.h>
 #include <wx/notebook.h>
@@ -8,6 +10,7 @@
 #include <wx/sizer.h>
 #include <wx/utils.h>
 #include <wx/eventfilter.h>
+#include <wx/statline.h>
 
 
 #include <iostream>

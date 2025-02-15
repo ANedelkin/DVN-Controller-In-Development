@@ -51,15 +51,17 @@ void BandRow::OnFocus(wxFocusEvent& e) {
     e.Skip();
 }
 
-BandRow::BandRow(wxWindow* parent, Scenario* scenario, char bandNum) : wxWindow(parent, wxID_ANY) {
+BandRow::BandRow(wxWindow* parent, Scenario* scenario, char bandNum) : wxPanel(parent, wxID_ANY) {
     this->scenario = scenario;
     this->bandNum = bandNum;
 
-    background = new wxButton(this, wxID_ANY);
+    background = new wxButton(this, wxID_ANY, wxEmptyString);
     background->SetBackgroundColour(wxColour(255, 255, 255));
     background->Disable();
 
     InitForeground();
+
+    SetMinSize(FromDIP(wxSize(-1, 40)));
 
     Bind(wxEVT_SIZE, &BandRow::OnResize, this);
     //Bind(wxEVT_PAINT, &BandRow::OnPaint, this);
@@ -68,13 +70,13 @@ BandRow::BandRow(wxWindow* parent, Scenario* scenario, char bandNum) : wxWindow(
 void BandRow::InitForeground() {
     num = new wxStaticText(this, wxID_ANY, to_string(bandNum + 1) + '.', wxDefaultPosition, wxSize(15, -1));
     num->SetBackgroundColour(wxColour(255, 255, 255));
-    name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, wxSize(250, -1), wxTE_PROCESS_ENTER);
-    startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetStartValue(bandNum)), wxDefaultPosition, wxSize(110, -1), wxTE_PROCESS_ENTER);
-    endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetEndValue(bandNum)), wxDefaultPosition, wxSize(110, -1), wxTE_PROCESS_ENTER);
+    name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, FromDIP(wxSize(250, -1)), wxTE_PROCESS_ENTER);
+    startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetStartValue(bandNum)), wxDefaultPosition, FromDIP(wxSize(110, -1)), wxTE_PROCESS_ENTER);
+    endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetEndValue(bandNum)), wxDefaultPosition, FromDIP(wxSize(110, -1)), wxTE_PROCESS_ENTER);
     bool active = scenario->IsActive(bandNum);
     statBtn = new wxButton(this, wxID_ANY, active ? "ON" : "OFF");
     statBtn->SetBackgroundColour(wxColour(*wxWHITE));
-    statBtn->SetForegroundColour(wxColour(active ? *wxGREEN : *wxRED));
+    statBtn->SetForegroundColour(wxColour(active ? DARK_GREEN : *wxRED));
 
     BindEventHandlers();
     SetUpSizers();
@@ -100,13 +102,13 @@ void BandRow::BindEventHandlers()
 void BandRow::SetUpSizers()
 {
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->AddSpacer(10);
-    sizer->Add(num, 0, wxALIGN_CENTER | wxRIGHT | wxTOP | wxBOTTOM, 10);
-    sizer->Add(name, 0, wxRIGHT | wxTOP | wxBOTTOM, 10);
-    sizer->Add(startValue, 0, wxRIGHT | wxTOP | wxBOTTOM, 10);
-    sizer->Add(endValue, 0, wxRIGHT | wxTOP | wxBOTTOM, 10);
-    sizer->Add(statBtn, 0, wxTOP | wxBOTTOM, 10);
-    sizer->AddSpacer(10);
+    sizer->AddSpacer(FromDIP(10));
+    sizer->Add(num, 0, wxALIGN_CENTER | wxRIGHT, FromDIP(10));
+    sizer->Add(name, 0, wxALIGN_CENTER | wxRIGHT, FromDIP(10));
+    sizer->Add(startValue, 0, wxALIGN_CENTER | wxRIGHT, FromDIP(10));
+    sizer->Add(endValue, 0, wxALIGN_CENTER | wxRIGHT, FromDIP(10));
+    sizer->Add(statBtn, 0, wxALIGN_CENTER);
+    sizer->AddSpacer(FromDIP(10));
     this->SetSizerAndFit(sizer);
 }
 
@@ -120,7 +122,7 @@ void BandRow::ChangeScenario(Scenario* scenario) {
     bool active = scenario->IsActive(bandNum);
     statBtn->SetLabel(active ? "ON" : "OFF");
     statBtn->SetBackgroundColour(wxColour(*wxWHITE));
-    statBtn->SetForegroundColour(wxColour(active ? *wxGREEN : *wxRED));
+    statBtn->SetForegroundColour(wxColour(active ? DARK_GREEN : *wxRED));
 }
 
 Status BandRow::Rename() {

@@ -1,73 +1,119 @@
 #include "MainFrame.h"
 
 MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
-	SetMinSize(wxSize(1000, 710));
+	SetMinSize(FromDIP(wxSize(1122, 710)));
 
 	base = this;
 
-	toolBar = CreateToolBar(wxTB_HORIZONTAL | wxTB_TEXT | wxTB_HORZ_LAYOUT, wxID_ANY);
-	toolBar->AddTool(wxID_NEW, wxT("New"), wxArtProvider::GetBitmap(wxART_PLUS));
-	toolBar->AddTool(wxID_OPEN, wxT("Add existing"), wxArtProvider::GetBitmap(wxART_FILE_OPEN));
-	toolBar->AddSeparator();
-	toolBar->AddStretchableSpace();
-	toolBar->AddTool(wxID_ABOUT, wxT("About"), wxArtProvider::GetBitmap(wxART_INFORMATION));
-	toolBar->Realize();
+	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-	devCtrl = new wxControl(toolBar, DEV_COMBOBOX_ID);
-	wxBoxSizer* devCtrlSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxComboBox* devComboBox = new wxComboBox(devCtrl, wxID_ANY, "", wxDefaultPosition, wxSize(150, -1), 0, nullptr, wxCB_READONLY);
-	wxStaticText* label = new wxStaticText(devCtrl, wxID_ANY, "Select jammer: ");
-	devCtrlSizer->Add(label, 0, wxALIGN_CENTER);
-	devCtrlSizer->Add(devComboBox, 0);
-	devCtrl->SetSizerAndFit(devCtrlSizer);
-	devCtrl->Hide();
+	CreateToolBar();
 
 	notebook = new wxNotebook(this, wxID_ANY);
-	//bandsPanel = new BandsPanel(notebook);
-	scenariosPanel = new ScenariosPanel(notebook);
-	loadsPanel = new wxPanel(notebook);
-	//notebook->AddPage(bandsPanel, "Bands");
+
+	scenariosPanel = new SideNotebook(notebook, "Scenarios");
+	BandsPanel* scenBandsPanel = new BandsPanel(scenariosPanel, new Scenario());
+	scenBandsPanel->UnInit();
+	scenariosPanel->SetContent(scenBandsPanel);
+
+	loadsPanel = new SideNotebook(notebook, "Loads");
+	SideNotebook* loadScenPanel = new SideNotebook(loadsPanel, "Scenarios", new Load());
+	BandsPanel* loadBandsPanel = new BandsPanel(loadScenPanel, new Scenario());
+	loadScenPanel->SetContent(loadBandsPanel);
+	loadScenPanel->UnInit();
+	loadsPanel->SetContent(loadScenPanel);
+
 	notebook->AddPage(scenariosPanel, "Scenarios");
 	notebook->AddPage(loadsPanel, "Loads");	
 	
+	mainSizer->Add(toolBar, 0, wxEXPAND);
+	mainSizer->Add(notebook, 0, wxEXPAND);
+
+	SetSizer(mainSizer);
+
 	notebook->Bind(wxEVT_NOTEBOOK_PAGE_CHANGED, &MainFrame::OnTabChanged, this);
-	toolBar->Bind(wxEVT_TOOL, &MainFrame::OnNew, this, wxID_NEW);
 }
 
-//void MainFrame::NewBand() //FIX: Bands not added to the bands list
-//{
-//	BandRow* row = new BandRow(bandsPanel->table, new BandPreset());
-//	bandsPanel->tableSizer->Add(row, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 15);
-//	bandsPanel->Layout();
-//}
+void MainFrame::CreateToolBar()
+{
+	toolBar = new wxPanel(this, wxID_ANY);
+	wxBoxSizer* toolBarSizer = new wxBoxSizer(wxHORIZONTAL);
+
+	#define CTRL_HEIGHT 30
+
+	newBtn = new wxButton(toolBar, wxID_ANY, "New");
+	//newBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_PLUS));
+	addBtn = new wxButton(toolBar, wxID_ANY, "Add existing");
+	//addBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_OPEN));
+
+	separator = new wxStaticLine(toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVERTICAL);
+
+	selJammLabel = new wxStaticText(toolBar, wxID_ANY, "Select jammer: ");
+	devComboBox = new wxComboBox(toolBar, wxID_ANY, "", wxDefaultPosition, FromDIP(wxSize(150, -1)), 0, nullptr, wxCB_READONLY);
+	selJammLabel->Hide();
+	devComboBox->Hide();
+
+
+	loadToBtn = new wxButton(toolBar, wxID_UP, "Load to jammer");
+	//loadToBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_GO_UP));
+	loadFromBtn = new wxButton(toolBar, wxID_DOWN, "Load from jammer");
+	//loadFromBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_GO_DOWN));
+	loadToBtn->Hide();
+	loadFromBtn->Hide();
+
+	aboutBtn = new wxButton(toolBar, wxID_ANY, "About");
+	//aboutBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_HELP));
+
+	#define PADDING FromDIP(5)
+
+	toolBarSizer->Add(newBtn, 0, wxEXPAND | wxALL, PADDING);
+	toolBarSizer->Add(addBtn, 0, wxEXPAND | wxALL, PADDING);
+	toolBarSizer->Add(separator, 0, wxEXPAND | wxALL, PADDING);
+	toolBarSizer->Add(selJammLabel, 0, wxALIGN_CENTER | wxALL, PADDING);
+	toolBarSizer->Add(devComboBox, 0, wxALIGN_CENTER | wxRIGHT | wxTOP | wxBOTTOM, PADDING + 1);
+	toolBarSizer->Add(loadToBtn, 0, wxEXPAND | wxALL, PADDING);
+	toolBarSizer->Add(loadFromBtn, 0, wxEXPAND | wxALL, PADDING);
+	toolBarSizer->AddStretchSpacer();
+	toolBarSizer->Add(aboutBtn, 0, wxEXPAND | wxALL, PADDING);
+
+	toolBar->SetSizerAndFit(toolBarSizer);
+
+	newBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnNew, this);
+}
 
 void MainFrame::NewScenario()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
 	nameSetter->ShowModal();
-	if (nameSetter->ok) scenariosPanel->AddScenario(new Scenario(nameSetter->name));
+	if (nameSetter->ok) scenariosPanel->AddPage(new Scenario(nameSetter->name), false);
 }
 
 void MainFrame::NewLoad()
 {
+	NameSetter* nameSetter = new NameSetter(this, "Enter load name", Load::ValidateName);
+	nameSetter->ShowModal();
+	if (nameSetter->ok) loadsPanel->AddPage(new Load(nameSetter->name), false);
 }
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
-	if (e.GetSelection() == 2) {
-		toolBar->InsertControl(2, devCtrl);
-		toolBar->InsertTool(3, wxID_UP, wxT("Upload to jammer"), wxArtProvider::GetBitmap(wxART_GO_UP));
-		toolBar->InsertTool(4, wxID_DOWN, wxT("Extract from jammer"), wxArtProvider::GetBitmap(wxART_GO_DOWN));
+	if (e.GetSelection() == 1) {
+		separator->Show();
+		selJammLabel->Show();
+		devComboBox->Show();
+		loadToBtn->Show();
+		loadFromBtn->Show();
+		Layout();
 	}
 	else {
-		toolBar->RemoveTool(DEV_COMBOBOX_ID);
-		devCtrl->Hide();
-		toolBar->RemoveTool(wxID_UP);
-		toolBar->RemoveTool(wxID_DOWN);
+		separator->Hide();
+		selJammLabel->Hide();
+		devComboBox->Hide();
+		loadToBtn->Hide();
+		loadFromBtn->Hide();
 	}
-	toolBar->Realize();
 }
 
-void MainFrame::OnNew(wxCommandEvent& e) {
+void MainFrame::OnNew(wxMouseEvent& e) {
 	switch (notebook->GetSelection())
 	{
 	//case 0:
