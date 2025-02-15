@@ -107,7 +107,7 @@ void SideNotebook::ChangeSource(DVNFileData* source) {
 
 void SideNotebook::SaveCurrent()
 {
-
+	content->Save();
 }
 
 void SideNotebook::Init() {

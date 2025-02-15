@@ -79,6 +79,7 @@ void MainFrame::CreateToolBar()
 	toolBar->SetSizerAndFit(toolBarSizer);
 
 	newBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnNew, this);
+	saveBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnSave, this);
 }
 
 void MainFrame::NewScenario()
@@ -132,13 +133,14 @@ void MainFrame::OnSave(wxMouseEvent& e)
 	switch (notebook->GetSelection())
 	{
 	case Scenarios:
-		
+		scenariosPanel->SaveCurrent();
 		break;
 	case Loads:
-		
+		loadsPanel->SaveCurrent();
 		break;
 	default:
 		break;
 	}
+	e.Skip();
 }
 

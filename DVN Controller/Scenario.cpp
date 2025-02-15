@@ -17,9 +17,9 @@ Scenario::Scenario(string name) : DVNFileData("./scenarios/", ".dvns") {
 }
 
 Status Scenario::SetBandValues(char i, int startValue, int endValue) {
-	if (endValue != -1 && startValue > endValue) return StartValueHigherThanEndvalue;
-	if (GetEndValue(i) != -1 && startValue < GetStartValueBorder(i) || startValue > GetEndValueBorder(i)) return StartValueOutOfBounds;
-	if (endValue > GetEndValueBorder(i) || GetStartValue(i) != -1 && endValue < GetStartValueBorder(i)) return EndValueOutOfBounds;
+	if (GetEndValue(i) != -1 && startValue > endValue) return StartValueHigherThanEndvalue;
+	if (GetStartValue(i) != -1 && startValue < GetStartValueBorder(i) || startValue > GetEndValueBorder(i)) return StartValueOutOfBounds;
+	if (endValue > GetEndValueBorder(i) || GetEndValue(i) != -1 && endValue < GetStartValueBorder(i)) return EndValueOutOfBounds;
 
 	int invalidValue = bandRanges[GetRangeIndex(i)][2];
 
@@ -27,10 +27,8 @@ Status Scenario::SetBandValues(char i, int startValue, int endValue) {
 		for (char j = 0; j < BANDS_COUNT; j++) {
 			if (GetRangeIndex(j) == GetRangeIndex(i) && j != i) Disable(j);
 		}
-		goto success;
 	}
 
-success:
 	bands[i].startValue = startValue;
 	bands[i].endValue = endValue;
 	return Success;
@@ -72,7 +70,7 @@ void Scenario::Disable(char i) {
 
 string Scenario::BandSaveString(char i) const {
 	ostringstream stream;
-	stream << name << "|" << bands[i].startValue << "|" << bands[i].endValue << "|";
+	stream << bands[i].name << "|" << bands[i].startValue << "|" << bands[i].endValue << "|" << (bands[i].working ? "ON" : "OFF");
 	return stream.str();
 }
 void Scenario::SaveBand(char i) const {

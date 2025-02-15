@@ -15,9 +15,10 @@ void BandRow::OnResize(wxSizeEvent& e) {
     }
 }
 void BandRow::OnNameEnter(wxCommandEvent& e) {
-    if (!Rename())
+    if (!Rename()) {
         focused = nullptr;
-    base->SetFocus();
+        base->SetFocus();
+    }
     e.Skip();
 }
 void BandRow::OnFreqEnter(wxCommandEvent& e) {

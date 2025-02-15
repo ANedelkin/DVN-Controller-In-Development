@@ -5,27 +5,24 @@ class App : public wxApp {
 private:
 	int RenameBand() {
 		BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
-		if (row->Rename()) {
-			focused->SetFocus();
-			return Event_Processed;
-		}
-		else {
+		if (!row->Rename()) {
 			focused = nullptr;
 			base->SetFocus();
-			return Event_Skip;
+			return Event_Processed;
 		}
+
+		focused->SetFocus();
+		return Event_Processed;
 	}
 	int ChangeFreqs() {
 		BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
-		if (row->ChangeFreqs()) {
-			focused->SetFocus();
-			return Event_Processed;
-		}
-		else {
+		if (!row->ChangeFreqs()) {
 			focused = nullptr;
 			base->SetFocus();
-			return Event_Skip;
+			return Event_Processed;
 		}
+		focused->SetFocus();
+		return Event_Processed;
 	}
 public:
     bool OnInit() {
