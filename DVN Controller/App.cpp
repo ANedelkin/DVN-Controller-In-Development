@@ -2,38 +2,6 @@
 #include "MainFrame.h"
 
 class App : public wxApp {
-private:
-	int RenameBand() {
-		BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
-		if (!row->Rename()) {
-			focused = nullptr;
-			base->SetFocus();
-			return Event_Processed;
-		}
-
-		focused->SetFocus();
-		return Event_Processed;
-	}
-	int ChangeStart() {
-		BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
-		if (!row->ChangeStart()) {
-			focused = nullptr;
-			base->SetFocus();
-			return Event_Processed;
-		}
-		focused->SetFocus();
-		return Event_Processed;
-	}
-	int ChangeEnd() {
-		BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
-		if (!row->ChangeEnd()) {
-			focused = nullptr;
-			base->SetFocus();
-			return Event_Processed;
-		}
-		focused->SetFocus();
-		return Event_Processed;
-	}
 public:
     bool OnInit() {
         MainFrame* mainFrame = new MainFrame("Title");
@@ -44,20 +12,35 @@ public:
 		const wxEventType t = e.GetEventType();
 		if (t == wxEVT_LEFT_DOWN || t == wxEVT_RIGHT_DOWN) {
 			if (focused && focused != e.GetEventObject()) {
+				base->Refresh();
+
+				BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
+				Status stat = Success;
+
 				switch ((int)focused->GetClientData())
 				{
 				case BandName:
-					return RenameBand();
+					stat = row->Rename();
 					break;
 				case Start:
-					return ChangeStart();
+					stat = row->ChangeStart();
 					break;
 				case End:
-					return ChangeEnd();
+					stat = row->ChangeEnd();
 					break;
 				default:
 					break;
 				}
+
+				if (!stat) { //Success
+					focused = nullptr;
+					base->SetFocus();
+					return Event_Processed;
+				}
+				else //Failure, like you
+					focused->SetFocus();
+				
+				return Event_Processed;
 			}
 		}
 		return Event_Skip;

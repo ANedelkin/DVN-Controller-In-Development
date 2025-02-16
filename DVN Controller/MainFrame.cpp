@@ -97,6 +97,7 @@ void MainFrame::NewLoad()
 }
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
+	SetFocus();
 	if (e.GetSelection() == 1) {
 		separator->Show();
 		selJammLabel->Show();

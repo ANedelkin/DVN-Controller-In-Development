@@ -27,6 +27,7 @@ private:
     void OnEndEnter(wxCommandEvent& e);
     void OnStatusChanged(wxMouseEvent& e);
     void OnFocus(wxFocusEvent& e);
+    void OnUnfocus(wxFocusEvent& e);
 public:
     wxStaticText* num;
     wxTextCtrl* name;

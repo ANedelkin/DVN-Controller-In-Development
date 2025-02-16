@@ -54,8 +54,15 @@ void BandRow::OnStatusChanged(wxMouseEvent& e)
     }
     e.Skip();
 }
+
 void BandRow::OnFocus(wxFocusEvent& e) {
-    focused = this->FindFocus();
+    focused = FindFocus();
+    e.Skip();
+}
+
+void BandRow::OnUnfocus(wxFocusEvent& e)
+{
+    focused = nullptr;
     e.Skip();
 }
 
@@ -68,11 +75,9 @@ BandRow::BandRow(wxWindow* parent, Scenario* scenario, char bandNum) : wxPanel(p
     background->Disable();
 
     InitForeground();
+    BindEventHandlers();
 
     SetMinSize(FromDIP(wxSize(-1, 40)));
-
-    Bind(wxEVT_SIZE, &BandRow::OnResize, this);
-    //Bind(wxEVT_PAINT, &BandRow::OnPaint, this);
 }
 
 void BandRow::InitForeground() {
@@ -90,15 +95,20 @@ void BandRow::InitForeground() {
     startValue->SetClientData((void*)Start);
     endValue->SetClientData((void*)End);
 
-    BindEventHandlers();
     SetUpSizers();
 }
 
 void BandRow::BindEventHandlers()
 {
+    Bind(wxEVT_SIZE, &BandRow::OnResize, this);
+
     name->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
+
+    name->Bind(wxEVT_KILL_FOCUS, &BandRow::OnUnfocus, this);
+    startValue->Bind(wxEVT_KILL_FOCUS, &BandRow::OnUnfocus, this);
+    endValue->Bind(wxEVT_KILL_FOCUS, &BandRow::OnUnfocus, this);
 
     name->Bind(wxEVT_TEXT_ENTER, &BandRow::OnNameEnter, this);
     startValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnStartEnter, this);
@@ -147,7 +157,7 @@ Status BandRow::Rename() {
     }
     return stat;
 }
-
+    
 Status BandRow::ChangeStart() {
     int newStart = stoi(startValue->GetLineText(0).ToStdString());
 
