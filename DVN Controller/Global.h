@@ -45,7 +45,8 @@ enum Tabs {
 enum InputType {
     ScenName,
     BandName,
-    Freq,
+    Start,
+    End,
 };
 
 //Colours

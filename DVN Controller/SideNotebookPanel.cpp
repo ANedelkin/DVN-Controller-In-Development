@@ -6,6 +6,11 @@ SideNotebookPanel::SideNotebookPanel(wxWindow* parent, DVNFileData* source) : wx
 	this->isInited = false;
 }
 
+void SideNotebookPanel::Save()
+{
+	source->Save();
+}
+
 bool SideNotebookPanel::IsInited()  { return isInited; }
 
 void SideNotebookPanel::Init()

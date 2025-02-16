@@ -15,13 +15,21 @@ void BandRow::OnResize(wxSizeEvent& e) {
     }
 }
 void BandRow::OnNameEnter(wxCommandEvent& e) {
-    if (!Rename())
+    if (!Rename()) {
         focused = nullptr;
-    base->SetFocus();
+        base->SetFocus();
+    }
     e.Skip();
 }
-void BandRow::OnFreqEnter(wxCommandEvent& e) {
-    if (!ChangeFreqs()) {
+void BandRow::OnStartEnter(wxCommandEvent& e) {
+    if (!ChangeStart()) {
+        focused = nullptr;
+        base->SetFocus();
+    }
+    e.Skip();
+}
+void BandRow::OnEndEnter(wxCommandEvent& e) {
+    if (!ChangeEnd()) {
         focused = nullptr;
         base->SetFocus();
     }
@@ -29,6 +37,7 @@ void BandRow::OnFreqEnter(wxCommandEvent& e) {
 }
 void BandRow::OnStatusChanged(wxMouseEvent& e)
 {
+    Refresh();
     if (scenario->IsActive(bandNum)) {
         scenario->TurnOff(bandNum);
         statBtn->SetForegroundColour(wxColour(*wxRED));
@@ -46,8 +55,9 @@ void BandRow::OnStatusChanged(wxMouseEvent& e)
     }
     e.Skip();
 }
+
 void BandRow::OnFocus(wxFocusEvent& e) {
-    focused = this->FindFocus();
+    focused = FindFocus();
     e.Skip();
 }
 
@@ -55,16 +65,15 @@ BandRow::BandRow(wxWindow* parent, Scenario* scenario, char bandNum) : wxPanel(p
     this->scenario = scenario;
     this->bandNum = bandNum;
 
+    unfocused = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(0, 0));
     background = new wxButton(this, wxID_ANY, wxEmptyString);
     background->SetBackgroundColour(wxColour(255, 255, 255));
     background->Disable();
 
     InitForeground();
+    BindEventHandlers();
 
     SetMinSize(FromDIP(wxSize(-1, 40)));
-
-    Bind(wxEVT_SIZE, &BandRow::OnResize, this);
-    //Bind(wxEVT_PAINT, &BandRow::OnPaint, this);
 }
 
 void BandRow::InitForeground() {
@@ -78,23 +87,24 @@ void BandRow::InitForeground() {
     statBtn->SetBackgroundColour(wxColour(*wxWHITE));
     statBtn->SetForegroundColour(wxColour(active ? DARK_GREEN : *wxRED));
 
-    BindEventHandlers();
+    name->SetClientData((void*)BandName);
+    startValue->SetClientData((void*)Start);
+    endValue->SetClientData((void*)End);
+
     SetUpSizers();
 }
 
 void BandRow::BindEventHandlers()
 {
+    Bind(wxEVT_SIZE, &BandRow::OnResize, this);
+
     name->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
 
     name->Bind(wxEVT_TEXT_ENTER, &BandRow::OnNameEnter, this);
-    startValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnFreqEnter, this);
-    endValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnFreqEnter, this);
-
-    name->SetClientData((void*)BandName);
-    startValue->SetClientData((void*)Freq);
-    endValue->SetClientData((void*)Freq);
+    startValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnStartEnter, this);
+    endValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnEndEnter, this);
 
     statBtn->Bind(wxEVT_LEFT_UP, &BandRow::OnStatusChanged, this);
 }
@@ -139,21 +149,40 @@ Status BandRow::Rename() {
     }
     return stat;
 }
-
-Status BandRow::ChangeFreqs() {
+    
+Status BandRow::ChangeStart() {
     int newStart = stoi(startValue->GetLineText(0).ToStdString());
-    int newEnd = stoi(endValue->GetLineText(0).ToStdString());
 
-    Status stat = scenario->SetBandValues(bandNum, newStart, newEnd);
+    Status stat = scenario->SetStartValue(bandNum, newStart);
     if (stat) {
         wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
         dialog.SetOKCancelLabels("Enter new value", "Keep old value");
         int id = dialog.ShowModal();
         if (id == wxID_CANCEL) {
             startValue->SetValue(to_string(scenario->GetStartValue(bandNum)));
+            return Success;
+        }
+    }
+    return stat;
+}
+
+Status BandRow::ChangeEnd() {
+    int newEnd = stoi(endValue->GetLineText(0).ToStdString());
+
+    Status stat = scenario->SetEndValue(bandNum, newEnd);
+    if (stat) {
+        wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
+        dialog.SetOKCancelLabels("Enter new value", "Keep old value");
+        int id = dialog.ShowModal();
+        if (id == wxID_CANCEL) {
             endValue->SetValue(to_string(scenario->GetEndValue(bandNum)));
             return Success;
         }
     }
     return stat;
+}
+
+void BandRow::Unfocus()
+{
+    unfocused->SetFocus();
 }

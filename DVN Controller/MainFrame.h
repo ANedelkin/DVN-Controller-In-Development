@@ -22,8 +22,8 @@ private:
 	wxStaticText* emptyText;
 
 	wxButton* newBtn;
+	wxButton* saveBtn;
 	wxButton* addBtn;
-	#define DEV_COMBOBOX_ID wxID_HIGHEST + 1
 	wxPanel* toolBar;
 	wxStaticLine* separator;
 	wxStaticText* selJammLabel;
@@ -34,12 +34,13 @@ private:
 
 	void CreateToolBar();
 
-	void NewBand();
+	//void NewBand();
 	void NewScenario();
 	void NewLoad();
 
 	void OnTabChanged(wxNotebookEvent& e);
 	void OnNew(wxMouseEvent& e);
+	void OnSave(wxMouseEvent& e);
 public:
 	BandsPanel* bandsPanel;
 	MainFrame(const string& title);

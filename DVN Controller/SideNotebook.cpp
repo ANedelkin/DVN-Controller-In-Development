@@ -105,6 +105,11 @@ void SideNotebook::ChangeSource(DVNFileData* source) {
 	content->ChangeSource(cur->GetSource());
 }
 
+void SideNotebook::SaveCurrent()
+{
+	content->Save();
+}
+
 void SideNotebook::Init() {
 	SideNotebookPanel::Init();
 	pagesList->Show();

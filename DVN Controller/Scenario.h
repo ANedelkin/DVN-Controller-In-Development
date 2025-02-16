@@ -12,7 +12,9 @@ public:
 	Scenario();
 	Scenario(string name);
 
-	Status SetBandValues(char i, int startValue, int endValue);
+	Status SetStartValue(char i, int value);
+	Status SetEndValue(char i, int value);
+	void CheckIfFull(char i);
 
 	Status TurnOn(char i);
 	void TurnOff(char i);

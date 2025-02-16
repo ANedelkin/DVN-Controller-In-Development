@@ -10,6 +10,7 @@ protected:
 public:
 	SideNotebookPanel(wxWindow* parent, DVNFileData* source);
 	virtual void ChangeSource(DVNFileData* source) = 0;
+	void Save();
 	bool IsInited();
 	virtual void Init();
 	virtual void UnInit();

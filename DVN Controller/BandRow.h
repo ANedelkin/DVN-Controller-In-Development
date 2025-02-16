@@ -7,6 +7,7 @@
 class BandRow : public wxPanel
 {
 private:
+    wxWindow* unfocused;
     bool toBeInited = true;
 
     Scenario* scenario;
@@ -23,7 +24,8 @@ private:
     void OnResize(wxSizeEvent& e);
 
     void OnNameEnter(wxCommandEvent& e);
-    void OnFreqEnter(wxCommandEvent& e);
+    void OnStartEnter(wxCommandEvent& e);
+    void OnEndEnter(wxCommandEvent& e);
     void OnStatusChanged(wxMouseEvent& e);
     void OnFocus(wxFocusEvent& e);
 public:
@@ -36,5 +38,8 @@ public:
     void ChangeScenario(Scenario* scenario);
 
     Status Rename();
-    Status ChangeFreqs();
+    Status ChangeStart();
+    Status ChangeEnd();
+
+    void Unfocus();
 };

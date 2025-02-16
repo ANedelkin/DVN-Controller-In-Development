@@ -37,6 +37,7 @@ public:
 	void ChangePage(DVNFileData* data);
 
 	void ChangeSource(DVNFileData* data) override;
+	void SaveCurrent();
 	void Init() override;
 	void UnInit() override;
 };

@@ -17,7 +17,7 @@ public:
 	string GetName();
 	static Status ValidateName(string& name);
 	
-	virtual string SaveString() const;
+	virtual string SaveString() const = 0;
 	void Save() const;
 };
 

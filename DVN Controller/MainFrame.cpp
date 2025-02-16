@@ -45,9 +45,8 @@ void MainFrame::CreateToolBar()
 	#define CTRL_HEIGHT 30
 
 	newBtn = new wxButton(toolBar, wxID_ANY, "New");
-	//newBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_PLUS));
+	saveBtn = new wxButton(toolBar, wxID_ANY, "Save");
 	addBtn = new wxButton(toolBar, wxID_ANY, "Add existing");
-	//addBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_OPEN));
 
 	separator = new wxStaticLine(toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVERTICAL);
 
@@ -58,18 +57,16 @@ void MainFrame::CreateToolBar()
 
 
 	loadToBtn = new wxButton(toolBar, wxID_UP, "Load to jammer");
-	//loadToBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_GO_UP));
 	loadFromBtn = new wxButton(toolBar, wxID_DOWN, "Load from jammer");
-	//loadFromBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_GO_DOWN));
 	loadToBtn->Hide();
 	loadFromBtn->Hide();
 
 	aboutBtn = new wxButton(toolBar, wxID_ANY, "About");
-	//aboutBtn->SetBitmap(wxArtProvider::GetBitmap(wxART_HELP));
 
 	#define PADDING FromDIP(5)
 
 	toolBarSizer->Add(newBtn, 0, wxEXPAND | wxALL, PADDING);
+	toolBarSizer->Add(saveBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(addBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(separator, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(selJammLabel, 0, wxALIGN_CENTER | wxALL, PADDING);
@@ -82,6 +79,7 @@ void MainFrame::CreateToolBar()
 	toolBar->SetSizerAndFit(toolBarSizer);
 
 	newBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnNew, this);
+	saveBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnSave, this);
 }
 
 void MainFrame::NewScenario()
@@ -99,6 +97,7 @@ void MainFrame::NewLoad()
 }
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
+	SetFocus();
 	if (e.GetSelection() == 1) {
 		separator->Show();
 		selJammLabel->Show();
@@ -119,9 +118,6 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 void MainFrame::OnNew(wxMouseEvent& e) {
 	switch (notebook->GetSelection())
 	{
-	//case 0:
-	//	NewBand();
-	//	break;
 	case Scenarios:
 		NewScenario();
 		break;
@@ -131,5 +127,21 @@ void MainFrame::OnNew(wxMouseEvent& e) {
 	default:
 		break;
 	}
+}
+
+void MainFrame::OnSave(wxMouseEvent& e)
+{
+	switch (notebook->GetSelection())
+	{
+	case Scenarios:
+		scenariosPanel->SaveCurrent();
+		break;
+	case Loads:
+		loadsPanel->SaveCurrent();
+		break;
+	default:
+		break;
+	}
+	e.Skip();
 }
 
