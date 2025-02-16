@@ -37,6 +37,7 @@ void BandRow::OnEndEnter(wxCommandEvent& e) {
 }
 void BandRow::OnStatusChanged(wxMouseEvent& e)
 {
+    Refresh();
     if (scenario->IsActive(bandNum)) {
         scenario->TurnOff(bandNum);
         statBtn->SetForegroundColour(wxColour(*wxRED));
@@ -60,16 +61,11 @@ void BandRow::OnFocus(wxFocusEvent& e) {
     e.Skip();
 }
 
-void BandRow::OnUnfocus(wxFocusEvent& e)
-{
-    focused = nullptr;
-    e.Skip();
-}
-
 BandRow::BandRow(wxWindow* parent, Scenario* scenario, char bandNum) : wxPanel(parent, wxID_ANY) {
     this->scenario = scenario;
     this->bandNum = bandNum;
 
+    unfocused = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(0, 0));
     background = new wxButton(this, wxID_ANY, wxEmptyString);
     background->SetBackgroundColour(wxColour(255, 255, 255));
     background->Disable();
@@ -105,10 +101,6 @@ void BandRow::BindEventHandlers()
     name->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
-
-    name->Bind(wxEVT_KILL_FOCUS, &BandRow::OnUnfocus, this);
-    startValue->Bind(wxEVT_KILL_FOCUS, &BandRow::OnUnfocus, this);
-    endValue->Bind(wxEVT_KILL_FOCUS, &BandRow::OnUnfocus, this);
 
     name->Bind(wxEVT_TEXT_ENTER, &BandRow::OnNameEnter, this);
     startValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnStartEnter, this);
@@ -188,4 +180,9 @@ Status BandRow::ChangeEnd() {
         }
     }
     return stat;
+}
+
+void BandRow::Unfocus()
+{
+    unfocused->SetFocus();
 }

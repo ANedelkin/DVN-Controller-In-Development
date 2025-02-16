@@ -11,6 +11,7 @@ public:
     int FilterEvent(wxEvent& e) {
 		const wxEventType t = e.GetEventType();
 		if (t == wxEVT_LEFT_DOWN || t == wxEVT_RIGHT_DOWN) {
+			wxWindow* target = dynamic_cast<wxWindow*>(e.GetEventObject());
 			if (focused && focused != e.GetEventObject()) {
 				base->Refresh();
 
@@ -34,10 +35,12 @@ public:
 
 				if (!stat) { //Success
 					focused = nullptr;
-					base->SetFocus();
-					return Event_Processed;
+
+					int type = (int)(target->GetClientData());
+					if (wxGetMouseState().LeftIsDown() && (type == BandName || type == Start || type == End)) return Event_Skip;
+					row->Unfocus();
 				}
-				else //Failure, like you
+				else //Failure, like me
 					focused->SetFocus();
 				
 				return Event_Processed;
