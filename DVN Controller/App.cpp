@@ -14,9 +14,19 @@ private:
 		focused->SetFocus();
 		return Event_Processed;
 	}
-	int ChangeFreqs() {
+	int ChangeStart() {
 		BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
-		if (!row->ChangeFreqs()) {
+		if (!row->ChangeStart()) {
+			focused = nullptr;
+			base->SetFocus();
+			return Event_Processed;
+		}
+		focused->SetFocus();
+		return Event_Processed;
+	}
+	int ChangeEnd() {
+		BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
+		if (!row->ChangeEnd()) {
 			focused = nullptr;
 			base->SetFocus();
 			return Event_Processed;
@@ -39,8 +49,13 @@ public:
 				case BandName:
 					return RenameBand();
 					break;
-				case Freq:
-					return ChangeFreqs();
+				case Start:
+					return ChangeStart();
+					break;
+				case End:
+					return ChangeEnd();
+					break;
+				default:
 					break;
 				}
 			}

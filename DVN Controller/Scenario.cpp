@@ -16,22 +16,33 @@ Scenario::Scenario(string name) : DVNFileData("./scenarios/", ".dvns") {
 	}
 }
 
-Status Scenario::SetBandValues(char i, int startValue, int endValue) {
-	if (GetEndValue(i) != -1 && startValue > endValue) return StartValueHigherThanEndvalue;
-	if (GetStartValue(i) != -1 && startValue < GetStartValueBorder(i) || startValue > GetEndValueBorder(i)) return StartValueOutOfBounds;
-	if (endValue > GetEndValueBorder(i) || GetEndValue(i) != -1 && endValue < GetStartValueBorder(i)) return EndValueOutOfBounds;
+Status Scenario::SetStartValue(char i, int value)
+{
+	if (value > GetEndValue(i) && GetEndValue(i) != -1) return StartValueHigherThanEndvalue;
+	if (value > GetEndValueBorder(i) || value < GetStartValueBorder(i)) return StartValueOutOfBounds;
+	
+	bands[i].startValue = value;
+	CheckIfFull(i);
+	return Success;
+}
 
-	int invalidValue = bandRanges[GetRangeIndex(i)][2];
+Status Scenario::SetEndValue(char i, int value)
+{
+	if (value < GetStartValue(i)) return StartValueHigherThanEndvalue;
+	if (value > GetEndValueBorder(i) || value < GetStartValueBorder(i)) return EndValueOutOfBounds;
 
-	if (startValue == GetStartValueBorder(i) && endValue == GetEndValueBorder(i)) {
+	bands[i].endValue = value;
+	CheckIfFull(i);
+	return Success;
+}
+
+void Scenario::CheckIfFull(char i)
+{
+	if (GetStartValue(i) == GetStartValueBorder(i) && GetEndValue(i) == GetEndValueBorder(i)) {
 		for (char j = 0; j < BANDS_COUNT; j++) {
 			if (GetRangeIndex(j) == GetRangeIndex(i) && j != i) Disable(j);
 		}
 	}
-
-	bands[i].startValue = startValue;
-	bands[i].endValue = endValue;
-	return Success;
 }
 
 Status Scenario::TurnOn(char i) {
