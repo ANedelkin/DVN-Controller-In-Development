@@ -97,14 +97,24 @@ void MainFrame::NewLoad()
 }
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
-	SetFocus();
-	if (e.GetSelection() == 1) {
+	//SetFocus();
+	if (e.GetSelection() == Loads) {
 		separator->Show();
 		selJammLabel->Show();
 		devComboBox->Show();
 		loadToBtn->Show();
 		loadFromBtn->Show();
 		Layout();
+		if (filesystem::exists("loads") && filesystem::is_directory("load")) {
+			for (const auto& file : filesystem::directory_iterator("load")) {
+				if (filesystem::is_regular_file(file)) {
+					ifstream stream(file.path()); //Handle file not opening correctly
+					string temp;
+					while (getline(stream, temp));
+					//loadsPanel->
+				}
+			}
+		}
 	}
 	else {
 		separator->Hide();
@@ -113,6 +123,8 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 		loadToBtn->Hide();
 		loadFromBtn->Hide();
 	}
+
+
 }
 
 void MainFrame::OnNew(wxMouseEvent& e) {

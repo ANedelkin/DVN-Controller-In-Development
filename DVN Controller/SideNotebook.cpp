@@ -26,6 +26,10 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* so
 }
 
 void SideNotebook::SetContent(SideNotebookPanel* content) {
+	if (this->content) {
+		this->content->DestroyChildren();
+		this->content->Destroy();
+	}
 	this->content = content;
 	mainSizer->Add(this->content, 1, wxEXPAND | wxLEFT, FromDIP(5));
 	if (source) {
@@ -78,21 +82,34 @@ void SideNotebook::OnDelete(wxCommandEvent& e)
 {
 	wxMessageDialog dialog(base, "If you delete this you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
 	if (dialog.ShowModal() == wxID_YES) {
-		int i = find(pages.begin(), pages.end(), e.GetEventObject()) - pages.begin();
-		pages.erase(pages.begin() + i);
-		if (cur == e.GetEventObject()) {
-			if (pages.size() > 0) {
-				if (i < pages.size()) ChangeSelection(pages[i]);
-				else ChangeSelection(pages[i - 1]);
-			}
-			else {
-				content->UnInit();
-				cur = nullptr;
-			}
+		Remove(dynamic_cast<wxWindowBase*>(e.GetEventObject()));
+	}
+}
+
+void SideNotebook::Remove(wxWindowBase* win)
+{
+	int i = find(pages.begin(), pages.end(), win) - pages.begin();
+	pages.erase(pages.begin() + i);
+	if (cur == win) {
+		if (pages.size() > 0) {
+			if (i < pages.size()) ChangeSelection(pages[i]);
+			else ChangeSelection(pages[i - 1]);
 		}
-		pagesSizer->Remove(i);
-		Layout();
-		dynamic_cast<wxWindowBase*>(e.GetEventObject())->Destroy();
+		else {
+			content->UnInit();
+			cur = nullptr;
+		}
+	}
+	pagesSizer->Remove(i);
+	Layout();
+	win->Destroy();
+}
+
+void SideNotebook::RemoveAll()
+{
+	for (SideMenuCtrl* page : pages)
+	{
+		Remove(page);
 	}
 }
 
