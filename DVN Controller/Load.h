@@ -34,8 +34,8 @@ public:
 		//	ScenarioPreset preset = ScenarioPreset::ToScenarioPreset(scenario);
 		//	for (char j = 0; j < BANDS_COUNT; j++)
 		//	{
-		//		load.scenarios.push_back(Scenario(preset.name));
-		//		load.scenarios[i].SetBandValues(j, preset.bands[j].startValue, preset.bands[j].endValue);
+		//		load.children.push_back(Scenario(preset.name));
+		//		load.children[i].SetBandValues(j, preset.bands[j].startValue, preset.bands[j].endValue);
 		//	}
 		//}
 		return Load();

@@ -25,8 +25,10 @@ private:
 	void ChangeSelection(SideMenuCtrl* scenCtrl);
 
 	void OnSelect(wxMouseEvent& e);
-
 	void OnDelete(wxCommandEvent& e);
+
+	void Remove(wxWindowBase* win);
+	void RemoveAll();
 public:
 	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr);
 

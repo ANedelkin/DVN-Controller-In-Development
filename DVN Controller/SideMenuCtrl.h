@@ -28,6 +28,9 @@ private:
 		eOut.SetEventObject(this);
 		mainPanel->GetEventHandler()->ProcessEvent(eOut);
 	}
+	void OnSave(wxCommandEvent& e) {
+		source->Save();
+	}
 public:
 	SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source, bool subMenu) : wxButton(parent, wxID_ANY, source->GetName()) {
 		SetMinSize(FromDIP(wxSize(-1, 40)));
@@ -44,7 +47,10 @@ public:
 		contextMenu->Bind(wxEVT_MENU, &SideMenuCtrl::OnRename, this, rename->GetId());
 
 		if (subMenu) {
-			
+			wxMenuItem* save = new wxMenuItem(contextMenu, wxID_ANY, "Save as template");
+			save->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_SAVE));
+			contextMenu->Append(save);
+			contextMenu->Bind(wxEVT_MENU, &SideMenuCtrl::OnSave, this, save->GetId());
 		}
 		else {
 			wxMenuItem* deleteItem = new wxMenuItem(contextMenu, wxID_DELETE, "Delete");
