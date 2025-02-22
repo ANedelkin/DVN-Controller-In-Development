@@ -4,7 +4,9 @@
 
 wxWindow* base = nullptr;
 wxWindow* focused = nullptr;
-char ctrlHeight = 0;
+
+wxPanel* emptyPanel = nullptr;
+wxStaticText* emptyText = nullptr;
 
 map<int, string> errorMessages = {
     {StartValueOutOfBounds , "Start value outside bounds!"},

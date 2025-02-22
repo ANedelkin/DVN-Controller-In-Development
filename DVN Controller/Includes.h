@@ -31,4 +31,6 @@ using namespace std;
 using namespace filesystem;
 using namespace chrono;
 
+#include "Icon.xpm"
+
 #include "ModelConstants.h"

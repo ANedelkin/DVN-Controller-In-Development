@@ -153,6 +153,7 @@
     <ClCompile Include="ModelConstants.cpp" />
     <ClCompile Include="NameSetter.cpp" />
     <ClCompile Include="Scenario.cpp" />
+    <ClCompile Include="ScenariosFrame.cpp" />
     <ClCompile Include="ScenariosPanel.cpp" />
     <ClCompile Include="SideNotebook.cpp" />
     <ClCompile Include="SideNotebookPanel.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="resource1.h" />
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="ScenarioPreset.h" />
+    <ClInclude Include="ScenariosFrame.h" />
     <ClInclude Include="ScenariosPanel.h" />
     <ClInclude Include="SideMenuCtrl.h" />
     <ClInclude Include="SideNotebook.h" />

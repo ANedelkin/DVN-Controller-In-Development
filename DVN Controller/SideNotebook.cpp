@@ -8,7 +8,7 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* so
 	pagesBoxSizer = new wxStaticBoxSizer(wxVERTICAL, pagesBox, sideMenuTxt);
 	pagesBoxSizer->AddSpacer(FromDIP(38));
 	pagesBox->SetSizerAndFit(pagesBoxSizer);
-	pagesBox->SetMinSize(FromDIP(wxSize(210, -1)));
+	pagesBox->SetMinSize(FromDIP(wxSize(210, -1)));  
 
 	pagesSizer = new wxBoxSizer(wxVERTICAL);
 	pagesList = new wxPanel(pagesBox);

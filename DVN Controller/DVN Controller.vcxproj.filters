@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Other classes">
       <UniqueIdentifier>{74dc76ab-4341-43a9-b04b-202e2163b4b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Custom windows">
+      <UniqueIdentifier>{81eab0ba-123c-48bd-849a-df09390437f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -77,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="SideNotebookPanel.cpp">
       <Filter>Source Files\Other classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenariosFrame.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,19 +131,39 @@
     <ClInclude Include="DVNFileData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SideMenuCtrl.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SideMenuCtrl.h">
+      <Filter>Header Files\Custom windows</Filter>
     </ClInclude>
     <ClInclude Include="SideNotebook.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Custom windows</Filter>
     </ClInclude>
     <ClInclude Include="SideNotebookPanel.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Custom windows</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenariosFrame.h">
+      <Filter>Header Files\Custom windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\x64\Release\DVN Controller.exe">
       <Filter>Output</Filter>
     </None>
+    <None Include="Icon.xpm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DVN Controller.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

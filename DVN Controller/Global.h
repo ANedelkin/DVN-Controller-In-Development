@@ -6,7 +6,12 @@
 
 extern wxWindow* base;
 extern wxWindow* focused;
-extern char ctrlHeight;
+
+
+//Ctrls:
+
+extern wxPanel* emptyPanel;
+extern wxStaticText* emptyText;
 
 
 //Errors:

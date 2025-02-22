@@ -33,8 +33,6 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 	mainSizer->Add(notebook, 0, wxEXPAND);
 
 	SetSizer(mainSizer);
-
-	notebook->Bind(wxEVT_NOTEBOOK_PAGE_CHANGED, &MainFrame::OnTabChanged, this);
 }
 
 void MainFrame::CreateToolBar()
@@ -45,29 +43,27 @@ void MainFrame::CreateToolBar()
 	#define CTRL_HEIGHT 30
 
 	newBtn = new wxButton(toolBar, wxID_ANY, "New");
+	openBtn = new wxButton(toolBar, wxID_ANY, "Open");
 	saveBtn = new wxButton(toolBar, wxID_ANY, "Save");
-	addBtn = new wxButton(toolBar, wxID_ANY, "Add existing");
+	scenBtn = new wxButton(toolBar, wxID_ANY, "Scenario templates");
 
 	separator = new wxStaticLine(toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVERTICAL);
 
 	selJammLabel = new wxStaticText(toolBar, wxID_ANY, "Select jammer: ");
 	devComboBox = new wxComboBox(toolBar, wxID_ANY, "", wxDefaultPosition, FromDIP(wxSize(150, -1)), 0, nullptr, wxCB_READONLY);
-	selJammLabel->Hide();
-	devComboBox->Hide();
 
 
 	loadToBtn = new wxButton(toolBar, wxID_UP, "Load to jammer");
 	loadFromBtn = new wxButton(toolBar, wxID_DOWN, "Load from jammer");
-	loadToBtn->Hide();
-	loadFromBtn->Hide();
 
 	aboutBtn = new wxButton(toolBar, wxID_ANY, "About");
 
 	#define PADDING FromDIP(5)
 
 	toolBarSizer->Add(newBtn, 0, wxEXPAND | wxALL, PADDING);
+	toolBarSizer->Add(openBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(saveBtn, 0, wxEXPAND | wxALL, PADDING);
-	toolBarSizer->Add(addBtn, 0, wxEXPAND | wxALL, PADDING);
+	toolBarSizer->Add(scenBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(separator, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(selJammLabel, 0, wxALIGN_CENTER | wxALL, PADDING);
 	toolBarSizer->Add(devComboBox, 0, wxALIGN_CENTER | wxRIGHT | wxTOP | wxBOTTOM, PADDING + 1);
@@ -80,6 +76,7 @@ void MainFrame::CreateToolBar()
 
 	newBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnNew, this);
 	saveBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnSave, this);
+	scenBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnScenarios, this);
 }
 
 void MainFrame::NewScenario()
@@ -96,49 +93,20 @@ void MainFrame::NewLoad()
 	if (nameSetter->ok) loadsPanel->AddPage(new Load(nameSetter->name), false);
 }
 
-void MainFrame::OnTabChanged(wxNotebookEvent& e) {
-	//SetFocus();
-	if (e.GetSelection() == Loads) {
-		separator->Show();
-		selJammLabel->Show();
-		devComboBox->Show();
-		loadToBtn->Show();
-		loadFromBtn->Show();
-		Layout();
-		if (filesystem::exists("loads") && filesystem::is_directory("load")) {
-			for (const auto& file : filesystem::directory_iterator("load")) {
-				if (filesystem::is_regular_file(file)) {
-					ifstream stream(file.path()); //Handle file not opening correctly
-					string temp;
-					while (getline(stream, temp));
-					//loadsPanel->
-				}
-			}
-		}
-	}
-	else {
-		separator->Hide();
-		selJammLabel->Hide();
-		devComboBox->Hide();
-		loadToBtn->Hide();
-		loadFromBtn->Hide();
-	}
-
-
-}
-
 void MainFrame::OnNew(wxMouseEvent& e) {
-	switch (notebook->GetSelection())
-	{
-	case Scenarios:
-		NewScenario();
-		break;
-	case Loads:
-		NewLoad();
-		break;
-	default:
-		break;
-	}
+	NameSetter* nameSetter = new NameSetter(this, "Enter load name", Load::ValidateName);
+	nameSetter->ShowModal();
+	//if (nameSetter->ok) {
+	//	loads.push_back(Load(nameSetter->name));
+	//	LoadsPanel* loadPanel = new LoadPanel(&loads[loads.size() - 1], notebook);
+	//	loadPanel->SetBackgroundColour(wxColour(255, 255, 255));
+	//	if (!notebook->GetPageCount()) {
+	//		emptyMessagePanel->Show(false);
+	//		notebook->Show();
+	//	}
+	//	notebook->AddPage(loadPanel, nameSetter->name, true);
+	//	Layout();
+	//}
 }
 
 void MainFrame::OnSave(wxMouseEvent& e)
@@ -155,5 +123,11 @@ void MainFrame::OnSave(wxMouseEvent& e)
 		break;
 	}
 	e.Skip();
+}
+
+void MainFrame::OnScenarios(wxMouseEvent& e)
+{
+	ScenariosFrame* frame = new ScenariosFrame(this, false);
+	frame->ShowModal();
 }
 

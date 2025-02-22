@@ -1,11 +1,10 @@
 #pragma once
 #include "Global.h"
 
-#include "Icon.xpm"
-
 #include "NameSetter.h"
 #include "BandsPanel.h"
 #include "SideNotebook.h"
+#include  "ScenariosFrame.h"
 
 #include "ScenariosPanel.h"
 #include "LoadsPanel.h"
@@ -13,17 +12,14 @@
 class MainFrame : public wxFrame
 {
 private:
-	//wxToolBar* toolBar;
 	wxNotebook* notebook;
 	SideNotebook* scenariosPanel;
 	SideNotebook* loadsPanel;
 
-	wxPanel* emptyPanel;
-	wxStaticText* emptyText;
-
 	wxButton* newBtn;
+	wxButton* openBtn;
 	wxButton* saveBtn;
-	wxButton* addBtn;
+	wxButton* scenBtn;
 	wxPanel* toolBar;
 	wxStaticLine* separator;
 	wxStaticText* selJammLabel;
@@ -38,9 +34,9 @@ private:
 	void NewScenario();
 	void NewLoad();
 
-	void OnTabChanged(wxNotebookEvent& e);
 	void OnNew(wxMouseEvent& e);
 	void OnSave(wxMouseEvent& e);
+	void OnScenarios(wxMouseEvent& e);
 public:
 	BandsPanel* bandsPanel;
 	MainFrame(const string& title);
