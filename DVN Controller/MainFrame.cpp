@@ -18,6 +18,7 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 	BandsPanel* scenBandsPanel = new BandsPanel(scenariosPanel, new Scenario());
 	scenBandsPanel->UnInit();
 	scenariosPanel->SetContent(scenBandsPanel);
+	LoadScenarios();
 
 	loadsPanel = new SideNotebook(notebook, "Loads");
 	SideNotebook* loadScenPanel = new SideNotebook(loadsPanel, "Scenarios", new Load());
@@ -49,6 +50,7 @@ void MainFrame::CreateToolBar()
 	addBtn = new wxButton(toolBar, wxID_ANY, "Add existing");
 
 	separator = new wxStaticLine(toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVERTICAL);
+	separator->Hide();
 
 	selJammLabel = new wxStaticText(toolBar, wxID_ANY, "Select jammer: ");
 	devComboBox = new wxComboBox(toolBar, wxID_ANY, "", wxDefaultPosition, FromDIP(wxSize(150, -1)), 0, nullptr, wxCB_READONLY);
@@ -82,6 +84,15 @@ void MainFrame::CreateToolBar()
 	saveBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnSave, this);
 }
 
+void MainFrame::LoadScenarios()
+{
+	vector<Scenario*> scenarios = Scenario::LoadScenarios();
+	for (char i = 0; i < scenarios.size(); i++)
+	{
+		scenariosPanel->AddPage(scenarios[i], false);
+	}
+}
+
 void MainFrame::NewScenario()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
@@ -105,16 +116,6 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 		loadToBtn->Show();
 		loadFromBtn->Show();
 		Layout();
-		if (filesystem::exists("loads") && filesystem::is_directory("load")) {
-			for (const auto& file : filesystem::directory_iterator("load")) {
-				if (filesystem::is_regular_file(file)) {
-					ifstream stream(file.path()); //Handle file not opening correctly
-					string temp;
-					while (getline(stream, temp));
-					//loadsPanel->
-				}
-			}
-		}
 	}
 	else {
 		separator->Hide();
@@ -123,8 +124,6 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 		loadToBtn->Hide();
 		loadFromBtn->Hide();
 	}
-
-
 }
 
 void MainFrame::OnNew(wxMouseEvent& e) {

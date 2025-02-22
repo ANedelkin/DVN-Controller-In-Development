@@ -13,7 +13,6 @@
 class MainFrame : public wxFrame
 {
 private:
-	//wxToolBar* toolBar;
 	wxNotebook* notebook;
 	SideNotebook* scenariosPanel;
 	SideNotebook* loadsPanel;
@@ -34,7 +33,8 @@ private:
 
 	void CreateToolBar();
 
-	//void NewBand();
+	void LoadScenarios();
+
 	void NewScenario();
 	void NewLoad();
 
@@ -42,6 +42,5 @@ private:
 	void OnNew(wxMouseEvent& e);
 	void OnSave(wxMouseEvent& e);
 public:
-	BandsPanel* bandsPanel;
 	MainFrame(const string& title);
 };
