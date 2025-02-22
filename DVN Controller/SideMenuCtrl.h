@@ -16,7 +16,7 @@ private:
 
 	}
 	void OnRename(wxCommandEvent& e) {
-		NameSetter* nameSetter = new NameSetter(base, "Enter scenario name", DVNFileData::ValidateName);
+		NameSetter* nameSetter = new NameSetter(base, "Enter name", DVNFileData::ValidateName);
 		nameSetter->ShowModal();
 		if (nameSetter->ok) {
 			source->Rename(nameSetter->name);
@@ -24,6 +24,9 @@ private:
 		}
 	}
 	void OnDelete(wxCommandEvent& eIn) {
+		if (exists(source->GetPath())) {
+			remove(source->GetPath());
+		}
 		wxCommandEvent eOut(wxEVT_COMMAND_MENU_SELECTED);
 		eOut.SetEventObject(this);
 		mainPanel->GetEventHandler()->ProcessEvent(eOut);
