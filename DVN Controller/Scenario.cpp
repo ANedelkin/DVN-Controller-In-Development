@@ -3,8 +3,9 @@
 #include "Scenario.h"
 
 Scenario::Scenario() : Scenario("Unnamed scenario") {}
-Scenario::Scenario(string name) : DVNFileData("./scenarios/", ".dvns") {
-	this->name = name;
+Scenario::Scenario(string name) : DVNFileData(name) {
+	this->folder = "./scenarios";
+	this->extension = ".dvns";
 	int k = 0;
 	for (int i = 0; i < BAND_RANGES_COUNT; i++) {
 		BandInfo band = BandInfo(i, -1, -1);
@@ -92,11 +93,10 @@ void Scenario::Disable(char i) {
 	bands[i].working = false;
 }
 
-Scenario* Scenario::ToScenario(string data)
+Scenario* Scenario::ToScenario(const string& name, const string& data)
 {
-	Scenario* scenario = new Scenario();
+	Scenario* scenario = new Scenario(name);
 	stringstream stream(data);
-	getline(stream, scenario->name);
 	string bandString;
 	for (int i = 0; i < BANDS_COUNT && getline(stream, bandString); i++) {
 		vector<string> values = Split(bandString, '|');
@@ -114,7 +114,8 @@ vector<Scenario*> Scenario::LoadScenarios()
 			ifstream stream(scenario.path());
 			stringstream data;
 			data << stream.rdbuf();
-			output.push_back(ToScenario(data.str()));
+			const string name = scenario.path().filename().string();
+			output.push_back(ToScenario(name.substr(0, name.length() - 5), data.str()));
 		}
 	}
 	return output;
@@ -128,10 +129,10 @@ string Scenario::BandSaveString(char i) const {
 
 string Scenario::SaveString() const {
 	ostringstream stream;
-	stream << name;
 	for (char i = 0; i < bands.size(); i++)
 	{
-		stream << endl << BandSaveString(i);
+		stream << BandSaveString(i);
+		if (i != bands.size() - 1) stream << endl;
 	}
 	return stream.str();
 }

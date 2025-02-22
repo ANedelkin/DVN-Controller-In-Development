@@ -9,13 +9,17 @@ protected:
 	string folder;
 	string extension;
 public:
-	DVNFileData(string folder, string extension);
+	bool upToDate;
+
+	DVNFileData(string name);
 
 	vector<DVNFileData*> children;
 
 	Status Rename(string name);
 	string GetName();
 	static Status ValidateName(string& name);
+
+	string GetPath() const;
 	
 	virtual string SaveString() const = 0;
 	void Save() const;

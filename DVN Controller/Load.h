@@ -8,8 +8,9 @@
 class Load : public DVNFileData {
 public:
 	Load() : Load("Unnamed load") {}
-	Load(string name) : DVNFileData("./loads/", ".dvnl") {
-		this->name = name;
+	Load(string name) : DVNFileData(name) {
+		this->folder = "./loads";
+		this->extension = ".dvnl";
 		for (char i = 0; i < SCENARIOS_COUNT; i++)
 		{
 			children.push_back(new Scenario());
