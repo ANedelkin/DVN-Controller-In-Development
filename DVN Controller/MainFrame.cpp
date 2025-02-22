@@ -46,6 +46,8 @@ void MainFrame::CreateToolBar()
 	#define CTRL_HEIGHT 30
 
 	newBtn = new wxButton(toolBar, wxID_ANY, "New");
+	openBtn = new wxButton(toolBar, wxID_ANY, "Open");
+	openBtn->Hide();
 	saveBtn = new wxButton(toolBar, wxID_ANY, "Save");
 	addBtn = new wxButton(toolBar, wxID_ANY, "Add existing");
 
@@ -68,6 +70,7 @@ void MainFrame::CreateToolBar()
 	#define PADDING FromDIP(5)
 
 	toolBarSizer->Add(newBtn, 0, wxEXPAND | wxALL, PADDING);
+	toolBarSizer->Add(openBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(saveBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(addBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(separator, 0, wxEXPAND | wxALL, PADDING);
@@ -110,6 +113,8 @@ void MainFrame::NewLoad()
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 	//SetFocus();
 	if (e.GetSelection() == Loads) {
+		addBtn->Hide();
+		openBtn->Show();
 		separator->Show();
 		selJammLabel->Show();
 		devComboBox->Show();
@@ -118,12 +123,15 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 		Layout();
 	}
 	else {
+		addBtn->Show();
+		openBtn->Hide();
 		separator->Hide();
 		selJammLabel->Hide();
 		devComboBox->Hide();
 		loadToBtn->Hide();
 		loadFromBtn->Hide();
 	}
+	Layout();
 }
 
 void MainFrame::OnNew(wxMouseEvent& e) {

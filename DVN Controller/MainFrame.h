@@ -21,6 +21,7 @@ private:
 	wxStaticText* emptyText;
 
 	wxButton* newBtn;
+	wxButton* openBtn;
 	wxButton* saveBtn;
 	wxButton* addBtn;
 	wxPanel* toolBar;
