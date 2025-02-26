@@ -33,10 +33,11 @@ public:
 	void Enable(char i);
 	void Disable(char i);
 
-	static Scenario* ToScenario(const string& name, const string& data);
+	static Scenario* ToScenario(const string& name, stringstream& data);
 	static vector<Scenario*> LoadScenarios();
 
 	string BandSaveString(char i) const;
 
 	string SaveString() const override;
+	void Save() const override;
 };

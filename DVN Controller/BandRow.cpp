@@ -144,9 +144,11 @@ Status BandRow::Rename() {
         int id = dialog.ShowModal();
         if (id == wxID_CANCEL) {
             name->SetValue(scenario->GetName(bandNum));
+            MarkUnsaved();
             return Success;
         }
     }
+    MarkUnsaved();
     return stat;
 }
     
@@ -185,4 +187,11 @@ Status BandRow::ChangeEnd() {
 void BandRow::Unfocus()
 {
     unfocused->SetFocus();
+}
+
+void BandRow::MarkUnsaved()
+{
+    wxCommandEvent e(EVT_UNSAVE);
+    e.SetClientData(scenario);
+    GetParent()->GetEventHandler()->ProcessEvent(e);
 }

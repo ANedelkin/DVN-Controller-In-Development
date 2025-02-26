@@ -21,6 +21,8 @@ private:
     void BindEventHandlers();
     void SetUpSizers();
 
+    void MarkUnsaved();
+
     void OnResize(wxSizeEvent& e);
 
     void OnNameEnter(wxCommandEvent& e);

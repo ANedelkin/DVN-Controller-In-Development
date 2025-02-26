@@ -41,6 +41,7 @@ private:
 
 	void OnTabChanged(wxNotebookEvent& e);
 	void OnNew(wxMouseEvent& e);
+	void OnOpen(wxMouseEvent& e);
 	void OnSave(wxMouseEvent& e);
 public:
 	MainFrame(const string& title);

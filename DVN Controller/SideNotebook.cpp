@@ -1,6 +1,6 @@
 #include "SideNotebook.h"
 
-SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* source) : SideNotebookPanel(parent, source)
+SideNotebook::SideNotebook(wxWindow* parent, wxPanel* mainPanel, string sideMenuTxt, DVNFileData* source) : SideNotebookPanel(parent, mainPanel, source)
 {
 	mainSizer = new wxBoxSizer(wxHORIZONTAL);
 
@@ -20,7 +20,8 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* so
 
 	this->SetSizerAndFit(mainSizer);
 
-	Bind(wxEVT_COMMAND_MENU_SELECTED, &SideNotebook::OnDelete, this);
+	Bind(EVT_DELETE, &SideNotebook::OnDelete, this);
+	Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, this);
 
 	this->source = source;
 }
@@ -82,11 +83,27 @@ void SideNotebook::OnDelete(wxCommandEvent& e)
 {
 	wxMessageDialog dialog(base, "If you delete this you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
 	if (dialog.ShowModal() == wxID_YES) {
-		Remove(dynamic_cast<wxWindowBase*>(e.GetEventObject()));
+		SideMenuCtrl* target = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
+		if (exists(target->GetSource()->GetPath())) {
+			remove(target->GetSource()->GetPath());
+		}
+		Remove(target);
 	}
 }
 
-void SideNotebook::Remove(wxWindowBase* win)
+void SideNotebook::OnUnsave(wxCommandEvent& e)
+{
+	void* data = e.GetClientData();
+	for (SideMenuCtrl* page : pages)
+	{
+		if (page->GetSource() == data) {
+			page->Unsave();
+			return;
+		}
+	}
+}
+
+void SideNotebook::Remove(SideMenuCtrl* win)
 {
 	int i = find(pages.begin(), pages.end(), win) - pages.begin();
 	pages.erase(pages.begin() + i);
@@ -124,7 +141,16 @@ void SideNotebook::ChangeSource(DVNFileData* source) {
 
 void SideNotebook::SaveCurrent()
 {
-	content->Save();
+	if (!cur) return;
+	DVNFileData* curData = cur->GetSource();
+	if (curData->folder == "") {
+		wxDirDialog dialog(this, "Select a folder", "", wxDD_DEFAULT_STYLE);
+		if (dialog.ShowModal() == wxID_OK) {
+			curData->folder = dialog.GetPath();
+		}
+		else return;
+	}
+	curData->Save();
 }
 
 void SideNotebook::Init() {

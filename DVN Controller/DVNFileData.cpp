@@ -35,13 +35,3 @@ string DVNFileData::GetPath() const
 {
 	return folder + "\\" + name + extension;
 }
-
-void DVNFileData::Save() const
-{
-	if (!exists(folder)) create_directory(folder);
-	ostringstream fileName;
-	fileName << GetPath();
-	ofstream stream(fileName.str());
-	stream << this->SaveString();
-	stream.close();
-}

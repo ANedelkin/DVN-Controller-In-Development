@@ -32,3 +32,7 @@ Status ValidateName(string& name) {
     if (name.find('|') != string::npos) return InvalidName;
     return Success;
 }
+
+//wxEventType EVT_DELETE = wxNewEventType();
+wxDEFINE_EVENT(EVT_DELETE, wxCommandEvent);
+wxDEFINE_EVENT(EVT_UNSAVE, wxCommandEvent);

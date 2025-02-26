@@ -6,9 +6,9 @@ class DVNFileData
 {
 protected:
 	string name;
-	string folder;
 	string extension;
 public:
+	string folder;
 	bool upToDate;
 
 	DVNFileData(string name);
@@ -22,6 +22,6 @@ public:
 	string GetPath() const;
 	
 	virtual string SaveString() const = 0;
-	void Save() const;
+	virtual void Save() const = 0;
 };
 

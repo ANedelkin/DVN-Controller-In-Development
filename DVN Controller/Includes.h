@@ -11,7 +11,7 @@
 #include <wx/utils.h>
 #include <wx/eventfilter.h>
 #include <wx/statline.h>
-
+#include <wx/filename.h>
 
 #include <iostream>
 

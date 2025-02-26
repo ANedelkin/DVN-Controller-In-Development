@@ -93,10 +93,9 @@ void Scenario::Disable(char i) {
 	bands[i].working = false;
 }
 
-Scenario* Scenario::ToScenario(const string& name, const string& data)
+Scenario* Scenario::ToScenario(const string& name, stringstream& stream)
 {
 	Scenario* scenario = new Scenario(name);
-	stringstream stream(data);
 	string bandString;
 	for (int i = 0; i < BANDS_COUNT && getline(stream, bandString); i++) {
 		vector<string> values = Split(bandString, '|');
@@ -115,7 +114,7 @@ vector<Scenario*> Scenario::LoadScenarios()
 			stringstream data;
 			data << stream.rdbuf();
 			const string name = scenario.path().filename().string();
-			output.push_back(ToScenario(name.substr(0, name.length() - 5), data.str()));
+			output.push_back(ToScenario(name.substr(0, name.length() - 5), data));
 		}
 	}
 	return output;
@@ -135,4 +134,14 @@ string Scenario::SaveString() const {
 		if (i != bands.size() - 1) stream << endl;
 	}
 	return stream.str();
+}
+
+void Scenario::Save() const
+{
+	if (!exists(folder)) create_directory(folder);
+	ostringstream fileName;
+	fileName << GetPath();
+	ofstream stream(fileName.str());
+	stream << this->SaveString();
+	stream.close();
 }

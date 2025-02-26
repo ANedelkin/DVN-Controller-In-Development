@@ -1,14 +1,11 @@
 #include "SideNotebookPanel.h"
 
-SideNotebookPanel::SideNotebookPanel(wxWindow* parent, DVNFileData* source) : wxPanel(parent)
+SideNotebookPanel::SideNotebookPanel(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source) : wxPanel(parent)
 {
 	this->source = source;
 	this->isInited = false;
-}
 
-void SideNotebookPanel::Save()
-{
-	source->Save();
+	this->mainPanel = mainPanel;
 }
 
 bool SideNotebookPanel::IsInited()  { return isInited; }
@@ -21,6 +18,13 @@ void SideNotebookPanel::Init()
 void SideNotebookPanel::UnInit()
 {
 	isInited = false;
+}
+
+void SideNotebookPanel::MarkUnsaved()
+{
+	wxCommandEvent e(EVT_UNSAVE);
+	e.SetClientData(source);
+	mainPanel->GetEventHandler()->ProcessEvent(e);
 }
 
 

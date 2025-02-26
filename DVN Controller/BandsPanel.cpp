@@ -1,7 +1,7 @@
 #include "BandsPanel.h"
 #include "Load.h"
 
-BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : SideNotebookPanel(parent, scenario) {
+BandsPanel::BandsPanel(wxWindow* parent, wxPanel* mainPanel, Scenario* scenario) : SideNotebookPanel(parent, mainPanel, scenario) {
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
 
     wxStaticBox* bandsBox = new wxStaticBox(this, wxID_ANY, "Bands");
@@ -19,7 +19,6 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : SideNotebookPanel
     wxBoxSizer* scrollSizer = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* contentSizer = new wxBoxSizer(wxVERTICAL);
 
-    do {
         wxFont labelsFont = wxFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
         wxStaticText* nameLabel = new wxStaticText(labels, wxID_ANY, "Name", wxDefaultPosition, FromDIP(wxSize(250, -1)));
@@ -40,7 +39,6 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : SideNotebookPanel
         labelsSizer->AddSpacer(FromDIP(10));
 
         labels->SetSizerAndFit(labelsSizer);
-    } while (0); //Labels
 
     this->source = scenario;
 

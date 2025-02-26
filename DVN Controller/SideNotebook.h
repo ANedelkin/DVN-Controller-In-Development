@@ -26,11 +26,12 @@ private:
 
 	void OnSelect(wxMouseEvent& e);
 	void OnDelete(wxCommandEvent& e);
+	void OnUnsave(wxCommandEvent& e);
 
-	void Remove(wxWindowBase* win);
+	void Remove(SideMenuCtrl* win);
 	void RemoveAll();
 public:
-	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr);
+	SideNotebook(wxWindow* parent, wxPanel* mainPanel, string sideMenuTxt, DVNFileData* data = nullptr);
 
 	void SetContent(SideNotebookPanel* content);
 
@@ -38,7 +39,7 @@ public:
 
 	void ChangePage(DVNFileData* data);
 
-	void ChangeSource(DVNFileData* data) override;
+	void ChangeSource(DVNFileData* source) override;
 	void SaveCurrent();
 	void Init() override;
 	void UnInit() override;

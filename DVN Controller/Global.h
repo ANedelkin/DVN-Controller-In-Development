@@ -49,6 +49,13 @@ enum InputType {
     End,
 };
 
+
 //Colours
 
 #define DARK_GREEN wxColour(0, 127, 14)
+
+
+//Events
+wxDECLARE_EVENT(EVT_DELETE, wxCommandEvent);
+wxDECLARE_EVENT(EVT_UNSAVE, wxCommandEvent);
+//extern wxEventType EVT_UNSAVE;

@@ -24,10 +24,7 @@ private:
 		}
 	}
 	void OnDelete(wxCommandEvent& eIn) {
-		if (exists(source->GetPath())) {
-			remove(source->GetPath());
-		}
-		wxCommandEvent eOut(wxEVT_COMMAND_MENU_SELECTED);
+		wxCommandEvent eOut(EVT_DELETE);
 		eOut.SetEventObject(this);
 		mainPanel->GetEventHandler()->ProcessEvent(eOut);
 	}
@@ -70,5 +67,12 @@ public:
 	void ChangeSource(DVNFileData* source) {
 		this->source = source;
 		SetLabel(source->GetName());
+	}
+
+	void Unsave() {
+		source->upToDate = false;
+		wxFont newFont = GetFont();
+		newFont.SetWeight(wxFONTWEIGHT_BOLD);
+		SetFont(newFont);
 	}
 };

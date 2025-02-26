@@ -14,15 +14,15 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 
 	notebook = new wxNotebook(this, wxID_ANY);
 
-	scenariosPanel = new SideNotebook(notebook, "Scenarios");
-	BandsPanel* scenBandsPanel = new BandsPanel(scenariosPanel, new Scenario());
+	scenariosPanel = new SideNotebook(notebook, nullptr, "Scenarios");
+	BandsPanel* scenBandsPanel = new BandsPanel(scenariosPanel, scenariosPanel, new Scenario());
 	scenBandsPanel->UnInit();
 	scenariosPanel->SetContent(scenBandsPanel);
 	LoadScenarios();
 
-	loadsPanel = new SideNotebook(notebook, "Loads");
-	SideNotebook* loadScenPanel = new SideNotebook(loadsPanel, "Scenarios", new Load());
-	BandsPanel* loadBandsPanel = new BandsPanel(loadScenPanel, new Scenario());
+	loadsPanel = new SideNotebook(notebook, nullptr, "Loads");
+	SideNotebook* loadScenPanel = new SideNotebook(loadsPanel, loadsPanel, "Scenarios", new Load());
+	BandsPanel* loadBandsPanel = new BandsPanel(loadScenPanel, loadsPanel, new Scenario());
 	loadScenPanel->SetContent(loadBandsPanel);
 	loadScenPanel->UnInit();
 	loadsPanel->SetContent(loadScenPanel);
@@ -84,6 +84,7 @@ void MainFrame::CreateToolBar()
 	toolBar->SetSizerAndFit(toolBarSizer);
 
 	newBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnNew, this);
+	openBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnOpen, this);
 	saveBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnSave, this);
 }
 
@@ -145,6 +146,25 @@ void MainFrame::OnNew(wxMouseEvent& e) {
 		break;
 	default:
 		break;
+	}
+}
+
+void MainFrame::OnOpen(wxMouseEvent& e)
+{
+	wxFileDialog dialog(this, "Select Load/s", "", "", "Load files (*.dvnl)|*.dvnl", wxFD_MULTIPLE);
+	wxArrayString paths;
+
+	if (dialog.ShowModal() == wxID_OK) {
+		dialog.GetPaths(paths);
+		for (const auto& path : paths)
+		{
+			ifstream stream(path.ToStdString());
+			stringstream data;
+			data << stream.rdbuf();
+			wxFileName fn(path);
+			const string name = fn.GetName().ToStdString();
+			loadsPanel->AddPage(Load::ToLoad(name, fn.GetPath().ToStdString(), data), false);
+		}
 	}
 }
 
