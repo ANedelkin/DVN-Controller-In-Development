@@ -137,6 +137,7 @@ void BandRow::ChangeScenario(Scenario* scenario) {
 
 Status BandRow::Rename() {
     string newName = name->GetLineText(0).ToStdString();
+    if (newName == scenario->GetName(bandNum)) return Success;
     Status stat = scenario->Rename(newName, bandNum);
     if (stat) {
         wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
@@ -144,7 +145,6 @@ Status BandRow::Rename() {
         int id = dialog.ShowModal();
         if (id == wxID_CANCEL) {
             name->SetValue(scenario->GetName(bandNum));
-            MarkUnsaved();
             return Success;
         }
     }
@@ -192,6 +192,5 @@ void BandRow::Unfocus()
 void BandRow::MarkUnsaved()
 {
     wxCommandEvent e(EVT_UNSAVE);
-    e.SetClientData(scenario);
     GetParent()->GetEventHandler()->ProcessEvent(e);
 }

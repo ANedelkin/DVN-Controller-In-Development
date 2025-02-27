@@ -1,6 +1,6 @@
 #include "SideNotebook.h"
 
-SideNotebook::SideNotebook(wxWindow* parent, wxPanel* mainPanel, string sideMenuTxt, DVNFileData* source) : SideNotebookPanel(parent, mainPanel, source)
+SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* source) : SideNotebookPanel(parent, source)
 {
 	mainSizer = new wxBoxSizer(wxHORIZONTAL);
 
@@ -21,7 +21,6 @@ SideNotebook::SideNotebook(wxWindow* parent, wxPanel* mainPanel, string sideMenu
 	this->SetSizerAndFit(mainSizer);
 
 	Bind(EVT_DELETE, &SideNotebook::OnDelete, this);
-	Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, this);
 
 	this->source = source;
 }
@@ -93,14 +92,12 @@ void SideNotebook::OnDelete(wxCommandEvent& e)
 
 void SideNotebook::OnUnsave(wxCommandEvent& e)
 {
-	void* data = e.GetClientData();
-	for (SideMenuCtrl* page : pages)
-	{
-		if (page->GetSource() == data) {
-			page->Unsave();
-			return;
-		}
-	}
+	Unsave();
+}
+
+void SideNotebook::Unsave()
+{
+	cur->Unsave();
 }
 
 void SideNotebook::Remove(SideMenuCtrl* win)
@@ -122,12 +119,17 @@ void SideNotebook::Remove(SideMenuCtrl* win)
 	win->Destroy();
 }
 
-void SideNotebook::RemoveAll()
+void SideNotebook::Save(SideMenuCtrl* page)
 {
-	for (SideMenuCtrl* page : pages)
-	{
-		Remove(page);
+	DVNFileData* curData = page->GetSource();
+	if (curData->folder == "") {
+		wxDirDialog dialog(this, "Select a folder", "", wxDD_DEFAULT_STYLE);
+		if (dialog.ShowModal() == wxID_OK) {
+			curData->folder = dialog.GetPath();
+		}
+		else return;
 	}
+	page->Save();
 }
 
 void SideNotebook::ChangeSource(DVNFileData* source) {
@@ -141,16 +143,32 @@ void SideNotebook::ChangeSource(DVNFileData* source) {
 
 void SideNotebook::SaveCurrent()
 {
-	if (!cur) return;
-	DVNFileData* curData = cur->GetSource();
-	if (curData->folder == "") {
-		wxDirDialog dialog(this, "Select a folder", "", wxDD_DEFAULT_STYLE);
-		if (dialog.ShowModal() == wxID_OK) {
-			curData->folder = dialog.GetPath();
+	if (cur) Save(cur);
+}
+
+bool SideNotebook::CheckForUnsaved()
+{
+	for (char i = 0; i < pages.size(); i++)
+	{
+		if (!pages[i]->GetSource()->upToDate) {
+			switch (SaveDialog(this, pages[i]->GetSource()->GetName()).ShowModal()) {
+			case SaveDialog::ID_SAVE:
+				Save(pages[i]);
+				break;
+			case SaveDialog::ID_CANCEL:
+			case wxID_CANCEL:
+				return false;
+			case SaveDialog::ID_SAVE_ALL:
+				for (char j = i; j < pages.size(); j++) {
+					Save(pages[i]);
+				}
+				return true;
+			case SaveDialog::ID_SKIP_ALL:
+				return true;
+			}
 		}
-		else return;
 	}
-	curData->Save();
+	return true;
 }
 
 void SideNotebook::Init() {

@@ -75,4 +75,11 @@ public:
 		newFont.SetWeight(wxFONTWEIGHT_BOLD);
 		SetFont(newFont);
 	}
+	void Save() {
+		source->upToDate = true;
+		wxFont newFont = GetFont();
+		newFont.SetWeight(wxFONTWEIGHT_NORMAL);
+		SetFont(newFont);
+		source->Save();
+	}
 };

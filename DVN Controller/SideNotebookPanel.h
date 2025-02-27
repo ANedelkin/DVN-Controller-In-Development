@@ -7,10 +7,8 @@ class SideNotebookPanel : public wxPanel
 protected:
 	DVNFileData* source;
 	bool isInited;
-
-	wxPanel* mainPanel;
 public:
-	SideNotebookPanel(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source);
+	SideNotebookPanel(wxWindow* parent, DVNFileData* source);
 	virtual void ChangeSource(DVNFileData* source) = 0;
 	bool IsInited();
 	virtual void Init();

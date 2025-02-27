@@ -58,4 +58,3 @@ enum InputType {
 //Events
 wxDECLARE_EVENT(EVT_DELETE, wxCommandEvent);
 wxDECLARE_EVENT(EVT_UNSAVE, wxCommandEvent);
-//extern wxEventType EVT_UNSAVE;

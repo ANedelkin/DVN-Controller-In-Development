@@ -14,18 +14,20 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 
 	notebook = new wxNotebook(this, wxID_ANY);
 
-	scenariosPanel = new SideNotebook(notebook, nullptr, "Scenarios");
-	BandsPanel* scenBandsPanel = new BandsPanel(scenariosPanel, scenariosPanel, new Scenario());
+	scenariosPanel = new SideNotebook(notebook, "Scenarios");
+	BandsPanel* scenBandsPanel = new BandsPanel(scenariosPanel, new Scenario());
 	scenBandsPanel->UnInit();
 	scenariosPanel->SetContent(scenBandsPanel);
 	LoadScenarios();
+	scenariosPanel->Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, scenariosPanel);
 
-	loadsPanel = new SideNotebook(notebook, nullptr, "Loads");
-	SideNotebook* loadScenPanel = new SideNotebook(loadsPanel, loadsPanel, "Scenarios", new Load());
-	BandsPanel* loadBandsPanel = new BandsPanel(loadScenPanel, loadsPanel, new Scenario());
+	loadsPanel = new SideNotebook(notebook, "Loads");
+	SideNotebook* loadScenPanel = new SideNotebook(loadsPanel, "Scenarios", new Load());
+	BandsPanel* loadBandsPanel = new BandsPanel(loadScenPanel, new Scenario());
 	loadScenPanel->SetContent(loadBandsPanel);
 	loadScenPanel->UnInit();
 	loadsPanel->SetContent(loadScenPanel);
+	loadsPanel->Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, loadsPanel);
 
 	notebook->AddPage(scenariosPanel, "Scenarios");
 	notebook->AddPage(loadsPanel, "Loads");	
@@ -86,6 +88,8 @@ void MainFrame::CreateToolBar()
 	newBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnNew, this);
 	openBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnOpen, this);
 	saveBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnSave, this);
+
+	Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
 }
 
 void MainFrame::LoadScenarios()
@@ -102,6 +106,7 @@ void MainFrame::NewScenario()
 	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
 	nameSetter->ShowModal();
 	if (nameSetter->ok) scenariosPanel->AddPage(new Scenario(nameSetter->name), false);
+	scenariosPanel->Unsave();
 }
 
 void MainFrame::NewLoad()
@@ -109,10 +114,10 @@ void MainFrame::NewLoad()
 	NameSetter* nameSetter = new NameSetter(this, "Enter load name", Load::ValidateName);
 	nameSetter->ShowModal();
 	if (nameSetter->ok) loadsPanel->AddPage(new Load(nameSetter->name), false);
+	loadsPanel->Unsave();
 }
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
-	//SetFocus();
 	if (e.GetSelection() == Loads) {
 		addBtn->Hide();
 		openBtn->Show();
@@ -184,3 +189,11 @@ void MainFrame::OnSave(wxMouseEvent& e)
 	e.Skip();
 }
 
+void MainFrame::OnClose(wxCloseEvent& e)
+{
+	if (!e.CanVeto() || loadsPanel->CheckForUnsaved() && scenariosPanel->CheckForUnsaved()) {
+		e.Skip();
+		return;
+	}
+	e.Veto();
+}

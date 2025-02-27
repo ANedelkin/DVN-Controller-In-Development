@@ -43,6 +43,7 @@ private:
 	void OnNew(wxMouseEvent& e);
 	void OnOpen(wxMouseEvent& e);
 	void OnSave(wxMouseEvent& e);
+	void OnClose(wxCloseEvent& e);
 public:
 	MainFrame(const string& title);
 };

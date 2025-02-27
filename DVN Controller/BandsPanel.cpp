@@ -1,7 +1,7 @@
 #include "BandsPanel.h"
 #include "Load.h"
 
-BandsPanel::BandsPanel(wxWindow* parent, wxPanel* mainPanel, Scenario* scenario) : SideNotebookPanel(parent, mainPanel, scenario) {
+BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : SideNotebookPanel(parent, scenario) {
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
 
     wxStaticBox* bandsBox = new wxStaticBox(this, wxID_ANY, "Bands");
@@ -19,26 +19,26 @@ BandsPanel::BandsPanel(wxWindow* parent, wxPanel* mainPanel, Scenario* scenario)
     wxBoxSizer* scrollSizer = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* contentSizer = new wxBoxSizer(wxVERTICAL);
 
-        wxFont labelsFont = wxFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    wxFont labelsFont = wxFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
-        wxStaticText* nameLabel = new wxStaticText(labels, wxID_ANY, "Name", wxDefaultPosition, FromDIP(wxSize(250, -1)));
-        wxStaticText* startValueLabel = new wxStaticText(labels, wxID_ANY, "Start frequecy", wxDefaultPosition, FromDIP(wxSize(110, -1)));
-        wxStaticText* endValueLabel = new wxStaticText(labels, wxID_ANY, "End frequency", wxDefaultPosition, FromDIP(wxSize(110, -1)));
-        wxStaticText* activeLabel = new wxStaticText(labels, wxID_ANY, "Status");
+    wxStaticText* nameLabel = new wxStaticText(labels, wxID_ANY, "Name", wxDefaultPosition, FromDIP(wxSize(250, -1)));
+    wxStaticText* startValueLabel = new wxStaticText(labels, wxID_ANY, "Start frequecy", wxDefaultPosition, FromDIP(wxSize(110, -1)));
+    wxStaticText* endValueLabel = new wxStaticText(labels, wxID_ANY, "End frequency", wxDefaultPosition, FromDIP(wxSize(110, -1)));
+    wxStaticText* activeLabel = new wxStaticText(labels, wxID_ANY, "Status");
 
-        nameLabel->SetFont(labelsFont);
-        startValueLabel->SetFont(labelsFont);
-        endValueLabel->SetFont(labelsFont);
-        activeLabel->SetFont(labelsFont);
+    nameLabel->SetFont(labelsFont);
+    startValueLabel->SetFont(labelsFont);
+    endValueLabel->SetFont(labelsFont);
+    activeLabel->SetFont(labelsFont);
 
-        labelsSizer->AddSpacer(FromDIP(35));
-        labelsSizer->Add(nameLabel, 0, wxALIGN_CENTER | wxRIGHT, FromDIP(11));
-        labelsSizer->Add(startValueLabel, 0, wxALIGN_CENTER | wxRIGHT, FromDIP(11));
-        labelsSizer->Add(endValueLabel, 0, wxALIGN_CENTER | wxRIGHT, FromDIP(11));
-        labelsSizer->Add(activeLabel, 0, wxALIGN_CENTER);
-        labelsSizer->AddSpacer(FromDIP(10));
+    labelsSizer->AddSpacer(FromDIP(35));
+    labelsSizer->Add(nameLabel, 0, wxALIGN_CENTER | wxRIGHT, FromDIP(11));
+    labelsSizer->Add(startValueLabel, 0, wxALIGN_CENTER | wxRIGHT, FromDIP(11));
+    labelsSizer->Add(endValueLabel, 0, wxALIGN_CENTER | wxRIGHT, FromDIP(11));
+    labelsSizer->Add(activeLabel, 0, wxALIGN_CENTER);
+    labelsSizer->AddSpacer(FromDIP(10));
 
-        labels->SetSizerAndFit(labelsSizer);
+    labels->SetSizerAndFit(labelsSizer);
 
     this->source = scenario;
 

@@ -5,6 +5,8 @@
 #include "SideMenuCtrl.h"
 #include "SideNotebookPanel.h"
 
+#include "SaveDialog.h"
+
 class SideNotebook : public SideNotebookPanel
 {
 private:
@@ -26,12 +28,16 @@ private:
 
 	void OnSelect(wxMouseEvent& e);
 	void OnDelete(wxCommandEvent& e);
-	void OnUnsave(wxCommandEvent& e);
 
 	void Remove(SideMenuCtrl* win);
-	void RemoveAll();
+
+	void Save(SideMenuCtrl* page);
+
 public:
-	SideNotebook(wxWindow* parent, wxPanel* mainPanel, string sideMenuTxt, DVNFileData* data = nullptr);
+	void OnUnsave(wxCommandEvent& e);
+	void Unsave();
+
+	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr);
 
 	void SetContent(SideNotebookPanel* content);
 
@@ -41,6 +47,7 @@ public:
 
 	void ChangeSource(DVNFileData* source) override;
 	void SaveCurrent();
+	bool CheckForUnsaved();
 	void Init() override;
 	void UnInit() override;
 };
