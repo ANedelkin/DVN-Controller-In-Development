@@ -113,8 +113,10 @@ void MainFrame::NewLoad()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter load name", Load::ValidateName);
 	nameSetter->ShowModal();
-	if (nameSetter->ok) loadsPanel->AddPage(new Load(nameSetter->name), false);
-	loadsPanel->Unsave();
+	if (nameSetter->ok)  {
+		loadsPanel->AddPage(new Load(nameSetter->name), false);
+		loadsPanel->Unsave();
+	}
 }
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
@@ -195,5 +197,5 @@ void MainFrame::OnClose(wxCloseEvent& e)
 		e.Skip();
 		return;
 	}
-	e.Veto();
+	e.Veto(); //It's presitentin' time
 }

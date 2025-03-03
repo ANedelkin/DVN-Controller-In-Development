@@ -15,30 +15,45 @@ public:
     };
 
     SaveDialog(wxWindow* parent, const string& fileName)
-        : wxDialog(parent, wxID_ANY, "Unsaved file", wxDefaultPosition, wxSize(300, 200))
+        : wxDialog(parent, wxID_ANY, "Unsaved file")
     {
-        wxPanel* panel = new wxPanel(this);
-        wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
+        wxPanel* content = new wxPanel(this);
+        wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-        wxStaticText* message = new wxStaticText(panel, wxID_ANY, fileName + " is unsaved, how would you like to proceed?");
-        vbox->Add(message, 0, wxEXPAND | wxALL, 10);
+        wxBoxSizer* verticalSizer = new wxBoxSizer(wxVERTICAL);
 
-        wxButton* saveButton = new wxButton(panel, ID_SAVE, "Save");
-        wxButton* skipButton = new wxButton(panel, ID_SKIP, "Skip");
-        wxButton* saveAllButton = new wxButton(panel, ID_SAVE_ALL, "Save All");
-        wxButton* skipAllButton = new wxButton(panel, ID_SKIP_ALL, "Skip All");
-        wxButton* cancelButton = new wxButton(panel, ID_CANCEL, "Cancel");
+        wxStaticText* message = new wxStaticText(
+            content, 
+            wxID_ANY, 
+            "\"" + fileName + "\"" + " is unsaved, how would you like to proceed?"
+        );
+        message->SetWindowStyle(wxALIGN_CENTER);
+        message->SetFont(wxFont(FromDIP(15), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI"));
+        message->SetForegroundColour(wxColour(65, 103, 179));
+        message->Wrap(GetSize().GetWidth());
+        //mainSizer->AddStretchSpacer(1);
+        verticalSizer->Add(message, 1, wxEXPAND | wxALIGN_CENTER | wxALL, FromDIP(10));
+        //mainSizer->AddStretchSpacer(1);
 
-        wxBoxSizer* hbox = new wxBoxSizer(wxHORIZONTAL);
-        hbox->Add(saveButton, 0, wxRIGHT, 5);
-        hbox->Add(skipButton, 0, wxRIGHT, 5);
-        hbox->Add(saveAllButton, 0, wxRIGHT, 5);
-        hbox->Add(skipAllButton, 0, wxRIGHT, 5);
-        hbox->Add(cancelButton, 0);
+        wxButton* saveButton = new wxButton(content, ID_SAVE, "Save");
+        wxButton* skipButton = new wxButton(content, ID_SKIP, "Don't save");
+        wxButton* cancelButton = new wxButton(content, ID_CANCEL, "Cancel");
+        wxButton* saveAllButton = new wxButton(content, ID_SAVE_ALL, "Save all unsaved files");
+        wxButton* skipAllButton = new wxButton(content, ID_SKIP_ALL, "Don't save any unsaved files");
 
-        vbox->Add(hbox, 0, wxALIGN_CENTER | wxBOTTOM, 10);
+        wxBoxSizer* horizontalSizer = new wxBoxSizer(wxHORIZONTAL);
+        horizontalSizer->Add(saveButton, 1, wxALL, FromDIP(5));
+        horizontalSizer->Add(skipButton, 1, wxALL, FromDIP(5));
+        horizontalSizer->Add(cancelButton, 1, wxALL, FromDIP(5));
+        verticalSizer->Add(horizontalSizer, 0, wxEXPAND, FromDIP(10));
 
-        panel->SetSizer(vbox);
+        verticalSizer->Add(saveAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
+        verticalSizer->Add(skipAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
+
+        content->SetSizerAndFit(verticalSizer);
+        mainSizer->Add(content, 1, wxEXPAND | wxALL, FromDIP(10));
+
+        SetSizerAndFit(mainSizer);
 
         saveButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSave, this);
         skipButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSkip, this);
