@@ -35,7 +35,7 @@ private:
 
 public:
 	void OnUnsave(wxCommandEvent& e);
-	void Unsave();
+	void Unsave(bool created);
 
 	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr);
 

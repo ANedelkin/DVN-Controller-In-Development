@@ -1,6 +1,6 @@
 #include "SideNotebookPanel.h"
 
-SideNotebookPanel::SideNotebookPanel(wxWindow* parent, DVNFileData* source) : wxPanel(parent)
+SideNotebookPanel::SideNotebookPanel(wxWindow* parent, DVNFileData* source) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL)
 {
 	this->source = source;
 	this->isInited = false;

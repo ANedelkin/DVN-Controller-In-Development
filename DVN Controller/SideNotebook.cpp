@@ -50,7 +50,7 @@ void SideNotebook::AddPage(DVNFileData* data, bool subMenu)
 	page->Bind(wxEVT_LEFT_UP, &SideNotebook::OnSelect, this);
 }
 
-void SideNotebook::ChangePage(DVNFileData* data)
+void SideNotebook::ChangePage(DVNFileData* data) //Unused
 {
 	this->source = data;
 	for (char i = 0; i < pages.size(); i++)
@@ -92,12 +92,18 @@ void SideNotebook::OnDelete(wxCommandEvent& e)
 
 void SideNotebook::OnUnsave(wxCommandEvent& e)
 {
-	Unsave();
+	Unsave(false);
 }
 
-void SideNotebook::Unsave()
+void SideNotebook::Unsave(bool created)
 {
-	cur->Unsave();
+	DVNFileData* source = cur->GetSource();
+	string ss = source->SaveString();
+	string nm = source->GetName();
+	if (!created && (source->oldSaveString == ss && source->oldName == nm))
+		cur->MarkSaved();
+	else
+		cur->Unsave();
 }
 
 void SideNotebook::Remove(SideMenuCtrl* win)

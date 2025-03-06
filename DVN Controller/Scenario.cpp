@@ -15,6 +15,7 @@ Scenario::Scenario(string name) : DVNFileData(name) {
 			k++;
 		}
 	}
+	oldSaveString = SaveString();
 }
 
 Status Scenario::SetBandData(char i, string name, int startValue, int endValue, bool working)
@@ -32,6 +33,7 @@ Status Scenario::SetBandData(char i, string name, int startValue, int endValue, 
 
 Status Scenario::SetStartValue(char i, int value)
 {
+	if (value == GetStartValue(i)) return Success;
 	if (value > GetEndValue(i) && GetEndValue(i) != -1) return StartValueHigherThanEndvalue;
 	if (value > GetEndValueBorder(i) || value < GetStartValueBorder(i)) return StartValueOutOfBounds;
 	
@@ -42,6 +44,7 @@ Status Scenario::SetStartValue(char i, int value)
 
 Status Scenario::SetEndValue(char i, int value)
 {
+	if (value == GetStartValue(i)) return Success;
 	if (value < GetStartValue(i)) return StartValueHigherThanEndvalue;
 	if (value > GetEndValueBorder(i) || value < GetStartValueBorder(i)) return EndValueOutOfBounds;
 
@@ -134,14 +137,4 @@ string Scenario::SaveString() const {
 		if (i != bands.size() - 1) stream << endl;
 	}
 	return stream.str();
-}
-
-void Scenario::Save() const
-{
-	if (!exists(folder)) create_directory(folder);
-	ostringstream fileName;
-	fileName << GetPath();
-	ofstream stream(fileName.str());
-	stream << this->SaveString();
-	stream.close();
 }

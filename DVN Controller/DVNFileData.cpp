@@ -1,24 +1,17 @@
 #include "DVNFileData.h"
 
-DVNFileData::DVNFileData(string name)
+DVNFileData::DVNFileData(const string& name) : name(name), upToDate(true), oldName(name)
 {
-	this->name = name;
-	upToDate = true;
 }
 
-Status DVNFileData::Rename(string name) {
-	const string oldPath = GetPath();
+Status DVNFileData::Rename(const string& name) {
 	this->name = name;
-	if (exists(oldPath)) {
-		const string newPath = GetPath();
-		rename(oldPath, newPath);
-	}
 	return Success;
 }
 
-string DVNFileData::GetName() { return name; }
+string DVNFileData::GetName() const { return name; }
 
-Status DVNFileData::ValidateName(string& name)
+Status DVNFileData::ValidateName(const string& name)
 {
 	string invalidChars = "\\/:*?\"<>|";
 	for (char ch : name) {
@@ -33,5 +26,26 @@ Status DVNFileData::ValidateName(string& name)
 
 string DVNFileData::GetPath() const
 {
-	return folder + "\\" + name + extension;
+	return folder + "\\" + oldName + extension;
+}
+
+string DVNFileData::SaveString() const
+{
+	return string();
+}
+
+void DVNFileData::Save() {
+	if (!exists(folder)) create_directory(folder);
+	const string oldPath = GetPath();
+	oldName = name;
+	if (exists(oldPath)) {
+		const string newPath = GetPath();
+		rename(oldPath, newPath);
+	}
+	ostringstream fileName;
+	fileName << GetPath();
+	ofstream stream(fileName.str());
+	stream << SaveString();
+	oldSaveString = SaveString();
+	stream.close();
 }

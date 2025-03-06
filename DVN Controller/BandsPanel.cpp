@@ -9,7 +9,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : SideNotebookPanel
     
     table = new wxPanel(bandsBox);
     wxPanel* labels = new wxPanel(table);
-    wxScrolled<wxPanel>* scrollWrapper = new wxScrolled<wxPanel>(table);
+    scrollWrapper = new wxScrolled<wxPanel>(table);
     content = new wxPanel(scrollWrapper);
 
     scrollWrapper->SetScrollRate(0, FromDIP(5));
@@ -73,6 +73,7 @@ void BandsPanel::ChangeSource(DVNFileData* source)
     {
         bandRows[i]->ChangeScenario(scen);
     }
+    scrollWrapper->Scroll(0, 0);
 }
 
 void BandsPanel::Init()

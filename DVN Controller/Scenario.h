@@ -39,5 +39,4 @@ public:
 	string BandSaveString(char i) const;
 
 	string SaveString() const override;
-	void Save() const override;
 };

@@ -32,7 +32,7 @@ public:
         message->SetForegroundColour(wxColour(65, 103, 179));
         message->Wrap(GetSize().GetWidth());
         //mainSizer->AddStretchSpacer(1);
-        verticalSizer->Add(message, 1, wxEXPAND | wxALIGN_CENTER | wxALL, FromDIP(10));
+        verticalSizer->Add(message, 1, wxALIGN_CENTER | wxALL, FromDIP(10));
         //mainSizer->AddStretchSpacer(1);
 
         wxButton* saveButton = new wxButton(content, ID_SAVE, "Save");

@@ -25,9 +25,9 @@ private:
 
     void OnResize(wxSizeEvent& e);
 
-    void OnNameEnter(wxCommandEvent& e);
-    void OnStartEnter(wxCommandEvent& e);
-    void OnEndEnter(wxCommandEvent& e);
+    void OnNameEnter(wxKeyEvent& e);
+    void OnStartEnter(wxKeyEvent& e);
+    void OnEndEnter(wxKeyEvent& e);
     void OnStatusChanged(wxMouseEvent& e);
     void OnFocus(wxFocusEvent& e);
 public:

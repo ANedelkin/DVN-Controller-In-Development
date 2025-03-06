@@ -10,9 +10,9 @@ public:
     }
     int FilterEvent(wxEvent& e) {
 		const wxEventType t = e.GetEventType();
-		if (t == wxEVT_LEFT_DOWN || t == wxEVT_RIGHT_DOWN) {
+		if (t == wxEVT_LEFT_DOWN || t == wxEVT_RIGHT_DOWN || t == wxEVT_CLOSE_WINDOW) {
 			wxWindow* target = dynamic_cast<wxWindow*>(e.GetEventObject());
-			if (focused && focused != e.GetEventObject()) {
+			if (focused && (focused != target || t == wxEVT_CLOSE_WINDOW && base && base == target)) {
 				base->Refresh();
 
 				BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
@@ -37,7 +37,7 @@ public:
 					focused = nullptr;
 
 					int type = (int)(target->GetClientData());
-					if (wxGetMouseState().LeftIsDown() && (type == BandName || type == Start || type == End)) return Event_Skip;
+					if (t == wxEVT_CLOSE_WINDOW || wxGetMouseState().LeftIsDown() && (type == BandName || type == Start || type == End)) return Event_Skip;
 					row->Unfocus();
 				}
 				else //Failure, like me

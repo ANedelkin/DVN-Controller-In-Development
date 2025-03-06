@@ -81,6 +81,12 @@
     <ClCompile Include="SaveDialog.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="SideMenuCtrl.cpp">
+      <Filter>Source Files\Other classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Load.cpp">
+      <Filter>Source Files\Loads</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrame.h">

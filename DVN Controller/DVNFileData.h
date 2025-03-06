@@ -8,20 +8,22 @@ protected:
 	string name;
 	string extension;
 public:
+	string oldName;
 	string folder;
+	string oldSaveString;
 	bool upToDate;
 
-	DVNFileData(string name);
+	DVNFileData(const string& name);
 
 	vector<DVNFileData*> children;
 
-	Status Rename(string name);
-	string GetName();
-	static Status ValidateName(string& name);
+	Status Rename(const string& name);
+	string GetName() const;
+	static Status ValidateName(const string& name);
 
 	string GetPath() const;
-	
-	virtual string SaveString() const = 0;
-	virtual void Save() const = 0;
+
+	virtual string SaveString() const;
+	void Save();
 };
 

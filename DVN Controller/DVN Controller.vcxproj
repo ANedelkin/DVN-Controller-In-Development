@@ -147,6 +147,7 @@
     <ClCompile Include="BandsPanel.cpp" />
     <ClCompile Include="DVNFileData.cpp" />
     <ClCompile Include="Global.cpp" />
+    <ClCompile Include="Load.cpp" />
     <ClCompile Include="LoadsPanel.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="App.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="SaveDialog.h" />
     <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="ScenariosPanel.cpp" />
+    <ClCompile Include="SideMenuCtrl.cpp" />
     <ClCompile Include="SideNotebook.cpp" />
     <ClCompile Include="SideNotebookPanel.cpp" />
   </ItemGroup>

@@ -13,6 +13,7 @@
 class MainFrame : public wxFrame
 {
 private:
+	wxPanel* mainPanel;
 	wxNotebook* notebook;
 	SideNotebook* scenariosPanel;
 	SideNotebook* loadsPanel;

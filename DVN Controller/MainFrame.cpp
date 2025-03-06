@@ -8,11 +8,13 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 
 	base = this;
 
+	wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
+	mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
 	CreateToolBar();
 
-	notebook = new wxNotebook(this, wxID_ANY);
+	notebook = new wxNotebook(mainPanel, wxID_ANY);
 
 	scenariosPanel = new SideNotebook(notebook, "Scenarios");
 	BandsPanel* scenBandsPanel = new BandsPanel(scenariosPanel, new Scenario());
@@ -35,14 +37,17 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 	mainSizer->Add(toolBar, 0, wxEXPAND);
 	mainSizer->Add(notebook, 0, wxEXPAND);
 
-	SetSizer(mainSizer);
+	mainPanel->SetSizer(mainSizer);
+
+	topSizer->Add(mainPanel, 1, wxEXPAND);
+	SetSizer(topSizer);
 
 	notebook->Bind(wxEVT_NOTEBOOK_PAGE_CHANGED, &MainFrame::OnTabChanged, this);
 }
 
 void MainFrame::CreateToolBar()
 {
-	toolBar = new wxPanel(this, wxID_ANY);
+	toolBar = new wxPanel(mainPanel, wxID_ANY);
 	wxBoxSizer* toolBarSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	#define CTRL_HEIGHT 30
@@ -106,7 +111,7 @@ void MainFrame::NewScenario()
 	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
 	nameSetter->ShowModal();
 	if (nameSetter->ok) scenariosPanel->AddPage(new Scenario(nameSetter->name), false);
-	scenariosPanel->Unsave();
+	scenariosPanel->Unsave(true);
 }
 
 void MainFrame::NewLoad()
@@ -115,7 +120,7 @@ void MainFrame::NewLoad()
 	nameSetter->ShowModal();
 	if (nameSetter->ok)  {
 		loadsPanel->AddPage(new Load(nameSetter->name), false);
-		loadsPanel->Unsave();
+		loadsPanel->Unsave(true);
 	}
 }
 
