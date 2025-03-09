@@ -31,9 +31,10 @@ private:
 
 	void Remove(SideMenuCtrl* win);
 
-	void Save(SideMenuCtrl* page);
-
+	bool Save(SideMenuCtrl* page);
 public:
+	void Select(char i);
+
 	void OnUnsave(wxCommandEvent& e);
 	void Unsave(bool created);
 

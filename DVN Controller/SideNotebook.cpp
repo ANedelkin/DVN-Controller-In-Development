@@ -125,17 +125,23 @@ void SideNotebook::Remove(SideMenuCtrl* win)
 	win->Destroy();
 }
 
-void SideNotebook::Save(SideMenuCtrl* page)
+bool SideNotebook::Save(SideMenuCtrl* page)
 {
 	DVNFileData* curData = page->GetSource();
 	if (curData->folder == "") {
-		wxDirDialog dialog(this, "Select a folder", "", wxDD_DEFAULT_STYLE);
+		wxDirDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"", "", wxDD_DEFAULT_STYLE);
 		if (dialog.ShowModal() == wxID_OK) {
 			curData->folder = dialog.GetPath();
 		}
-		else return;
+		else return false;
 	}
 	page->Save();
+	return true;
+}
+
+void SideNotebook::Select(char i)
+{
+	ChangeSelection(pages[i]);
 }
 
 void SideNotebook::ChangeSource(DVNFileData* source) {
@@ -159,14 +165,14 @@ bool SideNotebook::CheckForUnsaved()
 		if (!pages[i]->GetSource()->upToDate) {
 			switch (SaveDialog(this, pages[i]->GetSource()->GetName()).ShowModal()) {
 			case SaveDialog::ID_SAVE:
-				Save(pages[i]);
+				if (!Save(pages[i])) return false;
 				break;
 			case SaveDialog::ID_CANCEL:
 			case wxID_CANCEL:
 				return false;
 			case SaveDialog::ID_SAVE_ALL:
 				for (char j = i; j < pages.size(); j++) {
-					Save(pages[i]);
+					if (!Save(pages[i])) return false;
 				}
 				return true;
 			case SaveDialog::ID_SKIP_ALL:

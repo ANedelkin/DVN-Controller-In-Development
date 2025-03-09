@@ -105,6 +105,7 @@ Scenario* Scenario::ToScenario(const string& name, stringstream& stream)
 		BandInfo band(values[0], scenario->GetRangeIndex(i), stoi(values[1]), stoi(values[2]), values[3] == "ON");
 		scenario->SetBandData(i, band.name, band.startValue, band.endValue, band.working);
 	}
+	scenario->oldSaveString = scenario->SaveString();
 	return scenario;
 }
 vector<Scenario*> Scenario::LoadScenarios()

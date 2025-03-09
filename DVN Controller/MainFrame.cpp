@@ -104,6 +104,7 @@ void MainFrame::LoadScenarios()
 	{
 		scenariosPanel->AddPage(scenarios[i], false);
 	}
+	scenariosPanel->Select(0);
 }
 
 void MainFrame::NewScenario()
