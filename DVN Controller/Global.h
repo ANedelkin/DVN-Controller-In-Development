@@ -22,6 +22,7 @@ enum Status {
     InvalidName,
     InvalidSymbols,
     NameWhitespace,
+    NameAlreadyExists,
 };
 
 extern map<int, string> errorMessages;

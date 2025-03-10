@@ -111,18 +111,14 @@ void MainFrame::NewScenario()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
 	nameSetter->ShowModal();
-	if (nameSetter->ok) scenariosPanel->AddPage(new Scenario(nameSetter->name), false);
-	scenariosPanel->Unsave(true);
+	if (nameSetter->ok && !scenariosPanel->AddPage(new Scenario(nameSetter->name), false)) scenariosPanel->Unsave(true);
 }
 
 void MainFrame::NewLoad()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter load name", Load::ValidateName);
 	nameSetter->ShowModal();
-	if (nameSetter->ok)  {
-		loadsPanel->AddPage(new Load(nameSetter->name), false);
-		loadsPanel->Unsave(true);
-	}
+	if (nameSetter->ok && !loadsPanel->AddPage(new Load(nameSetter->name), false)) loadsPanel->Unsave(true);
 }
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {

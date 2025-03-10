@@ -20,13 +20,17 @@ Status DVNFileData::ValidateName(const string& name)
 		}
 	}
 	if (name.length() == 0) return NameWhitespace;
-	if (all_of(name.begin(), name.end(), [](unsigned char c) { return std::isspace(c); })) return NameWhitespace;
+	if (all_of(name.begin(), name.end(), [](unsigned char c) { return isspace(c); })) return NameWhitespace;
 	return Success;
 }
 
-string DVNFileData::GetPath() const
+string DVNFileData::GetOldPath() const
 {
 	return folder + "\\" + oldName + extension;
+}
+
+string DVNFileData::GetNewPath() const {
+	return folder + "\\" + name + extension;
 }
 
 string DVNFileData::SaveString() const
@@ -36,14 +40,14 @@ string DVNFileData::SaveString() const
 
 void DVNFileData::Save() {
 	if (!exists(folder)) create_directory(folder);
-	const string oldPath = GetPath();
+	const string oldPath = GetOldPath();
 	oldName = name;
 	if (exists(oldPath)) {
-		const string newPath = GetPath();
+		const string newPath = GetOldPath();
 		rename(oldPath, newPath);
 	}
 	ostringstream fileName;
-	fileName << GetPath();
+	fileName << GetOldPath();
 	ofstream stream(fileName.str());
 	stream << SaveString();
 	oldSaveString = SaveString();

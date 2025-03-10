@@ -21,7 +21,9 @@ public:
 	string GetName() const;
 	static Status ValidateName(const string& name);
 
-	string GetPath() const;
+	string GetOldPath() const;
+
+	string GetNewPath() const;
 
 	virtual string SaveString() const;
 	void Save();

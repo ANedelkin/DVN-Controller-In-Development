@@ -15,7 +15,8 @@ map<int, string> errorMessages = {
     {InvalidName, "The name cannot contain the symbol \"|\"!"},
     {InvalidSymbols, "The name cannot contain the symbol \"{}\"!"},
     {NameWhitespace, "The name cannot be empty!"},
-    {BandUninitialized, "Start and end frequencies have to be set in order to turn band on."},
+    {BandUninitialized, "Start and end frequencies have to be set in order to turn band on!"},
+    {NameAlreadyExists, "A scenario with this name already exists!"}
 };
 
 vector<string> Split(const string& str, char delimiter) {

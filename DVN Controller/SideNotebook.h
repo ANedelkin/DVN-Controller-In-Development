@@ -42,7 +42,7 @@ public:
 
 	void SetContent(SideNotebookPanel* content);
 
-	void AddPage(DVNFileData* data, bool subMenu);
+	Status AddPage(DVNFileData* data, bool subMenu);
 
 	void ChangePage(DVNFileData* data);
 

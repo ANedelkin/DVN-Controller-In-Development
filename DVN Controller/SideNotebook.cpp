@@ -39,8 +39,14 @@ void SideNotebook::SetContent(SideNotebookPanel* content) {
 	}
 }
 
-void SideNotebook::AddPage(DVNFileData* data, bool subMenu)
+Status SideNotebook::AddPage(DVNFileData* data, bool subMenu)
 {
+	for (SideMenuCtrl* page : pages) {
+		if (page->GetSource()->GetNewPath() == data->GetNewPath()) {
+			wxMessageDialog(base, "A file with the name \"" + data->GetName() + "\" is already open!", "Error", wxOK | wxICON_ERROR).ShowModal();
+			return NameAlreadyExists;
+		}
+	}
 	SideMenuCtrl* page = new SideMenuCtrl(pagesList, this, data, subMenu);
 	pages.push_back(page);
 	pagesSizer->Add(page, 0, wxEXPAND | wxBOTTOM, FromDIP(10));
@@ -48,6 +54,7 @@ void SideNotebook::AddPage(DVNFileData* data, bool subMenu)
 	Refresh();
 	Layout();
 	page->Bind(wxEVT_LEFT_UP, &SideNotebook::OnSelect, this);
+	return Success;
 }
 
 void SideNotebook::ChangePage(DVNFileData* data) //Unused
@@ -83,8 +90,8 @@ void SideNotebook::OnDelete(wxCommandEvent& e)
 	wxMessageDialog dialog(base, "If you delete this you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
 	if (dialog.ShowModal() == wxID_YES) {
 		SideMenuCtrl* target = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
-		if (exists(target->GetSource()->GetPath())) {
-			remove(target->GetSource()->GetPath());
+		if (exists(target->GetSource()->GetOldPath())) {
+			remove(target->GetSource()->GetOldPath());
 		}
 		Remove(target);
 	}
@@ -141,7 +148,7 @@ bool SideNotebook::Save(SideMenuCtrl* page)
 
 void SideNotebook::Select(char i)
 {
-	ChangeSelection(pages[i]);
+	if(pages.size() > i) ChangeSelection(pages[i]);
 }
 
 void SideNotebook::ChangeSource(DVNFileData* source) {
