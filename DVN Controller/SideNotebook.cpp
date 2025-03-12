@@ -20,7 +20,7 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* so
 
 	this->SetSizerAndFit(mainSizer);
 
-	Bind(wxEVT_COMMAND_MENU_SELECTED, &SideNotebook::OnDelete, this);
+	Bind(EVT_DELETE, &SideNotebook::OnDelete, this);
 
 	this->source = source;
 }
@@ -39,18 +39,28 @@ void SideNotebook::SetContent(SideNotebookPanel* content) {
 	}
 }
 
-void SideNotebook::AddPage(DVNFileData* data, bool subMenu)
+Status SideNotebook::AddPage(DVNFileData* data, bool subMenu)
 {
+	if (!subMenu) {
+		for (SideMenuCtrl* page : pages) {
+			if (page->GetSource()->GetNewPath() == data->GetNewPath() && page->GetSource()->folder != "") {
+				wxMessageDialog(base, "A file with the name \"" + data->GetName() + "\" is already open!", "Error", wxOK | wxICON_ERROR).ShowModal();
+				return NameAlreadyExists;
+			}
+		}
+	}
 	SideMenuCtrl* page = new SideMenuCtrl(pagesList, this, data, subMenu);
 	pages.push_back(page);
 	pagesSizer->Add(page, 0, wxEXPAND | wxBOTTOM, FromDIP(10));
 	ChangeSelection(page);
+	if (!content->IsInited()) content->Init();
 	Refresh();
 	Layout();
 	page->Bind(wxEVT_LEFT_UP, &SideNotebook::OnSelect, this);
+	return Success;
 }
 
-void SideNotebook::ChangePage(DVNFileData* data)
+void SideNotebook::ChangePage(DVNFileData* data) //Unused
 {
 	this->source = data;
 	for (char i = 0; i < pages.size(); i++)
@@ -62,13 +72,12 @@ void SideNotebook::ChangePage(DVNFileData* data)
 
 void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 {
-	page->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
 	if (cur) cur->SetBackgroundColour(wxColour(255, 255, 255));
+	page->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
 	cur = page;
 
 	DVNFileData* s = cur->GetSource();
 	content->ChangeSource(s);
-	if (!content->IsInited()) content->Init();
 }
 
 void SideNotebook::OnSelect(wxMouseEvent& e)
@@ -82,11 +91,31 @@ void SideNotebook::OnDelete(wxCommandEvent& e)
 {
 	wxMessageDialog dialog(base, "If you delete this you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
 	if (dialog.ShowModal() == wxID_YES) {
-		Remove(dynamic_cast<wxWindowBase*>(e.GetEventObject()));
+		SideMenuCtrl* target = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
+		if (exists(target->GetSource()->GetOldPath())) {
+			remove(target->GetSource()->GetOldPath());
+		}
+		Remove(target);
 	}
 }
 
-void SideNotebook::Remove(wxWindowBase* win)
+void SideNotebook::OnUnsave(wxCommandEvent& e)
+{
+	Unsave(false);
+}
+
+void SideNotebook::Unsave(bool created)
+{
+	DVNFileData* source = cur->GetSource();
+	string ss = source->SaveString();
+	string nm = source->GetName();
+	if (!created && (source->oldSaveString == ss && source->oldName == nm))
+		cur->MarkSaved();
+	else
+		cur->Unsave();
+}
+
+void SideNotebook::Remove(SideMenuCtrl* win)
 {
 	int i = find(pages.begin(), pages.end(), win) - pages.begin();
 	pages.erase(pages.begin() + i);
@@ -105,12 +134,33 @@ void SideNotebook::Remove(wxWindowBase* win)
 	win->Destroy();
 }
 
-void SideNotebook::RemoveAll()
+bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs)
 {
-	for (SideMenuCtrl* page : pages)
-	{
-		Remove(page);
+	DVNFileData* curData = page->GetSource();
+	if (curData->folder == "" || saveAs) {
+		wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"" + curData->GetName(), "", curData->GetNameWithExt(), "Load files (*.dvnl)|*.dvnl", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+		if (dialog.ShowModal() == wxID_OK) {
+			string name = wxFileName(dialog.GetPath()).GetName().ToStdString();
+			string folder = dialog.GetDirectory().ToStdString();
+			for (SideMenuCtrl* existing : pages) {
+				if (existing == page) continue;
+				if (existing->GetSource()->GetOldPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {
+					ErrorMessage("File \"" + name + "\" is already open. Close it before you can override it.");
+					return false;
+				}
+			}
+			curData->Rename(name);
+			curData->folder = folder;
+		}
+		else return false;
 	}
+	page->Save();
+	return true;
+}
+
+void SideNotebook::Select(char i)
+{
+	if(pages.size() > i) ChangeSelection(pages[i]);
 }
 
 void SideNotebook::ChangeSource(DVNFileData* source) {
@@ -122,9 +172,38 @@ void SideNotebook::ChangeSource(DVNFileData* source) {
 	content->ChangeSource(cur->GetSource());
 }
 
-void SideNotebook::SaveCurrent()
+void SideNotebook::SaveCurrent(bool saveAs)
 {
-	content->Save();
+	if (cur) Save(cur, saveAs);
+}
+
+SideMenuCtrl* SideNotebook::GetCurrent() {
+	return cur;
+}
+
+bool SideNotebook::CheckForUnsaved()
+{
+	for (char i = 0; i < pages.size(); i++)
+	{
+		if (!pages[i]->GetSource()->upToDate) {
+			switch (SaveDialog(this, pages[i]->GetSource()->GetName()).ShowModal()) {
+			case SaveDialog::ID_SAVE:
+				if (!Save(pages[i], false)) return false;
+				break;
+			case SaveDialog::ID_CANCEL:
+			case wxID_CANCEL:
+				return false;
+			case SaveDialog::ID_SAVE_ALL:
+				for (char j = i; j < pages.size(); j++) {
+					if (!Save(pages[j], false)) return false;
+				}
+				return true;
+			case SaveDialog::ID_SKIP_ALL:
+				return true;
+			}
+		}
+	}
+	return true;
 }
 
 void SideNotebook::Init() {

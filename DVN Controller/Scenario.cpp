@@ -3,8 +3,9 @@
 #include "Scenario.h"
 
 Scenario::Scenario() : Scenario("Unnamed scenario") {}
-Scenario::Scenario(string name) : DVNFileData("./scenarios/", ".dvns") {
-	this->name = name;
+Scenario::Scenario(string name) : DVNFileData(name) {
+	this->folder = "./scenarios";
+	this->extension = ".dvns";
 	int k = 0;
 	for (int i = 0; i < BAND_RANGES_COUNT; i++) {
 		BandInfo band = BandInfo(i, -1, -1);
@@ -14,10 +15,25 @@ Scenario::Scenario(string name) : DVNFileData("./scenarios/", ".dvns") {
 			k++;
 		}
 	}
+	oldSaveString = SaveString();
+}
+
+Status Scenario::SetBandData(char i, string name, int startValue, int endValue, bool working)
+{
+	Status stat = Success;
+	stat = Rename(name, i);
+	if (!stat) stat = SetStartValue(i, startValue);
+	if (!stat) stat = SetEndValue(i, endValue);
+	if (!stat) {
+		if (working) stat = TurnOn(i);
+		else TurnOff(i);
+	}
+	return stat;
 }
 
 Status Scenario::SetStartValue(char i, int value)
 {
+	if (value == GetStartValue(i)) return Success;
 	if (value > GetEndValue(i) && GetEndValue(i) != -1) return StartValueHigherThanEndvalue;
 	if (value > GetEndValueBorder(i) || value < GetStartValueBorder(i)) return StartValueOutOfBounds;
 	
@@ -28,6 +44,7 @@ Status Scenario::SetStartValue(char i, int value)
 
 Status Scenario::SetEndValue(char i, int value)
 {
+	if (value == GetStartValue(i)) return Success;
 	if (value < GetStartValue(i)) return StartValueHigherThanEndvalue;
 	if (value > GetEndValueBorder(i) || value < GetStartValueBorder(i)) return EndValueOutOfBounds;
 
@@ -79,32 +96,46 @@ void Scenario::Disable(char i) {
 	bands[i].working = false;
 }
 
+Scenario* Scenario::ToScenario(const string& name, stringstream& stream)
+{
+	Scenario* scenario = new Scenario(name);
+	string bandString;
+	for (int i = 0; i < BANDS_COUNT && getline(stream, bandString); i++) {
+		vector<string> values = Split(bandString, '|');
+		BandInfo band(values[0], scenario->GetRangeIndex(i), stoi(values[1]), stoi(values[2]), values[3] == "ON");
+		scenario->SetBandData(i, band.name, band.startValue, band.endValue, band.working);
+	}
+	scenario->oldSaveString = scenario->SaveString();
+	return scenario;
+}
+vector<Scenario*> Scenario::LoadScenarios()
+{
+	vector<Scenario*> output;
+	if (filesystem::exists("./scenarios")) {
+		directory_iterator dirItr("./scenarios");
+		for (const auto& scenario : dirItr) {
+			ifstream stream(scenario.path());
+			stringstream data;
+			data << stream.rdbuf();
+			const string name = scenario.path().filename().string();
+			output.push_back(ToScenario(name.substr(0, name.length() - 5), data));
+		}
+	}
+	return output;
+}
+
 string Scenario::BandSaveString(char i) const {
 	ostringstream stream;
 	stream << bands[i].name << "|" << bands[i].startValue << "|" << bands[i].endValue << "|" << (bands[i].working ? "ON" : "OFF");
 	return stream.str();
 }
-void Scenario::SaveBand(char i) const {
-	if (!exists("./bands")) create_directory("./bands");
-	time_t now = system_clock::to_time_t(system_clock::now());
-	tm now_tm;
-	localtime_s(&now_tm, &now);
-	int year = now_tm.tm_year % 100;
-	ostringstream fileName;
-	fileName << "./bands/band_" << setfill('0') << setw(2) << year << put_time(&now_tm, "%m%d%H%M%S");
-	auto ms_part = duration_cast<milliseconds>(system_clock::now().time_since_epoch()) % 1000;
-	fileName << setfill('0') << setw(3) << ms_part.count() << ".dvnb";
-	ofstream stream(fileName.str());
-	stream << BandSaveString(i);
-	stream.close();
-}
 
 string Scenario::SaveString() const {
 	ostringstream stream;
-	stream << name;
 	for (char i = 0; i < bands.size(); i++)
 	{
-		stream << endl << BandSaveString(i);
+		stream << BandSaveString(i);
+		if (i != bands.size() - 1) stream << endl;
 	}
 	return stream.str();
 }

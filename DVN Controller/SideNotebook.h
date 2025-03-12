@@ -5,12 +5,11 @@
 #include "SideMenuCtrl.h"
 #include "SideNotebookPanel.h"
 
+#include "SaveDialog.h"
+
 class SideNotebook : public SideNotebookPanel
 {
 private:
-	string folder;
-	string extension;
-
 	vector<SideMenuCtrl*> pages;
 
 	wxBoxSizer* mainSizer;
@@ -27,19 +26,27 @@ private:
 	void OnSelect(wxMouseEvent& e);
 	void OnDelete(wxCommandEvent& e);
 
-	void Remove(wxWindowBase* win);
-	void RemoveAll();
+	void Remove(SideMenuCtrl* win);
+
+	bool Save(SideMenuCtrl* page, bool saveAs);
 public:
+	void Select(char i);
+
+	void OnUnsave(wxCommandEvent& e);
+	void Unsave(bool created);
+
 	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr);
 
 	void SetContent(SideNotebookPanel* content);
 
-	void AddPage(DVNFileData* data, bool subMenu);
+	Status AddPage(DVNFileData* data, bool subMenu);
 
 	void ChangePage(DVNFileData* data);
 
-	void ChangeSource(DVNFileData* data) override;
-	void SaveCurrent();
+	void ChangeSource(DVNFileData* source) override;
+	void SaveCurrent(bool saveAs);
+	SideMenuCtrl* GetCurrent();
+	bool CheckForUnsaved();
 	void Init() override;
 	void UnInit() override;
 };

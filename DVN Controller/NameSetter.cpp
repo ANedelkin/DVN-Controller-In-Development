@@ -3,7 +3,7 @@
 #include "NameSetter.h"
 
 
-NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(string& name)) 
+NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name)) 
           : wxDialog(parent, wxID_ANY, title)
 {
     SetSize(FromDIP(wxSize(250, 190)));

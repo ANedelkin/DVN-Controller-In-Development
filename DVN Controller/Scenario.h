@@ -12,6 +12,8 @@ public:
 	Scenario();
 	Scenario(string name);
 
+	Status SetBandData(char i, string name, int startValue, int endValue, bool working);
+
 	Status SetStartValue(char i, int value);
 	Status SetEndValue(char i, int value);
 	void CheckIfFull(char i);
@@ -31,8 +33,10 @@ public:
 	void Enable(char i);
 	void Disable(char i);
 
+	static Scenario* ToScenario(const string& name, stringstream& data);
+	static vector<Scenario*> LoadScenarios();
+
 	string BandSaveString(char i) const;
-	void SaveBand(char i) const;
 
 	string SaveString() const override;
 };

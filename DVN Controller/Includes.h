@@ -9,9 +9,11 @@
 #include <wx/listctrl.h>
 #include <wx/sizer.h>
 #include <wx/utils.h>
+#include <wx/event.h>
 #include <wx/eventfilter.h>
 #include <wx/statline.h>
-
+#include <wx/filename.h>
+#include <wx/fontenum.h>
 
 #include <iostream>
 

@@ -78,6 +78,15 @@
     <ClCompile Include="SideNotebookPanel.cpp">
       <Filter>Source Files\Other classes</Filter>
     </ClCompile>
+    <ClCompile Include="SaveDialog.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SideMenuCtrl.cpp">
+      <Filter>Source Files\Other classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Load.cpp">
+      <Filter>Source Files\Loads</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrame.h">
@@ -134,10 +143,27 @@
     <ClInclude Include="SideNotebookPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\x64\Release\DVN Controller.exe">
       <Filter>Output</Filter>
     </None>
+    <None Include="Icon.xpm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DVN Controller.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

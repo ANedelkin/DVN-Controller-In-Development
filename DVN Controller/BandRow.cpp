@@ -5,33 +5,60 @@
 void BandRow::OnResize(wxSizeEvent& e) {
     if (toBeInited) {
         background->SetSize(GetSize());
-        num->Raise();
         name->Raise();
         startValue->Raise();
         endValue->Raise();
         statBtn->Raise();
+        num->Raise();
         e.Skip();
         toBeInited = false;
     }
 }
-void BandRow::OnNameEnter(wxCommandEvent& e) {
-    if (!Rename()) {
-        focused = nullptr;
-        base->SetFocus();
+void BandRow::OnNameEnter(wxKeyEvent& e) {
+    int key = e.GetKeyCode();
+    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !Rename()) {
+        if (key == WXK_TAB) {
+            if(wxGetKeyState(WXK_SHIFT)) 
+                focused->Navigate(wxNavigationKeyEvent::IsBackward);
+            else 
+                focused->Navigate();
+        }
+        else {
+            Unfocus();
+            focused = nullptr;
+        }
     }
     e.Skip();
 }
-void BandRow::OnStartEnter(wxCommandEvent& e) {
-    if (!ChangeStart()) {
-        focused = nullptr;
-        base->SetFocus();
+void BandRow::OnStartEnter(wxKeyEvent& e) {
+    int key = e.GetKeyCode();
+    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !ChangeStart()) {
+        if (key == WXK_TAB) {
+            if (wxGetKeyState(WXK_SHIFT))
+                focused->Navigate(wxNavigationKeyEvent::IsBackward);
+            else
+                focused->Navigate();
+        }
+        else {
+            Unfocus();
+            focused = nullptr;
+        }
     }
     e.Skip();
 }
-void BandRow::OnEndEnter(wxCommandEvent& e) {
-    if (!ChangeEnd()) {
-        focused = nullptr;
-        base->SetFocus();
+void BandRow::OnEndEnter(wxKeyEvent& e) {
+    int key = e.GetKeyCode();
+    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !ChangeEnd()) {
+        if (key == WXK_TAB) {
+            if (wxGetKeyState(WXK_SHIFT))
+                focused->Navigate(wxNavigationKeyEvent::IsBackward);
+            else
+                focused->Navigate();
+        }
+        else {
+            Unfocus();
+            focused = nullptr;
+        }
     }
     e.Skip();
 }
@@ -42,17 +69,18 @@ void BandRow::OnStatusChanged(wxMouseEvent& e)
         scenario->TurnOff(bandNum);
         statBtn->SetForegroundColour(wxColour(*wxRED));
         statBtn->SetLabel("OFF");
+        MarkUnsaved();
     }
     else {
         Status stat = scenario->TurnOn(bandNum);
         if (stat) {
             wxMessageDialog(base, errorMessages[stat], "Error", wxICON_ERROR).ShowModal();
+            return;
         }
-        else {
-            statBtn->SetForegroundColour(DARK_GREEN);
-            statBtn->SetLabel("ON");
-        }
+        statBtn->SetForegroundColour(DARK_GREEN);
+        statBtn->SetLabel("ON");
     }
+    MarkUnsaved();
     e.Skip();
 }
 
@@ -77,7 +105,7 @@ BandRow::BandRow(wxWindow* parent, Scenario* scenario, char bandNum) : wxPanel(p
 }
 
 void BandRow::InitForeground() {
-    num = new wxStaticText(this, wxID_ANY, to_string(bandNum + 1) + '.', wxDefaultPosition, wxSize(15, -1));
+    num = new wxStaticText(this, wxID_ANY, to_string(bandNum + 1) + '.', wxDefaultPosition, FromDIP(wxSize(15, -1)));
     num->SetBackgroundColour(wxColour(255, 255, 255));
     name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, FromDIP(wxSize(250, -1)), wxTE_PROCESS_ENTER);
     startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetStartValue(bandNum)), wxDefaultPosition, FromDIP(wxSize(110, -1)), wxTE_PROCESS_ENTER);
@@ -102,9 +130,9 @@ void BandRow::BindEventHandlers()
     startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
 
-    name->Bind(wxEVT_TEXT_ENTER, &BandRow::OnNameEnter, this);
-    startValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnStartEnter, this);
-    endValue->Bind(wxEVT_TEXT_ENTER, &BandRow::OnEndEnter, this);
+    name->Bind(wxEVT_KEY_DOWN, &BandRow::OnNameEnter, this);
+    startValue->Bind(wxEVT_KEY_DOWN, &BandRow::OnStartEnter, this);
+    endValue->Bind(wxEVT_KEY_DOWN, &BandRow::OnEndEnter, this);
 
     statBtn->Bind(wxEVT_LEFT_UP, &BandRow::OnStatusChanged, this);
 }
@@ -137,6 +165,7 @@ void BandRow::ChangeScenario(Scenario* scenario) {
 
 Status BandRow::Rename() {
     string newName = name->GetLineText(0).ToStdString();
+    if (newName == scenario->GetName(bandNum)) return Success;
     Status stat = scenario->Rename(newName, bandNum);
     if (stat) {
         wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
@@ -147,12 +176,13 @@ Status BandRow::Rename() {
             return Success;
         }
     }
+    MarkUnsaved();
     return stat;
 }
     
 Status BandRow::ChangeStart() {
     int newStart = stoi(startValue->GetLineText(0).ToStdString());
-
+    if(newStart == scenario->GetStartValue(bandNum)) return Success;
     Status stat = scenario->SetStartValue(bandNum, newStart);
     if (stat) {
         wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
@@ -163,12 +193,13 @@ Status BandRow::ChangeStart() {
             return Success;
         }
     }
+    MarkUnsaved();
     return stat;
 }
 
 Status BandRow::ChangeEnd() {
     int newEnd = stoi(endValue->GetLineText(0).ToStdString());
-
+    if (newEnd == scenario->GetEndValue(bandNum)) return Success;
     Status stat = scenario->SetEndValue(bandNum, newEnd);
     if (stat) {
         wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
@@ -179,10 +210,17 @@ Status BandRow::ChangeEnd() {
             return Success;
         }
     }
+    MarkUnsaved();
     return stat;
 }
 
 void BandRow::Unfocus()
 {
     unfocused->SetFocus();
+}
+
+void BandRow::MarkUnsaved()
+{
+    wxCommandEvent e(EVT_UNSAVE);
+    GetParent()->GetEventHandler()->ProcessEvent(e);
 }

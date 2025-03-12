@@ -22,6 +22,7 @@ enum Status {
     InvalidName,
     InvalidSymbols,
     NameWhitespace,
+    NameAlreadyExists,
 };
 
 extern map<int, string> errorMessages;
@@ -31,6 +32,7 @@ extern map<int, string> errorMessages;
 
 extern vector<string> Split(const string& str, char delimiter);
 extern Status ValidateName(string& name);
+extern int ErrorMessage(const string& message);
 
 //Tabs
 
@@ -49,6 +51,12 @@ enum InputType {
     End,
 };
 
+
 //Colours
 
 #define DARK_GREEN wxColour(0, 127, 14)
+
+
+//Events
+wxDECLARE_EVENT(EVT_DELETE, wxCommandEvent);
+wxDECLARE_EVENT(EVT_UNSAVE, wxCommandEvent);
