@@ -10,9 +10,6 @@
 class SideNotebook : public SideNotebookPanel
 {
 private:
-	string folder;
-	string extension;
-
 	vector<SideMenuCtrl*> pages;
 
 	wxBoxSizer* mainSizer;
@@ -31,7 +28,7 @@ private:
 
 	void Remove(SideMenuCtrl* win);
 
-	bool Save(SideMenuCtrl* page);
+	bool Save(SideMenuCtrl* page, bool saveAs);
 public:
 	void Select(char i);
 
@@ -47,7 +44,8 @@ public:
 	void ChangePage(DVNFileData* data);
 
 	void ChangeSource(DVNFileData* source) override;
-	void SaveCurrent();
+	void SaveCurrent(bool saveAs);
+	SideMenuCtrl* GetCurrent();
 	bool CheckForUnsaved();
 	void Init() override;
 	void UnInit() override;

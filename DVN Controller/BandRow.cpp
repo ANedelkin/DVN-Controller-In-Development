@@ -105,7 +105,7 @@ BandRow::BandRow(wxWindow* parent, Scenario* scenario, char bandNum) : wxPanel(p
 }
 
 void BandRow::InitForeground() {
-    num = new wxStaticText(this, wxID_ANY, to_string(bandNum + 1) + '.', wxDefaultPosition, wxSize(15, -1));
+    num = new wxStaticText(this, wxID_ANY, to_string(bandNum + 1) + '.', wxDefaultPosition, FromDIP(wxSize(15, -1)));
     num->SetBackgroundColour(wxColour(255, 255, 255));
     name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, FromDIP(wxSize(250, -1)), wxTE_PROCESS_ENTER);
     startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetStartValue(bandNum)), wxDefaultPosition, FromDIP(wxSize(110, -1)), wxTE_PROCESS_ENTER);

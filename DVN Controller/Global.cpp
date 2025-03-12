@@ -34,6 +34,11 @@ Status ValidateName(string& name) {
     return Success;
 }
 
+int ErrorMessage(const string& message)
+{
+    return wxMessageDialog(base, message, "Error", wxOK | wxICON_ERROR).ShowModal();
+}
+
 //wxEventType EVT_DELETE = wxNewEventType();
 wxDEFINE_EVENT(EVT_DELETE, wxCommandEvent);
 wxDEFINE_EVENT(EVT_UNSAVE, wxCommandEvent);

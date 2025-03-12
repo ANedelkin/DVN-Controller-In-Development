@@ -11,6 +11,8 @@ Status DVNFileData::Rename(const string& name) {
 
 string DVNFileData::GetName() const { return name; }
 
+string DVNFileData::GetNameWithExt() const { return name + extension; }
+
 Status DVNFileData::ValidateName(const string& name)
 {
 	string invalidChars = "\\/:*?\"<>|";
@@ -31,6 +33,11 @@ string DVNFileData::GetOldPath() const
 
 string DVNFileData::GetNewPath() const {
 	return folder + "\\" + name + extension;
+}
+
+string DVNFileData::GetExtension() const
+{
+	return extension;
 }
 
 string DVNFileData::SaveString() const

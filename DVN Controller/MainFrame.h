@@ -24,6 +24,7 @@ private:
 	wxButton* newBtn;
 	wxButton* openBtn;
 	wxButton* saveBtn;
+	wxButton* saveAsBtn;
 	wxButton* addBtn;
 	wxPanel* toolBar;
 	wxStaticLine* separator;
@@ -44,6 +45,7 @@ private:
 	void OnNew(wxMouseEvent& e);
 	void OnOpen(wxMouseEvent& e);
 	void OnSave(wxMouseEvent& e);
+	void OnSaveAs(wxMouseEvent& e);
 	void OnClose(wxCloseEvent& e);
 public:
 	MainFrame(const string& title);

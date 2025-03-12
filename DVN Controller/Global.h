@@ -32,6 +32,7 @@ extern map<int, string> errorMessages;
 
 extern vector<string> Split(const string& str, char delimiter);
 extern Status ValidateName(string& name);
+extern int ErrorMessage(const string& message);
 
 //Tabs
 

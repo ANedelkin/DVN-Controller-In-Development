@@ -41,16 +41,19 @@ void SideNotebook::SetContent(SideNotebookPanel* content) {
 
 Status SideNotebook::AddPage(DVNFileData* data, bool subMenu)
 {
-	for (SideMenuCtrl* page : pages) {
-		if (page->GetSource()->GetNewPath() == data->GetNewPath()) {
-			wxMessageDialog(base, "A file with the name \"" + data->GetName() + "\" is already open!", "Error", wxOK | wxICON_ERROR).ShowModal();
-			return NameAlreadyExists;
+	if (!subMenu) {
+		for (SideMenuCtrl* page : pages) {
+			if (page->GetSource()->GetNewPath() == data->GetNewPath() && page->GetSource()->folder != "") {
+				wxMessageDialog(base, "A file with the name \"" + data->GetName() + "\" is already open!", "Error", wxOK | wxICON_ERROR).ShowModal();
+				return NameAlreadyExists;
+			}
 		}
 	}
 	SideMenuCtrl* page = new SideMenuCtrl(pagesList, this, data, subMenu);
 	pages.push_back(page);
 	pagesSizer->Add(page, 0, wxEXPAND | wxBOTTOM, FromDIP(10));
 	ChangeSelection(page);
+	if (!content->IsInited()) content->Init();
 	Refresh();
 	Layout();
 	page->Bind(wxEVT_LEFT_UP, &SideNotebook::OnSelect, this);
@@ -69,13 +72,12 @@ void SideNotebook::ChangePage(DVNFileData* data) //Unused
 
 void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 {
-	page->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
 	if (cur) cur->SetBackgroundColour(wxColour(255, 255, 255));
+	page->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
 	cur = page;
 
 	DVNFileData* s = cur->GetSource();
 	content->ChangeSource(s);
-	if (!content->IsInited()) content->Init();
 }
 
 void SideNotebook::OnSelect(wxMouseEvent& e)
@@ -132,13 +134,23 @@ void SideNotebook::Remove(SideMenuCtrl* win)
 	win->Destroy();
 }
 
-bool SideNotebook::Save(SideMenuCtrl* page)
+bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs)
 {
 	DVNFileData* curData = page->GetSource();
-	if (curData->folder == "") {
-		wxDirDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"", "", wxDD_DEFAULT_STYLE);
+	if (curData->folder == "" || saveAs) {
+		wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"" + curData->GetName(), "", curData->GetNameWithExt(), "Load files (*.dvnl)|*.dvnl", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 		if (dialog.ShowModal() == wxID_OK) {
-			curData->folder = dialog.GetPath();
+			string name = wxFileName(dialog.GetPath()).GetName().ToStdString();
+			string folder = dialog.GetDirectory().ToStdString();
+			for (SideMenuCtrl* existing : pages) {
+				if (existing == page) continue;
+				if (existing->GetSource()->GetOldPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {
+					ErrorMessage("File \"" + name + "\" is already open. Close it before you can override it.");
+					return false;
+				}
+			}
+			curData->Rename(name);
+			curData->folder = folder;
 		}
 		else return false;
 	}
@@ -160,9 +172,13 @@ void SideNotebook::ChangeSource(DVNFileData* source) {
 	content->ChangeSource(cur->GetSource());
 }
 
-void SideNotebook::SaveCurrent()
+void SideNotebook::SaveCurrent(bool saveAs)
 {
-	if (cur) Save(cur);
+	if (cur) Save(cur, saveAs);
+}
+
+SideMenuCtrl* SideNotebook::GetCurrent() {
+	return cur;
 }
 
 bool SideNotebook::CheckForUnsaved()
@@ -172,14 +188,14 @@ bool SideNotebook::CheckForUnsaved()
 		if (!pages[i]->GetSource()->upToDate) {
 			switch (SaveDialog(this, pages[i]->GetSource()->GetName()).ShowModal()) {
 			case SaveDialog::ID_SAVE:
-				if (!Save(pages[i])) return false;
+				if (!Save(pages[i], false)) return false;
 				break;
 			case SaveDialog::ID_CANCEL:
 			case wxID_CANCEL:
 				return false;
 			case SaveDialog::ID_SAVE_ALL:
 				for (char j = i; j < pages.size(); j++) {
-					if (!Save(pages[i])) return false;
+					if (!Save(pages[j], false)) return false;
 				}
 				return true;
 			case SaveDialog::ID_SKIP_ALL:
