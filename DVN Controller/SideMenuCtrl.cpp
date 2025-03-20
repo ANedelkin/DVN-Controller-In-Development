@@ -21,11 +21,17 @@ void SideMenuCtrl::OnDelete(wxCommandEvent& eIn) {
 	mainPanel->GetEventHandler()->ProcessEvent(eOut);
 }
 
+void SideMenuCtrl::OnClose(wxCommandEvent& eIn) {
+	wxCommandEvent eOut(EVT_CLOSE_PAGE);
+	eOut.SetEventObject(this);
+	mainPanel->GetEventHandler()->ProcessEvent(eOut);
+}
+
 void SideMenuCtrl::OnSave(wxCommandEvent& e) {
 	source->Save();
 }
 
-SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source, bool subMenu) : wxButton(parent, wxID_ANY, source->GetName()) {
+SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source, char style) : wxButton(parent, wxID_ANY, source->GetName()) {
 	SetMinSize(FromDIP(wxSize(-1, 40)));
 
 	this->source = source;
@@ -39,17 +45,23 @@ SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* so
 	contextMenu->Append(rename);
 	contextMenu->Bind(wxEVT_MENU, &SideMenuCtrl::OnRename, this, rename->GetId());
 
-	if (subMenu) {
+	if (style & LOADABLE) {
 		wxMenuItem* save = new wxMenuItem(contextMenu, wxID_ANY, "Save as template");
 		save->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_SAVE));
 		contextMenu->Append(save);
 		contextMenu->Bind(wxEVT_MENU, &SideMenuCtrl::OnSave, this, save->GetId());
 	}
-	else {
+	if (style & DELETABLE) {
 		wxMenuItem* deleteItem = new wxMenuItem(contextMenu, wxID_DELETE, "Delete");
-		deleteItem->SetBitmap(wxArtProvider::GetBitmap(wxART_CLOSE));
+		deleteItem->SetBitmap(wxArtProvider::GetBitmap(wxART_DELETE));
 		contextMenu->Append(deleteItem);
 		contextMenu->Bind(wxEVT_MENU, &SideMenuCtrl::OnDelete, this, deleteItem->GetId());
+	}
+	if (style & CLOSEABLE) {
+		wxMenuItem* closeItem = new wxMenuItem(contextMenu, wxID_CLOSE, "Close");
+		closeItem->SetBitmap(wxArtProvider::GetBitmap(wxART_CLOSE));
+		contextMenu->Append(closeItem);
+		contextMenu->Bind(wxEVT_MENU, &SideMenuCtrl::OnClose, this, closeItem->GetId());
 	}
 
 

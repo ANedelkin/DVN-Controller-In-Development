@@ -1,7 +1,9 @@
 #include "SideNotebook.h"
 
-SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* source) : SideNotebookPanel(parent, source)
+SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* source, const char style) : SideNotebookPanel(parent, source)
 {
+	this->style = style;
+
 	mainSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	pagesBox = new wxStaticBox(this, wxID_ANY, sideMenuTxt);
@@ -21,6 +23,7 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* so
 	this->SetSizerAndFit(mainSizer);
 
 	Bind(EVT_DELETE, &SideNotebook::OnDelete, this);
+	Bind(EVT_CLOSE_PAGE, &SideNotebook::OnClose, this);
 
 	this->source = source;
 }
@@ -34,14 +37,14 @@ void SideNotebook::SetContent(SideNotebookPanel* content) {
 	mainSizer->Add(this->content, 1, wxEXPAND | wxLEFT, FromDIP(5));
 	if (source) {
 		for (DVNFileData* child : source->children) {
-			AddPage(child, true);
+			AddPage(child);
 		}
 	}
 }
 
-Status SideNotebook::AddPage(DVNFileData* data, bool subMenu)
+Status SideNotebook::AddPage(DVNFileData* data)
 {
-	if (!subMenu) {
+	if (style & (1 << CLOSEABLE)) {
 		for (SideMenuCtrl* page : pages) {
 			if (page->GetSource()->GetNewPath() == data->GetNewPath() && page->GetSource()->folder != "") {
 				wxMessageDialog(base, "A file with the name \"" + data->GetName() + "\" is already open!", "Error", wxOK | wxICON_ERROR).ShowModal();
@@ -49,7 +52,7 @@ Status SideNotebook::AddPage(DVNFileData* data, bool subMenu)
 			}
 		}
 	}
-	SideMenuCtrl* page = new SideMenuCtrl(pagesList, this, data, subMenu);
+	SideMenuCtrl* page = new SideMenuCtrl(pagesList, this, data, style);
 	pages.push_back(page);
 	pagesSizer->Add(page, 0, wxEXPAND | wxBOTTOM, FromDIP(10));
 	ChangeSelection(page);
@@ -95,8 +98,12 @@ void SideNotebook::OnDelete(wxCommandEvent& e)
 		if (exists(target->GetSource()->GetOldPath())) {
 			remove(target->GetSource()->GetOldPath());
 		}
-		Remove(target);
+		Close(target);
 	}
+}
+
+void SideNotebook::OnClose(wxCommandEvent& e) {
+	Close(dynamic_cast<SideMenuCtrl*>(e.GetEventObject()));
 }
 
 void SideNotebook::OnUnsave(wxCommandEvent& e)
@@ -115,7 +122,7 @@ void SideNotebook::Unsave(bool created)
 		cur->Unsave();
 }
 
-void SideNotebook::Remove(SideMenuCtrl* win)
+void SideNotebook::Close(SideMenuCtrl* win)
 {
 	int i = find(pages.begin(), pages.end(), win) - pages.begin();
 	pages.erase(pages.begin() + i);
@@ -145,7 +152,7 @@ bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs)
 			for (SideMenuCtrl* existing : pages) {
 				if (existing == page) continue;
 				if (existing->GetSource()->GetOldPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {
-					ErrorMessage("File \"" + name + "\" is already open. Close it before you can override it.");
+					ErrorMessage(base, FileAlreadyOpen, name.c_str());
 					return false;
 				}
 			}
