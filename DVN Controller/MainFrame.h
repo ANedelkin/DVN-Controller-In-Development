@@ -6,9 +6,10 @@
 #include "NameSetter.h"
 #include "BandsPanel.h"
 #include "SideNotebook.h"
+#include "JammersWindow.h"
 
-#include "ScenariosPanel.h"
 #include "LoadsPanel.h"
+#include "ScenariosPanel.h"
 
 class MainFrame : public wxFrame
 {
@@ -28,8 +29,6 @@ private:
 	wxButton* addBtn;
 	wxPanel* toolBar;
 	wxStaticLine* separator;
-	wxStaticText* selJammLabel;
-	wxComboBox* devComboBox;
 	wxButton* loadToBtn;
 	wxButton* loadFromBtn;
 	wxButton* aboutBtn;
@@ -46,6 +45,8 @@ private:
 	void OnOpen(wxMouseEvent& e);
 	void OnSave(wxMouseEvent& e);
 	void OnSaveAs(wxMouseEvent& e);
+	void OnLoadFromJmr(wxMouseEvent& e);
+	void OnLoadToJmr(wxMouseEvent& e);
 	void OnClose(wxCloseEvent& e);
 public:
 	MainFrame(const string& title);

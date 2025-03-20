@@ -16,15 +16,15 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 
 	notebook = new wxNotebook(mainPanel, wxID_ANY);
 
-	scenariosPanel = new SideNotebook(notebook, "Scenarios");
+	scenariosPanel = new SideNotebook(notebook, "Scenarios", nullptr, DELETABLE);
 	BandsPanel* scenBandsPanel = new BandsPanel(scenariosPanel, new Scenario());
 	scenBandsPanel->UnInit();
 	scenariosPanel->SetContent(scenBandsPanel);
 	LoadScenarios();
 	scenariosPanel->Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, scenariosPanel);
 
-	loadsPanel = new SideNotebook(notebook, "Loads");
-	SideNotebook* loadScenPanel = new SideNotebook(loadsPanel, "Scenarios", new Load());
+	loadsPanel = new SideNotebook(notebook, "Loads", nullptr, DELETABLE | CLOSEABLE);
+	SideNotebook* loadScenPanel = new SideNotebook(loadsPanel, "Scenarios", new Load(), LOADABLE);
 	BandsPanel* loadBandsPanel = new BandsPanel(loadScenPanel, new Scenario());
 	loadScenPanel->SetContent(loadBandsPanel);
 	loadScenPanel->UnInit();
@@ -64,12 +64,6 @@ void MainFrame::CreateToolBar()
 	separator = new wxStaticLine(toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVERTICAL);
 	separator->Hide();
 
-	selJammLabel = new wxStaticText(toolBar, wxID_ANY, "Select jammer: ");
-	devComboBox = new wxComboBox(toolBar, wxID_ANY, "", wxDefaultPosition, FromDIP(wxSize(150, -1)), 0, nullptr, wxCB_READONLY);
-	selJammLabel->Hide();
-	devComboBox->Hide();
-
-
 	loadToBtn = new wxButton(toolBar, wxID_UP, "Load to jammer");
 	loadFromBtn = new wxButton(toolBar, wxID_DOWN, "Load from jammer");
 	loadToBtn->Hide();
@@ -85,8 +79,6 @@ void MainFrame::CreateToolBar()
 	toolBarSizer->Add(saveAsBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(addBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(separator, 0, wxEXPAND | wxALL, PADDING);
-	toolBarSizer->Add(selJammLabel, 0, wxALIGN_CENTER | wxALL, PADDING);
-	toolBarSizer->Add(devComboBox, 0, wxALIGN_CENTER | wxRIGHT | wxTOP | wxBOTTOM, PADDING + 1);
 	toolBarSizer->Add(loadToBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->Add(loadFromBtn, 0, wxEXPAND | wxALL, PADDING);
 	toolBarSizer->AddStretchSpacer();
@@ -98,6 +90,8 @@ void MainFrame::CreateToolBar()
 	openBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnOpen, this);
 	saveBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnSave, this);
 	saveAsBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnSaveAs, this);
+	loadToBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnLoadToJmr, this);
+	loadFromBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnLoadFromJmr, this);
 
 	Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
 }
@@ -107,7 +101,7 @@ void MainFrame::LoadScenarios()
 	vector<Scenario*> scenarios = Scenario::LoadScenarios();
 	for (char i = 0; i < scenarios.size(); i++)
 	{
-		scenariosPanel->AddPage(scenarios[i], false);
+		scenariosPanel->AddPage(scenarios[i]);
 	}
 	scenariosPanel->Select(0);
 }
@@ -116,14 +110,14 @@ void MainFrame::NewScenario()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
 	nameSetter->ShowModal();
-	if (nameSetter->ok && !scenariosPanel->AddPage(new Scenario(nameSetter->name), false)) scenariosPanel->Unsave(true);
+	if (nameSetter->ok && !scenariosPanel->AddPage(new Scenario(nameSetter->name))) scenariosPanel->Unsave(true);
 }
 
 void MainFrame::NewLoad()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter load name", Load::ValidateName);
 	nameSetter->ShowModal();
-	if (nameSetter->ok && !loadsPanel->AddPage(new Load(nameSetter->name), false)) loadsPanel->Unsave(true);
+	if (nameSetter->ok && !loadsPanel->AddPage(new Load(nameSetter->name))) loadsPanel->Unsave(true);
 }
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
@@ -132,8 +126,6 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 		openBtn->Show();
 		saveAsBtn->Show();
 		separator->Show();
-		selJammLabel->Show();
-		devComboBox->Show();
 		loadToBtn->Show();
 		loadFromBtn->Show();
 		Layout();
@@ -143,8 +135,6 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 		openBtn->Hide();
 		saveAsBtn->Hide();
 		separator->Hide();
-		selJammLabel->Hide();
-		devComboBox->Hide();
 		loadToBtn->Hide();
 		loadFromBtn->Hide();
 	}
@@ -175,11 +165,14 @@ void MainFrame::OnOpen(wxMouseEvent& e)
 		for (const auto& path : paths)
 		{
 			ifstream stream(path.ToStdString());
-			stringstream data;
-			data << stream.rdbuf();
 			wxFileName fn(path);
 			const string name = fn.GetName().ToStdString();
-			loadsPanel->AddPage(Load::ToLoad(name, fn.GetPath().ToStdString(), data), false);
+			if (stream.is_open()) {
+				stringstream data;
+				data << stream.rdbuf();
+				loadsPanel->AddPage(Load::ToLoad(name, fn.GetPath().ToStdString(), data));
+			}
+			else ErrorMessage(this, FileNonexistent, name.c_str());
 		}
 	}
 }
@@ -203,6 +196,18 @@ void MainFrame::OnSave(wxMouseEvent& e)
 void MainFrame::OnSaveAs(wxMouseEvent& e)
 {
 	loadsPanel->SaveCurrent(true);
+}
+
+void MainFrame::OnLoadFromJmr(wxMouseEvent& e)
+{
+	JammersWindow jammersWindow(this);
+	jammersWindow.ShowModal();
+}
+
+void MainFrame::OnLoadToJmr(wxMouseEvent& e)
+{
+	JammersWindow jammersWindow(this);
+	jammersWindow.ShowModal();
 }
 
 void MainFrame::OnClose(wxCloseEvent& e)

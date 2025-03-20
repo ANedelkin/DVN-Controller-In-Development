@@ -74,7 +74,7 @@ void BandRow::OnStatusChanged(wxMouseEvent& e)
     else {
         Status stat = scenario->TurnOn(bandNum);
         if (stat) {
-            wxMessageDialog(base, errorMessages[stat], "Error", wxICON_ERROR).ShowModal();
+            wxMessageDialog(base, errorMessages.at(stat), "Error", wxICON_ERROR).ShowModal();
             return;
         }
         statBtn->SetForegroundColour(DARK_GREEN);
@@ -168,7 +168,7 @@ Status BandRow::Rename() {
     if (newName == scenario->GetName(bandNum)) return Success;
     Status stat = scenario->Rename(newName, bandNum);
     if (stat) {
-        wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
+        wxMessageDialog dialog(base, errorMessages.at(stat), "Error", wxOK | wxCANCEL | wxICON_ERROR);
         dialog.SetOKCancelLabels("Enter new name", "Keep old name");
         int id = dialog.ShowModal();
         if (id == wxID_CANCEL) {
@@ -185,7 +185,7 @@ Status BandRow::ChangeStart() {
     if(newStart == scenario->GetStartValue(bandNum)) return Success;
     Status stat = scenario->SetStartValue(bandNum, newStart);
     if (stat) {
-        wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
+        wxMessageDialog dialog(base, errorMessages.at(stat), "Error", wxOK | wxCANCEL | wxICON_ERROR);
         dialog.SetOKCancelLabels("Enter new value", "Keep old value");
         int id = dialog.ShowModal();
         if (id == wxID_CANCEL) {
@@ -202,7 +202,7 @@ Status BandRow::ChangeEnd() {
     if (newEnd == scenario->GetEndValue(bandNum)) return Success;
     Status stat = scenario->SetEndValue(bandNum, newEnd);
     if (stat) {
-        wxMessageDialog dialog(base, errorMessages[stat], "Error", wxOK | wxCANCEL | wxICON_ERROR);
+        wxMessageDialog dialog(base, errorMessages.at(stat), "Error", wxOK | wxCANCEL | wxICON_ERROR);
         dialog.SetOKCancelLabels("Enter new value", "Keep old value");
         int id = dialog.ShowModal();
         if (id == wxID_CANCEL) {

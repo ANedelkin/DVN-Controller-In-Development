@@ -10,6 +10,7 @@
 class SideNotebook : public SideNotebookPanel
 {
 private:
+	char style;
 	vector<SideMenuCtrl*> pages;
 
 	wxBoxSizer* mainSizer;
@@ -26,7 +27,9 @@ private:
 	void OnSelect(wxMouseEvent& e);
 	void OnDelete(wxCommandEvent& e);
 
-	void Remove(SideMenuCtrl* win);
+	void OnClose(wxCommandEvent& e);
+
+	void Close(SideMenuCtrl* win);
 
 	bool Save(SideMenuCtrl* page, bool saveAs);
 public:
@@ -35,11 +38,11 @@ public:
 	void OnUnsave(wxCommandEvent& e);
 	void Unsave(bool created);
 
-	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr);
+	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr, const char style = 0);
 
 	void SetContent(SideNotebookPanel* content);
 
-	Status AddPage(DVNFileData* data, bool subMenu);
+	Status AddPage(DVNFileData* data);
 
 	void ChangePage(DVNFileData* data);
 

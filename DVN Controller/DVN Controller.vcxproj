@@ -106,15 +106,17 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FTD2XX_STATIC;FTD2XX_STATIC_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(WXWIN5)\include\msvc;$(WXWIN5)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(WXWIN5)\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Alex\DVN projects\DVN Controller\DVN Controller\DVN Controller;$(WXWIN5)\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ftd2xx.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
@@ -126,10 +128,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FTD2XX_STATIC;FTD2XX_STATICNDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(WXWIN5)\include\msvc;$(WXWIN5)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,6 +140,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(WXWIN5)\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ftd2xx.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
@@ -147,6 +151,7 @@
     <ClCompile Include="BandsPanel.cpp" />
     <ClCompile Include="DVNFileData.cpp" />
     <ClCompile Include="Global.cpp" />
+    <ClCompile Include="JammersWindow.cpp" />
     <ClCompile Include="Load.cpp" />
     <ClCompile Include="LoadsPanel.cpp" />
     <ClCompile Include="MainFrame.cpp" />
@@ -156,6 +161,7 @@
     <ClCompile Include="SaveDialog.h" />
     <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="ScenariosPanel.cpp" />
+    <ClCompile Include="ScenSelectDialog.cpp" />
     <ClCompile Include="SideMenuCtrl.cpp" />
     <ClCompile Include="SideNotebook.cpp" />
     <ClCompile Include="SideNotebookPanel.cpp" />
@@ -166,8 +172,10 @@
     <ClInclude Include="BandRow.h" />
     <ClInclude Include="BandsPanel.h" />
     <ClInclude Include="DVNFileData.h" />
+    <ClInclude Include="ftd2xx.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="Includes.h" />
+    <ClInclude Include="JammersWindow.h" />
     <ClInclude Include="Load.h" />
     <ClInclude Include="LoadsPanel.h" />
     <ClInclude Include="MainFrame.h" />
@@ -178,6 +186,7 @@
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="ScenarioPreset.h" />
     <ClInclude Include="ScenariosPanel.h" />
+    <ClInclude Include="ScenSelectDialog.h" />
     <ClInclude Include="SideMenuCtrl.h" />
     <ClInclude Include="SideNotebook.h" />
     <ClInclude Include="SideNotebookPanel.h" />
