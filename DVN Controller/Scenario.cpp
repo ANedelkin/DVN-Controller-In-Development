@@ -8,10 +8,12 @@ Scenario::Scenario(string name) : DVNFileData(name) {
 	this->extension = ".dvns";
 	int k = 0;
 	for (int i = 0; i < BAND_RANGES_COUNT; i++) {
-		BandInfo band = BandInfo(i, -1, -1);
+		BandInfo band = BandInfo(i, bandRanges[i][0], bandRanges[i][1]);
 		for (int j = 0; j < bandRanges[i][3]; j++)
 		{
 			bands[k] = band;
+			bands[k].name = "Band ";
+			bands[k].name += to_string(k + 1);
 			k++;
 		}
 	}
@@ -34,11 +36,11 @@ Status Scenario::SetBandData(char i, string name, int startValue, int endValue, 
 Status Scenario::SetStartValue(char i, int value)
 {
 	if (value == GetStartValue(i)) return Success;
-	if (value > GetEndValue(i) && GetEndValue(i) != -1) return StartValueHigherThanEndvalue;
-	if (value > GetEndValueBorder(i) || value < GetStartValueBorder(i)) return StartValueOutOfBounds;
+	if (value > GetEndValue(i)) return StartValueHigherThanEndvalue;
+	if (value < GetStartValueBorder(i)) return StartValueOutOfBounds;
 	
 	bands[i].startValue = value;
-	CheckIfFull(i);
+	//CheckIfFull(i);
 	return Success;
 }
 
@@ -46,10 +48,10 @@ Status Scenario::SetEndValue(char i, int value)
 {
 	if (value == GetEndValue(i)) return Success;
 	if (value < GetStartValue(i)) return StartValueHigherThanEndvalue;
-	if (value > GetEndValueBorder(i) || value < GetStartValueBorder(i)) return EndValueOutOfBounds;
+	if (value > GetEndValueBorder(i)) return EndValueOutOfBounds;
 
 	bands[i].endValue = value;
-	CheckIfFull(i);
+	//CheckIfFull(i);
 	return Success;
 }
 
