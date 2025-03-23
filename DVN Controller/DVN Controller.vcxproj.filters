@@ -13,156 +13,153 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Bands">
-      <UniqueIdentifier>{b9fd7432-c92f-4076-a39f-dd42bfe58351}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Loads">
-      <UniqueIdentifier>{fa42d931-3ff1-4f0f-9671-7a85a2fbdc05}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scenarios">
-      <UniqueIdentifier>{090081ab-1567-4a03-be6a-47e508144d43}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Output">
       <UniqueIdentifier>{ec703ff8-9cae-45da-8abe-52b5ff38be2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Bands">
-      <UniqueIdentifier>{d93fc7dc-79a0-4daa-90e5-b5f5923c6311}</UniqueIdentifier>
+    <Filter Include="Header Files\Data">
+      <UniqueIdentifier>{a841490a-da90-49a0-9343-3a714ba0e0fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Scenarios">
-      <UniqueIdentifier>{a504ce2c-2a8e-4cee-8d53-db742026aa08}</UniqueIdentifier>
+    <Filter Include="Header Files\Frames">
+      <UniqueIdentifier>{c5de9c41-143e-4102-909d-dbd98b2c5783}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Loads">
-      <UniqueIdentifier>{c9ad8b40-0e48-46a2-9dd4-96d2406923ae}</UniqueIdentifier>
+    <Filter Include="Header Files\Resources">
+      <UniqueIdentifier>{b4a9d10f-24b5-4667-9392-0b53a98b3cd3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Other classes">
+    <Filter Include="Source Files\Resources">
+      <UniqueIdentifier>{8f63a4d5-950d-4d91-a7e6-e14a68fc9351}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Frames">
+      <UniqueIdentifier>{f83d2f38-ef74-42e5-b7a7-ce871bbedae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Controls">
       <UniqueIdentifier>{74dc76ab-4341-43a9-b04b-202e2163b4b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data">
+      <UniqueIdentifier>{8d7d4cd8-c837-4f7b-938e-f33a53403089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Controls">
+      <UniqueIdentifier>{0ac7b84a-7394-4949-992d-cc602eddd2e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainFrame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Global.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelConstants.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BandRow.cpp">
-      <Filter>Source Files\Bands</Filter>
-    </ClCompile>
-    <ClCompile Include="BandsPanel.cpp">
-      <Filter>Source Files\Bands</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenario.cpp">
-      <Filter>Source Files\Scenarios</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadsPanel.cpp">
-      <Filter>Source Files\Loads</Filter>
-    </ClCompile>
-    <ClCompile Include="ScenariosPanel.cpp">
-      <Filter>Source Files\Scenarios</Filter>
-    </ClCompile>
-    <ClCompile Include="DVNFileData.cpp">
-      <Filter>Source Files\Other classes</Filter>
-    </ClCompile>
-    <ClCompile Include="NameSetter.cpp">
-      <Filter>Source Files\Other classes</Filter>
-    </ClCompile>
     <ClCompile Include="SideNotebook.cpp">
-      <Filter>Source Files\Other classes</Filter>
+      <Filter>Source Files\Controls</Filter>
     </ClCompile>
     <ClCompile Include="SideNotebookPanel.cpp">
-      <Filter>Source Files\Other classes</Filter>
-    </ClCompile>
-    <ClCompile Include="SaveDialog.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Controls</Filter>
     </ClCompile>
     <ClCompile Include="SideMenuCtrl.cpp">
-      <Filter>Source Files\Other classes</Filter>
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveDialog.h">
+      <Filter>Header Files\Frames</Filter>
     </ClCompile>
     <ClCompile Include="Load.cpp">
-      <Filter>Source Files\Loads</Filter>
+      <Filter>Source Files\Data</Filter>
     </ClCompile>
-    <ClCompile Include="JammersWindow.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Scenario.cpp">
+      <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="DVNFileData.cpp">
+      <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="BandRow.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="BandsPanel.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelConstants.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrame.cpp">
+      <Filter>Source Files\Frames</Filter>
     </ClCompile>
     <ClCompile Include="ScenSelectDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Frames</Filter>
+    </ClCompile>
+    <ClCompile Include="NameSetter.cpp">
+      <Filter>Source Files\Frames</Filter>
+    </ClCompile>
+    <ClCompile Include="JammersWindow.cpp">
+      <Filter>Source Files\Frames</Filter>
+    </ClCompile>
+    <ClCompile Include="ColourfulButton.cpp">
+      <Filter>Source Files\Controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainFrame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NameSetter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Global.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelConstants.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="Load.h">
+      <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="BandInfo.h">
-      <Filter>Header Files\Bands</Filter>
+      <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="BandPreset.h">
-      <Filter>Header Files\Bands</Filter>
-    </ClInclude>
-    <ClInclude Include="BandsPanel.h">
-      <Filter>Header Files\Bands</Filter>
-    </ClInclude>
-    <ClInclude Include="Load.h">
-      <Filter>Header Files\Loads</Filter>
+      <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="Scenario.h">
-      <Filter>Header Files\Scenarios</Filter>
+      <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="ScenarioPreset.h">
-      <Filter>Header Files\Scenarios</Filter>
-    </ClInclude>
-    <ClInclude Include="BandRow.h">
-      <Filter>Header Files\Bands</Filter>
-    </ClInclude>
-    <ClInclude Include="ScenariosPanel.h">
-      <Filter>Header Files\Scenarios</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadsPanel.h">
-      <Filter>Header Files\Loads</Filter>
+      <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="DVNFileData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SideMenuCtrl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SideNotebook.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SideNotebookPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ftd2xx.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="JammersWindow.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Frames</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrame.h">
+      <Filter>Header Files\Frames</Filter>
+    </ClInclude>
+    <ClInclude Include="NameSetter.h">
+      <Filter>Header Files\Frames</Filter>
     </ClInclude>
     <ClInclude Include="ScenSelectDialog.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Frames</Filter>
+    </ClInclude>
+    <ClInclude Include="BandRow.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="BandsPanel.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="SideMenuCtrl.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="SideNotebook.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="SideNotebookPanel.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="ftd2xx.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelConstants.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ColourfulButton.h">
+      <Filter>Header Files\Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

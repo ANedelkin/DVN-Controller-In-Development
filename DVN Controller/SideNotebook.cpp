@@ -1,4 +1,5 @@
 #include "SideNotebook.h"
+#include "ScenSelectDialog.h"
 
 SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* source, const char style) : SideNotebookPanel(parent, source)
 {
@@ -22,6 +23,7 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* so
 
 	this->SetSizerAndFit(mainSizer);
 
+	Bind(EVT_LOAD, &SideNotebook::OnLoad, this);
 	Bind(EVT_DELETE, &SideNotebook::OnDelete, this);
 	Bind(EVT_CLOSE_PAGE, &SideNotebook::OnClose, this);
 
@@ -63,16 +65,6 @@ Status SideNotebook::AddPage(DVNFileData* data)
 	return Success;
 }
 
-void SideNotebook::ChangePage(DVNFileData* data) //Unused
-{
-	this->source = data;
-	for (char i = 0; i < pages.size(); i++)
-	{
-		pages[i]->ChangeSource(data->children[i]);
-		ChangeSelection(pages[i]);
-	}
-}
-
 void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 {
 	if (cur) cur->SetBackgroundColour(wxColour(255, 255, 255));
@@ -81,6 +73,19 @@ void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 
 	DVNFileData* s = cur->GetSource();
 	content->ChangeSource(s);
+}
+
+void SideNotebook::OnLoad(wxCommandEvent& e)
+{
+	ScenSelectDialog* dialog = new ScenSelectDialog(base);
+	if (dialog->ShowModal() == wxID_OK) {
+		SideMenuCtrl* page = (SideMenuCtrl*)e.GetEventObject();
+		Scenario* selection = dialog->GetSelection();
+		*(Scenario*)page->GetSource() = *selection;
+		page->Refresh();
+		page->MarkUnsaved();
+		if (cur == page) ChangeSelection(cur);
+	}
 }
 
 void SideNotebook::OnSelect(wxMouseEvent& e)

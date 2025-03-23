@@ -14,6 +14,7 @@
 #include <wx/statline.h>
 #include <wx/filename.h>
 #include <wx/fontenum.h>
+#include <wx/renderer.h>
 
 #include <iostream>
 

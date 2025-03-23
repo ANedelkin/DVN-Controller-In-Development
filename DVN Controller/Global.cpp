@@ -49,6 +49,7 @@ int ErrorMessage(wxWindow* parent, Status stat, const char* param)
     return wxMessageDialog(parent, msg, "Error", wxOK | wxICON_ERROR).ShowModal();
 }
 
+wxDEFINE_EVENT(EVT_LOAD, wxCommandEvent);
 wxDEFINE_EVENT(EVT_CLOSE_PAGE, wxCommandEvent);
 wxDEFINE_EVENT(EVT_DELETE, wxCommandEvent);
 wxDEFINE_EVENT(EVT_UNSAVE, wxCommandEvent);
