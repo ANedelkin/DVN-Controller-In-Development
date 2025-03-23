@@ -1,7 +1,7 @@
 #include "BandsPanel.h"
 #include "Load.h"
 
-BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : SideNotebookPanel(parent, scenario) {
+BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) : SideNotebookPanel(parent, scenario) {
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
 
     wxStaticBox* bandsBox = new wxStaticBox(this, wxID_ANY, "Bands");
@@ -43,7 +43,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario) : SideNotebookPanel
     this->source = scenario;
 
     for (char i = 0; i < BANDS_COUNT; i++) {
-        bandRows[i] = new BandRow(content, scenario, i);
+        bandRows[i] = new BandRow(content, scenario, i, style);
         contentSizer->Add(bandRows[i], 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(10));
     }
 

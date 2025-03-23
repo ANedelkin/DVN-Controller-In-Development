@@ -14,7 +14,7 @@ public:
 	wxPanel* content;
 	wxBoxSizer* tableSizer;
 
-	BandsPanel(wxWindow* parent, Scenario* scenario);
+	BandsPanel(wxWindow* parent, Scenario* scenario, const char style = 0);
 
 	void ChangeSource(DVNFileData* source) override;
 	void Init() override;

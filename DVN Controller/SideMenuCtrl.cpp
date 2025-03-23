@@ -31,6 +31,13 @@ void SideMenuCtrl::OnSave(wxCommandEvent& e) {
 	source->Save();
 }
 
+void SideMenuCtrl::OnLoad(wxCommandEvent& eIn)
+{
+	wxCommandEvent eOut(EVT_LOAD);
+	eOut.SetEventObject(this);
+	mainPanel->GetEventHandler()->ProcessEvent(eOut);
+}
+
 SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source, char style) : wxButton(parent, wxID_ANY, source->GetName()) {
 	SetMinSize(FromDIP(wxSize(-1, 40)));
 
@@ -50,6 +57,11 @@ SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* so
 		save->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_SAVE));
 		contextMenu->Append(save);
 		contextMenu->Bind(wxEVT_MENU, &SideMenuCtrl::OnSave, this, save->GetId());
+
+		wxMenuItem* load = new wxMenuItem(contextMenu, wxID_ANY, "Load from template");
+		load->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_OPEN));
+		contextMenu->Append(load);
+		contextMenu->Bind(wxEVT_MENU, &SideMenuCtrl::OnLoad, this, load->GetId());
 	}
 	if (style & DELETABLE) {
 		wxMenuItem* deleteItem = new wxMenuItem(contextMenu, wxID_DELETE, "Delete");
@@ -71,7 +83,13 @@ SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* so
 DVNFileData* SideMenuCtrl::GetSource() { return source; }
 
 void SideMenuCtrl::ChangeSource(DVNFileData* source) {
+	delete this->source;
 	this->source = source;
+	SetLabel(source->GetName());
+}
+
+void SideMenuCtrl::Refresh()
+{
 	SetLabel(source->GetName());
 }
 

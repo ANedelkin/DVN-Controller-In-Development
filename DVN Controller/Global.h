@@ -7,6 +7,7 @@
 #define CLOSEABLE   0b0001
 #define DELETABLE   0b0010
 #define LOADABLE    0b0100
+#define READ_ONLY   0b1000
 
 
 //Vars:
@@ -69,6 +70,7 @@ enum InputType {
 
 
 //Events
+wxDECLARE_EVENT(EVT_LOAD, wxCommandEvent);
 wxDECLARE_EVENT(EVT_CLOSE_PAGE, wxCommandEvent);
 wxDECLARE_EVENT(EVT_DELETE, wxCommandEvent);
 wxDECLARE_EVENT(EVT_UNSAVE, wxCommandEvent);

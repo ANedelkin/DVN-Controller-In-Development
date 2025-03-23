@@ -3,19 +3,22 @@
 #include "Global.h"
 #include "Scenario.h"
 #include "BandPreset.h"
+#include "ColourfulButton.h"
 
 class BandRow : public wxPanel
 {
 private:
     wxWindow* unfocused;
     bool toBeInited = true;
+    const char style;
 
     Scenario* scenario;
     char bandNum;
 
     wxButton* background;
 
-    wxButton* statBtn;
+    wxStaticText* num;
+    ColourfulBtn* statBtn;
 
     void InitForeground();
     void BindEventHandlers();
@@ -28,14 +31,13 @@ private:
     void OnNameEnter(wxKeyEvent& e);
     void OnStartEnter(wxKeyEvent& e);
     void OnEndEnter(wxKeyEvent& e);
-    void OnStatusChanged(wxMouseEvent& e);
+    void OnStatusChanged(wxCommandEvent& e);
     void OnFocus(wxFocusEvent& e);
 public:
-    wxStaticText* num;
     wxTextCtrl* name;
     wxTextCtrl* startValue;
     wxTextCtrl* endValue;
-    BandRow(wxWindow* parent, Scenario* scenario, char bandNum);
+    BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const  char style = 0);
 
     void ChangeScenario(Scenario* scenario);
 

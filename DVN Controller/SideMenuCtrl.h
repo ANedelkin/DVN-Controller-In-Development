@@ -14,11 +14,13 @@ private:
 	void OnDelete(wxCommandEvent& eIn);
 	void OnClose(wxCommandEvent& eIn);
 	void OnSave(wxCommandEvent& e);
+	void OnLoad(wxCommandEvent& eIn);
 public:
 	SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source, char style);
 
 	DVNFileData* GetSource();
 	void ChangeSource(DVNFileData* source);
+	void Refresh();
 	void Unsave();
 	void Save();
 	void MarkSaved();

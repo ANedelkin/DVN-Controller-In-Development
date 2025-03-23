@@ -44,7 +44,7 @@ Status Scenario::SetStartValue(char i, int value)
 
 Status Scenario::SetEndValue(char i, int value)
 {
-	if (value == GetStartValue(i)) return Success;
+	if (value == GetEndValue(i)) return Success;
 	if (value < GetStartValue(i)) return StartValueHigherThanEndvalue;
 	if (value > GetEndValueBorder(i) || value < GetStartValueBorder(i)) return EndValueOutOfBounds;
 

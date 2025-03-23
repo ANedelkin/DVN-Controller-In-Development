@@ -110,7 +110,10 @@ void MainFrame::NewScenario()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
 	nameSetter->ShowModal();
-	if (nameSetter->ok && !scenariosPanel->AddPage(new Scenario(nameSetter->name))) scenariosPanel->Unsave(true);
+	Scenario* newScen = new Scenario(nameSetter->name);
+	if (nameSetter->ok && !scenariosPanel->AddPage(newScen)) {
+		scenariosPanel->Unsave(true);
+	}
 }
 
 void MainFrame::NewLoad()

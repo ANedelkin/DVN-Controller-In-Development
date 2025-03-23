@@ -4,8 +4,9 @@
 
 #include "SideMenuCtrl.h"
 #include "SideNotebookPanel.h"
-
 #include "SaveDialog.h"
+
+class ScenSelectDialog;
 
 class SideNotebook : public SideNotebookPanel
 {
@@ -24,6 +25,7 @@ private:
 
 	void ChangeSelection(SideMenuCtrl* scenCtrl);
 
+	void OnLoad(wxCommandEvent& e);
 	void OnSelect(wxMouseEvent& e);
 	void OnDelete(wxCommandEvent& e);
 

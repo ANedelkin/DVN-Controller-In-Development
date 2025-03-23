@@ -3,13 +3,12 @@
 
 #include "Icon.xpm"
 
+#include "Load.h"
+#include "Scenario.h"
 #include "NameSetter.h"
 #include "BandsPanel.h"
 #include "SideNotebook.h"
 #include "JammersWindow.h"
-
-#include "LoadsPanel.h"
-#include "ScenariosPanel.h"
 
 class MainFrame : public wxFrame
 {
