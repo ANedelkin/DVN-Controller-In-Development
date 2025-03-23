@@ -7,7 +7,7 @@ Load::Load(const string& name, const string& folder) : DVNFileData(name) {
 	this->folder = folder;
 	for (char i = 0; i < SCENARIOS_COUNT; i++)
 	{
-		children.push_back(new Scenario());
+		children.push_back(new Scenario(string("Scenario ") + to_string(i + 1)));
 	}
 	oldSaveString = SaveString();
 }
