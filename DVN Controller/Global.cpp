@@ -38,7 +38,7 @@ Status ValidateName(string& name) {
     return Success;
 }
 
-int ErrorMessage(wxWindow* parent, Status stat, const char* param)
+int ErrorMessage(wxWindow* parent, Status stat, const char* param, const char style)
 {
     char buffer[256];
     string msg;
@@ -47,6 +47,15 @@ int ErrorMessage(wxWindow* parent, Status stat, const char* param)
         msg = buffer;
     }
     else msg = errorMessages[stat];
+
+    wxMessageDialog frame(parent, msg);
+
+    if (style & DIALOG) {
+        wxMessageDialog frame(parent, msg, "Error", wxOK | wxCANCEL | wxICON_ERROR);
+        frame.SetOKCancelLabels("Enter new value", "Keep old value");
+        return frame.ShowModal();
+    }
+
     return wxMessageDialog(parent, msg, "Error", wxOK | wxICON_ERROR).ShowModal();
 }
 
