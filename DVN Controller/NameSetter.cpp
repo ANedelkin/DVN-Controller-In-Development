@@ -3,7 +3,7 @@
 #include "NameSetter.h"
 
 
-NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name)) 
+NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name), const string& defaultValue) 
           : wxDialog(parent, wxID_ANY, title)
 {
     SetSize(FromDIP(wxSize(250, 190)));
@@ -15,7 +15,7 @@ NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validato
     wxBoxSizer* inputSizer = new wxBoxSizer(wxHORIZONTAL);
 
     //wxStaticText* text = new wxStaticText(inputPanel, wxID_ANY, "Enter name:", wxPoint(20, 20));
-    input = new wxTextCtrl(inputPanel, wxID_ANY, "", FromDIP(wxPoint(20, 50)), FromDIP(wxSize(200, 25)));
+    input = new wxTextCtrl(inputPanel, wxID_ANY, defaultValue, FromDIP(wxPoint(20, 50)), FromDIP(wxSize(200, 25)));
 
     //inputSizer->Add(text, 0, wxALIGN_CENTER | wxALL, 10);
     inputSizer->Add(input, 1, wxALIGN_CENTER | wxALL, FromDIP(10));

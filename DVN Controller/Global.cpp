@@ -13,7 +13,7 @@ map<Status, const char*> errorMessages = {
     {EndValueLowerThanStartValue, "End value lower than start value!"},
     {BandAtLastPlace, "The range between the start and end values of the last band of this range cannot include the value %s!"},
     {InvalidName, "The name cannot contain the symbol \"|\"!"},
-    {InvalidSymbols, "The name cannot contain the symbol \"%s\"!"},
+    {InvalidSymbols, "The name cannot contain the symbols { \\ / : * ? \" < > | }!"},
     {NameWhitespace, "The name cannot be empty!"},
     {BandUninitialized, "Start and end frequencies have to be set in order to turn band on!"},
     {NameAlreadyExists, "A scenario with this name already exists!"},

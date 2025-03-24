@@ -97,7 +97,7 @@ string Scenario::GetName(char i) { return bands[i].name; }
 Status Scenario::Rename(string name, char i) {
 	if (name.length() == 0) return NameWhitespace;
 	if (all_of(name.begin(), name.end(), [](unsigned char c) { return std::isspace(c); })) return NameWhitespace;
-	if (name.find('|') != string::npos) return InvalidSymbols;
+	if (name.find('|') != string::npos) return InvalidName;
 
 	bands[i].name = name;
 	return Success;

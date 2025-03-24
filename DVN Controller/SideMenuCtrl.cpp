@@ -6,7 +6,7 @@ void SideMenuCtrl::OnContextMenu(wxMouseEvent& e) {
 }
 
 void SideMenuCtrl::OnRename(wxCommandEvent& e) {
-	NameSetter* nameSetter = new NameSetter(base, "Enter name", DVNFileData::ValidateName);
+	NameSetter* nameSetter = new NameSetter(base, "Enter name", DVNFileData::ValidateName, source->GetName());
 	nameSetter->ShowModal();
 	if (nameSetter->ok && source->GetName() != nameSetter->name) {
 		source->Rename(nameSetter->name);

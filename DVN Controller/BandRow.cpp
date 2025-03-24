@@ -74,7 +74,7 @@ void BandRow::OnStatusChanged(wxCommandEvent& e)
     else {
         Status stat = scenario->TurnOn(bandNum);
         if (stat) {
-            wxMessageDialog(base, errorMessages.at(stat), "Error", wxICON_ERROR).ShowModal();
+            ErrorMessage(base, stat);
             return;
         }
         statBtn->SetForegroundColour(DARK_GREEN);
