@@ -34,6 +34,7 @@ enum Status {
     JammerNotSelected,
     FileNonexistent,
     FileAlreadyOpen,
+    FreqNotPositiveNumber,
 };
 
 extern map<Status, const char*> errorMessages;

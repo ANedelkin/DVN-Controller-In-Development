@@ -19,7 +19,8 @@ map<Status, const char*> errorMessages = {
     {NameAlreadyExists, "A scenario with this name already exists!"},
     {JammerNotSelected, "You haven't selected a jammer!"},
     {FileNonexistent, "The file \"%s\" does not exist!"},
-    {FileAlreadyOpen, "The file \"%s\" is already open!"}
+    {FileAlreadyOpen, "The file \"%s\" is already open!"},
+    {FreqNotPositiveNumber, "The frequency has to be a positive whole number!"}
 };
 
 vector<string> Split(const string& str, char delimiter) {
