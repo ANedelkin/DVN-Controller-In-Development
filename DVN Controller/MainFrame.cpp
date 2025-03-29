@@ -47,19 +47,15 @@ void MainFrame::CreateToolBar()
 
 	newBtn = new wxButton(toolBar, wxID_ANY, "New");
 	openBtn = new wxButton(toolBar, wxID_ANY, "Open");
-	openBtn->Hide();
 	saveBtn = new wxButton(toolBar, wxID_ANY, "Save");
 	saveAsBtn = new wxButton(toolBar, wxID_ANY, "Save As");
-	saveAsBtn->Hide();
 	addBtn = new wxButton(toolBar, wxID_ANY, "Add existing");
+	addBtn->Hide();
 
 	separator = new wxStaticLine(toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVERTICAL);
-	separator->Hide();
 
 	loadToBtn = new wxButton(toolBar, wxID_UP, "Load to jammer");
 	loadFromBtn = new wxButton(toolBar, wxID_DOWN, "Load from jammer");
-	loadToBtn->Hide();
-	loadFromBtn->Hide();
 
 	aboutBtn = new wxButton(toolBar, wxID_ANY, "About");
 

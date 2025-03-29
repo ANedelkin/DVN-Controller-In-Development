@@ -29,8 +29,8 @@ Status LoadsPanel::AddPage(Load* data)
 {
 	for (SideMenuCtrl* page : pages) {
 		if (page->GetSource()->GetNewPath() == data->GetNewPath() && page->GetSource()->folder != "") {
-			ErrorMessage(base, ScenarioAlreadyExists, data->GetName().c_str());
-			return ScenarioAlreadyExists;
+			ErrorMessage(base, FileAlreadyOpen, data->GetName().c_str());
+			return FileAlreadyOpen;
 		}
 	}
 

@@ -51,15 +51,15 @@ extern int ErrorMessage(wxWindow* parent, Status stat, const char* param = "", c
 
 //Tabs
 
-enum Tabs {
-    Scenarios,
+enum Tabs { //Move to MainFrame
     Loads,
+    Scenarios,
 };
 
 
 //BandRow column tags
 
-enum InputType {
+enum InputType { //Change to defines
     ScenName,
     BandName,
     Start,
