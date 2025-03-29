@@ -26,6 +26,8 @@ private:
 
     void MarkUnsaved();
 
+    Status TryParse(const wxString& str, int* result);
+
     void OnResize(wxSizeEvent& e);
 
     void OnNameEnter(wxKeyEvent& e);
@@ -42,8 +44,9 @@ public:
     void ChangeScenario(Scenario* scenario);
 
     Status Rename();
-    Status ChangeStart();
-    Status ChangeEnd();
+    //Status ChangeStart();
+    //Status ChangeEnd();
+    Status UpdateFreq(wxTextCtrl* ctrl);
 
     void Unfocus();
 };

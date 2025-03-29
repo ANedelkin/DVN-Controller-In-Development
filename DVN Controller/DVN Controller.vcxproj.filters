@@ -93,6 +93,12 @@
     <ClCompile Include="ColourfulButton.cpp">
       <Filter>Source Files\Controls</Filter>
     </ClCompile>
+    <ClCompile Include="ScenariosPanel.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadsPanel.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Load.h">
@@ -159,6 +165,12 @@
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="ColourfulButton.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenariosPanel.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadsPanel.h">
       <Filter>Header Files\Controls</Filter>
     </ClInclude>
   </ItemGroup>

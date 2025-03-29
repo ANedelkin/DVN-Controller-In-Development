@@ -32,7 +32,7 @@ void BandRow::OnNameEnter(wxKeyEvent& e) {
 }
 void BandRow::OnStartEnter(wxKeyEvent& e) {
     int key = e.GetKeyCode();
-    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !ChangeStart()) {
+    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !UpdateFreq(startValue)) {
         if (key == WXK_TAB) {
             if (wxGetKeyState(WXK_SHIFT))
                 focused->Navigate(wxNavigationKeyEvent::IsBackward);
@@ -48,7 +48,7 @@ void BandRow::OnStartEnter(wxKeyEvent& e) {
 }
 void BandRow::OnEndEnter(wxKeyEvent& e) {
     int key = e.GetKeyCode();
-    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !ChangeEnd()) {
+    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !UpdateFreq(endValue)) {
         if (key == WXK_TAB) {
             if (wxGetKeyState(WXK_SHIFT))
                 focused->Navigate(wxNavigationKeyEvent::IsBackward);
@@ -74,7 +74,7 @@ void BandRow::OnStatusChanged(wxCommandEvent& e)
     else {
         Status stat = scenario->TurnOn(bandNum);
         if (stat) {
-            wxMessageDialog(base, errorMessages.at(stat), "Error", wxICON_ERROR).ShowModal();
+            ErrorMessage(base, stat);
             return;
         }
         statBtn->SetForegroundColour(DARK_GREEN);
@@ -109,8 +109,8 @@ void BandRow::InitForeground() {
     num->SetBackgroundColour(wxColour(255, 255, 255));
 
     name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, FromDIP(wxSize(250, -1)), wxTE_PROCESS_ENTER);
-    startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetStartValue(bandNum)), wxDefaultPosition, FromDIP(wxSize(110, -1)), wxTE_PROCESS_ENTER);
-    endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetEndValue(bandNum)), wxDefaultPosition, FromDIP(wxSize(110, -1)), wxTE_PROCESS_ENTER);
+    startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 0)), wxDefaultPosition, FromDIP(wxSize(110, -1)), wxTE_PROCESS_ENTER);
+    endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 1)), wxDefaultPosition, FromDIP(wxSize(110, -1)), wxTE_PROCESS_ENTER);
     
     bool active = scenario->IsActive(bandNum);
     statBtn = new ColourfulBtn(this, active ? "ON" : "OFF");
@@ -165,8 +165,8 @@ void BandRow::ChangeScenario(Scenario* scenario) {
     this->scenario = scenario;
 
     name->SetValue(scenario->GetName(bandNum));
-    startValue->SetValue(to_string(scenario->GetStartValue(bandNum)));
-    endValue->SetValue(to_string(scenario->GetEndValue(bandNum)));
+    startValue->SetValue(to_string(scenario->GetFreq(bandNum, 0)));
+    endValue->SetValue(to_string(scenario->GetFreq(bandNum, 1)));
 
     bool active = scenario->IsActive(bandNum);
     statBtn->SetLabel(active ? "ON" : "OFF");
@@ -178,10 +178,7 @@ Status BandRow::Rename() {
     if (newName == scenario->GetName(bandNum)) return Success;
     Status stat = scenario->Rename(newName, bandNum);
     if (stat) {
-        wxMessageDialog dialog(base, errorMessages.at(stat), "Error", wxOK | wxCANCEL | wxICON_ERROR);
-        dialog.SetOKCancelLabels("Enter new name", "Keep old name");
-        int id = dialog.ShowModal();
-        if (id == wxID_CANCEL) {
+        if (ErrorMessage(base, stat, "", DIALOG) == wxID_CANCEL) {
             name->SetValue(scenario->GetName(bandNum));
             return Success;
         }
@@ -189,36 +186,29 @@ Status BandRow::Rename() {
     MarkUnsaved();
     return stat;
 }
-    
-Status BandRow::ChangeStart() {
-    int newStart = stoi(startValue->GetLineText(0).ToStdString());
-    if(newStart == scenario->GetStartValue(bandNum)) return Success;
-    Status stat = scenario->SetStartValue(bandNum, newStart);
-    if (stat) {
-        wxMessageDialog dialog(base, errorMessages.at(stat), "Error", wxOK | wxCANCEL | wxICON_ERROR);
-        dialog.SetOKCancelLabels("Enter new value", "Keep old value");
-        int id = dialog.ShowModal();
-        if (id == wxID_CANCEL) {
-            startValue->SetValue(to_string(scenario->GetStartValue(bandNum)));
-            return Success;
-        }
-    }
-    MarkUnsaved();
-    return stat;
-}
 
-Status BandRow::ChangeEnd() {
-    int newEnd = stoi(endValue->GetLineText(0).ToStdString());
-    if (newEnd == scenario->GetEndValue(bandNum)) return Success;
-    Status stat = scenario->SetEndValue(bandNum, newEnd);
+Status BandRow::UpdateFreq(wxTextCtrl* ctrl)
+{
+    Status stat;
+    int freqToChange = (int)ctrl->GetClientData() == Start ? 0 : 1;
+    int newEnd;
+    stat = TryParse(ctrl->GetValue(), &newEnd);
     if (stat) {
-        wxMessageDialog dialog(base, errorMessages.at(stat), "Error", wxOK | wxCANCEL | wxICON_ERROR);
-        dialog.SetOKCancelLabels("Enter new value", "Keep old value");
-        int id = dialog.ShowModal();
-        if (id == wxID_CANCEL) {
-            endValue->SetValue(to_string(scenario->GetEndValue(bandNum)));
+        if (ErrorMessage(base, stat, "", DIALOG) == wxID_CANCEL) {
+            ctrl->SetValue(to_string(scenario->GetFreq(bandNum, freqToChange)));
             return Success;
+        };
+    }
+    else {
+        if (newEnd == scenario->GetFreq(bandNum, freqToChange)) return Success;
+        stat = scenario->SetFreq(bandNum, freqToChange, newEnd);
+        if (stat) {
+            if (ErrorMessage(base, stat, "", DIALOG) == wxID_CANCEL) {
+                ctrl->SetValue(to_string(scenario->GetFreq(bandNum, freqToChange)));
+                return Success;
+            }
         }
+        else ctrl->SetValue(to_string(scenario->GetFreq(bandNum, freqToChange)));
     }
     MarkUnsaved();
     return stat;
@@ -233,4 +223,12 @@ void BandRow::MarkUnsaved()
 {
     wxCommandEvent e(EVT_UNSAVE);
     GetParent()->GetEventHandler()->ProcessEvent(e);
+}
+
+Status BandRow::TryParse(const wxString& str, int* result)
+{
+    char* endptr = nullptr;
+    *result = strtol(str.c_str(), &endptr, 10);
+    if (*result > numeric_limits<int>::max() || *result < 0 || *endptr != '\0') return FreqNotPositiveNumber;
+    return Success;
 }

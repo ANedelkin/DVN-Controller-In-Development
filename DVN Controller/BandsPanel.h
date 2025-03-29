@@ -16,7 +16,7 @@ public:
 
 	BandsPanel(wxWindow* parent, Scenario* scenario, const char style = 0);
 
-	void ChangeSource(DVNFileData* source) override;
+	void SetSource(DVNFileData* source) override;
 	void Init() override;
 	void UnInit() override;
 };

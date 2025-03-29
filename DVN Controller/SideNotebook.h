@@ -10,8 +10,8 @@ class ScenSelectDialog;
 
 class SideNotebook : public SideNotebookPanel
 {
-private:
-	char style;
+protected:
+	wxMenu* contextMenu;
 	vector<SideMenuCtrl*> pages;
 
 	wxBoxSizer* mainSizer;
@@ -25,11 +25,7 @@ private:
 
 	void ChangeSelection(SideMenuCtrl* scenCtrl);
 
-	void OnLoad(wxCommandEvent& e);
 	void OnSelect(wxMouseEvent& e);
-	void OnDelete(wxCommandEvent& e);
-
-	void OnClose(wxCommandEvent& e);
 
 	void Close(SideMenuCtrl* win);
 
@@ -40,15 +36,15 @@ public:
 	void OnUnsave(wxCommandEvent& e);
 	void Unsave(bool created);
 
-	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr, const char style = 0);
+	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr);
 
 	void SetContent(SideNotebookPanel* content);
 
-	Status AddPage(DVNFileData* data);
+	Status NewPage(DVNFileData* data);
+	Status AddPage(SideMenuCtrl* page);
+	vector<SideMenuCtrl*> GetPages();
 
-	void ChangePage(DVNFileData* data);
-
-	void ChangeSource(DVNFileData* source) override;
+	void SetSource(DVNFileData* source) override;
 	void SaveCurrent(bool saveAs);
 	SideMenuCtrl* GetCurrent();
 	bool CheckForUnsaved();

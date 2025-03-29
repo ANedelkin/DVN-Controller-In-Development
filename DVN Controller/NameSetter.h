@@ -10,7 +10,7 @@ private:
 public:
 	string name = "";
 	bool ok = false;
-	NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name));
+	NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name), const string& defaultValue = "");
 	void OnOK(wxCommandEvent& e);
 };
 

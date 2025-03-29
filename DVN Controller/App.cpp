@@ -24,10 +24,10 @@ public:
 					stat = row->Rename();
 					break;
 				case Start:
-					stat = row->ChangeStart();
+					stat = row->UpdateFreq(row->startValue);
 					break;
 				case End:
-					stat = row->ChangeEnd();
+					stat = row->UpdateFreq(row->endValue);
 					break;
 				default:
 					break;

@@ -1,5 +1,5 @@
 #include "ScenSelectDialog.h"
-#include "SideNotebook.h"
+#include "ScenariosPanel.h"
 
 ScenSelectDialog::ScenSelectDialog(wxWindow* parent) : wxDialog(parent, wxID_ANY, "Select scenario")
 {
@@ -11,10 +11,7 @@ ScenSelectDialog::ScenSelectDialog(wxWindow* parent) : wxDialog(parent, wxID_ANY
 	wxPanel* contentPanel = new wxPanel(mainPanel);
 	contentPanel->SetBackgroundColour(wxColour(255, 255, 255));
 	wxBoxSizer* contentSizer = new wxBoxSizer(wxHORIZONTAL);
-	scenariosPanel = new SideNotebook(contentPanel, "Scenarios", nullptr, READ_ONLY);
-	BandsPanel* bandsPanel = new BandsPanel(scenariosPanel, new Scenario(), READ_ONLY);
-	bandsPanel->UnInit();
-	scenariosPanel->SetContent(bandsPanel);
+	scenariosPanel = new ScenariosPanel(contentPanel, nullptr, READ_ONLY);
 
 	contentSizer->Add(scenariosPanel, 1, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, FromDIP(5));
 	contentPanel->SetSizerAndFit(contentSizer);
@@ -43,7 +40,7 @@ void ScenSelectDialog::LoadScenarios()
 	vector<Scenario*> scenarios = Scenario::LoadScenarios();
 	for (char i = 0; i < scenarios.size(); i++)
 	{
-		scenariosPanel->AddPage(scenarios[i]);
+		scenariosPanel->NewPage(scenarios[i]);
 	}
 	scenariosPanel->Select(0);
 }

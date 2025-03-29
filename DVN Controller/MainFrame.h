@@ -8,6 +8,8 @@
 #include "NameSetter.h"
 #include "BandsPanel.h"
 #include "SideNotebook.h"
+#include "ScenariosPanel.h"
+#include "LoadsPanel.h"
 #include "JammersWindow.h"
 
 class MainFrame : public wxFrame
@@ -15,8 +17,8 @@ class MainFrame : public wxFrame
 private:
 	wxPanel* mainPanel;
 	wxNotebook* notebook;
-	SideNotebook* scenariosPanel;
-	SideNotebook* loadsPanel;
+	ScenariosPanel* scenariosPanel;
+	LoadsPanel* loadsPanel;
 
 	wxPanel* emptyPanel;
 	wxStaticText* emptyText;
@@ -35,17 +37,18 @@ private:
 	void CreateToolBar();
 
 	void LoadScenarios();
+	void UpdateScenarios();
 
 	void NewScenario();
 	void NewLoad();
 
 	void OnTabChanged(wxNotebookEvent& e);
-	void OnNew(wxMouseEvent& e);
-	void OnOpen(wxMouseEvent& e);
-	void OnSave(wxMouseEvent& e);
-	void OnSaveAs(wxMouseEvent& e);
-	void OnLoadFromJmr(wxMouseEvent& e);
-	void OnLoadToJmr(wxMouseEvent& e);
+	void OnNew(wxCommandEvent& e);
+	void OnOpen(wxCommandEvent& e);
+	void OnSave(wxCommandEvent& e);
+	void OnSaveAs(wxCommandEvent& e);
+	void OnLoadFromJmr(wxCommandEvent& e);
+	void OnLoadToJmr(wxCommandEvent& e);
 	void OnClose(wxCloseEvent& e);
 public:
 	MainFrame(const string& title);
