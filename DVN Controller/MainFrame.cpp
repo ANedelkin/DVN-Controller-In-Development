@@ -180,7 +180,7 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 				data << stream.rdbuf();
 				loadsPanel->AddPage(Load::ToLoad(name, fn.GetPath().ToStdString(), data));
 			}
-			else ErrorMessage(this, FileNonexistent, name.c_str());
+			else ErrorMessage(this, FileNonexistent, 0, name.c_str());
 		}
 	}
 }

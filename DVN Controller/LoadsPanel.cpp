@@ -28,8 +28,8 @@ LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", nullptr
 Status LoadsPanel::AddPage(Load* data)
 {
 	for (SideMenuCtrl* page : pages) {
-		if (page->GetSource()->GetNewPath() == data->GetNewPath() && page->GetSource()->folder != "") {
-			ErrorMessage(base, FileAlreadyOpen, data->GetName().c_str());
+		if (page->GetSource()->GetOldPath() == data->GetOldPath() && page->GetSource()->folder != "") {
+			ErrorMessage(base, FileAlreadyOpen, 0, data->GetName().c_str(), page->GetSource()->GetName());
 			return FileAlreadyOpen;
 		}
 	}

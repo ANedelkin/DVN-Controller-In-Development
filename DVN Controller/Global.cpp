@@ -19,9 +19,10 @@ map<Status, const char*> errorMessages = {
     {NameAlreadyExists, "A scenario with this name already exists!"},
     {JammerNotSelected, "You haven't selected a jammer!"},
     {FileNonexistent, "The file \"%s\" does not exist!"},
-    {FileAlreadyOpen, "The file \"%s\" is already open!"},
+    {FileAlreadyOpen, "The file \"%s\" is already open as \"%s\"!"},
     {ScenarioAlreadyExists, "A scenario with the name \"%s\" already exists!"},
-    {FreqNotPositiveNumber, "The frequency has to be a positive whole number!"}
+    {FreqNotPositiveNumber, "The frequency has to be a positive whole number!"},
+    {ErrorMessageTooLong, "The error message the program tried to generate was too long!"},
 };
 
 vector<string> Split(const string& str, char delimiter) {
@@ -39,17 +40,18 @@ Status ValidateName(string& name) {
     return Success;
 }
 
-int ErrorMessage(wxWindow* parent, Status stat, const char* param, const char style)
+int ErrorMessage(wxWindow* parent, Status stat, const char style, ...)
 {
     char buffer[256];
     string msg;
-    if (param != "")  {
-        sprintf(buffer, errorMessages[stat], param);
-        msg = buffer;
-    }
-    else msg = errorMessages[stat];
 
-    wxMessageDialog frame(parent, msg);
+    va_list args;
+    va_start(args, style);
+
+    if (vsnprintf(buffer, sizeof(buffer), errorMessages[stat], args) > sizeof(buffer) - 1)
+        return ErrorMessage(parent, ErrorMessageTooLong);
+
+    msg = buffer;
 
     if (style & DIALOG) {
         wxMessageDialog frame(parent, msg, "Error", wxOK | wxCANCEL | wxICON_ERROR);

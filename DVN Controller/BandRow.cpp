@@ -178,7 +178,7 @@ Status BandRow::Rename() {
     if (newName == scenario->GetName(bandNum)) return Success;
     Status stat = scenario->Rename(newName, bandNum);
     if (stat) {
-        if (ErrorMessage(base, stat, "", DIALOG) == wxID_CANCEL) {
+        if (ErrorMessage(base, stat, DIALOG) == wxID_CANCEL) {
             name->SetValue(scenario->GetName(bandNum));
             return Success;
         }
@@ -194,7 +194,7 @@ Status BandRow::UpdateFreq(wxTextCtrl* ctrl)
     int newEnd;
     stat = TryParse(ctrl->GetValue(), &newEnd);
     if (stat) {
-        if (ErrorMessage(base, stat, "", DIALOG) == wxID_CANCEL) {
+        if (ErrorMessage(base, stat, DIALOG) == wxID_CANCEL) {
             ctrl->SetValue(to_string(scenario->GetFreq(bandNum, freqToChange)));
             return Success;
         };
@@ -203,7 +203,7 @@ Status BandRow::UpdateFreq(wxTextCtrl* ctrl)
         if (newEnd == scenario->GetFreq(bandNum, freqToChange)) return Success;
         stat = scenario->SetFreq(bandNum, freqToChange, newEnd);
         if (stat) {
-            if (ErrorMessage(base, stat, "", DIALOG) == wxID_CANCEL) {
+            if (ErrorMessage(base, stat, DIALOG) == wxID_CANCEL) {
                 ctrl->SetValue(to_string(scenario->GetFreq(bandNum, freqToChange)));
                 return Success;
             }

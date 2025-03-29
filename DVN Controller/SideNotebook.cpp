@@ -138,7 +138,7 @@ bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs)
 			for (SideMenuCtrl* existing : pages) {
 				if (existing == page) continue;
 				if (existing->GetSource()->GetOldPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {
-					ErrorMessage(base, FileAlreadyOpen, name.c_str());
+					ErrorMessage(base, FileAlreadyOpen, 0, name.c_str());
 					return false;
 				}
 			}

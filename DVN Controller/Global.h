@@ -37,6 +37,7 @@ enum Status {
     FileAlreadyOpen,
     ScenarioAlreadyExists,
     FreqNotPositiveNumber,
+    ErrorMessageTooLong,
 };
 
 extern map<Status, const char*> errorMessages;
@@ -46,7 +47,7 @@ extern map<Status, const char*> errorMessages;
 
 extern vector<string> Split(const string& str, char delimiter);
 extern Status ValidateName(string& name);
-extern int ErrorMessage(wxWindow* parent, Status stat, const char* param = "", const char style = 0);
+extern int ErrorMessage(wxWindow* parent, Status stat, const char style = 0, ...);
 
 
 //Tabs

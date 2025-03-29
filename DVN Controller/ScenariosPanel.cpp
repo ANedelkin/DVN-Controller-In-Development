@@ -37,7 +37,7 @@ Status ScenariosPanel::AddPage(Scenario* data)
 {
 	for (SideMenuCtrl* page : pages) {
 		if (page->GetSource()->GetNewPath() == data->GetNewPath() && page->GetSource()->folder != "") {
-			ErrorMessage(base, ScenarioAlreadyExists, data->DVNFileData::GetName().c_str());
+			ErrorMessage(base, ScenarioAlreadyExists, 0, data->DVNFileData::GetName().c_str());
 			return ScenarioAlreadyExists;
 		}
 	}
