@@ -24,8 +24,8 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 	loadsPanel = new LoadsPanel(notebook);
 	loadsPanel->Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, loadsPanel);
 
-	notebook->AddPage(scenariosPanel, "Scenarios");
 	notebook->AddPage(loadsPanel, "Loads");	
+	notebook->AddPage(scenariosPanel, "Scenarios");
 	
 	mainSizer->Add(toolBar, 0, wxEXPAND);
 	mainSizer->Add(notebook, 0, wxEXPAND);
