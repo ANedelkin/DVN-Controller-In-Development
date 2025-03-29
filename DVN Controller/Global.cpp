@@ -20,6 +20,7 @@ map<Status, const char*> errorMessages = {
     {JammerNotSelected, "You haven't selected a jammer!"},
     {FileNonexistent, "The file \"%s\" does not exist!"},
     {FileAlreadyOpen, "The file \"%s\" is already open!"},
+    {ScenarioAlreadyExists, "A scenario with the name \"%s\" already exists!"},
     {FreqNotPositiveNumber, "The frequency has to be a positive whole number!"}
 };
 

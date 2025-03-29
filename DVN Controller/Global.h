@@ -35,6 +35,7 @@ enum Status {
     JammerNotSelected,
     FileNonexistent,
     FileAlreadyOpen,
+    ScenarioAlreadyExists,
     FreqNotPositiveNumber,
 };
 

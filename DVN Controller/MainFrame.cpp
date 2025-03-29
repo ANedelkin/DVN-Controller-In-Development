@@ -16,20 +16,12 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 
 	notebook = new wxNotebook(mainPanel, wxID_ANY);
 
-	scenariosPanel = new SideNotebook(notebook, "Scenarios", nullptr, DELETABLE);
-	BandsPanel* scenBandsPanel = new BandsPanel(scenariosPanel, new Scenario());
-	scenBandsPanel->UnInit();
-	scenariosPanel->SetContent(scenBandsPanel);
+	scenariosPanel = new ScenariosPanel(notebook, nullptr, DELETABLE);
 	LoadScenarios();
+	scenariosPanel->Select(0);
 	scenariosPanel->Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, scenariosPanel);
 
-	loadsPanel = new SideNotebook(notebook, "Loads", nullptr, DELETABLE | CLOSEABLE);
-	SideNotebook* loadScenPanel = new SideNotebook(loadsPanel, "Scenarios", new Load(), LOADABLE);
-	BandsPanel* loadBandsPanel = new BandsPanel(loadScenPanel, new Scenario());
-	loadScenPanel->SetContent(loadBandsPanel);
-	loadScenPanel->UnInit();
-	loadsPanel->SetContent(loadScenPanel);
-	loadScenPanel->Select(0);
+	loadsPanel = new LoadsPanel(notebook);
 	loadsPanel->Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, loadsPanel);
 
 	notebook->AddPage(scenariosPanel, "Scenarios");
@@ -86,12 +78,12 @@ void MainFrame::CreateToolBar()
 
 	toolBar->SetSizerAndFit(toolBarSizer);
 
-	newBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnNew, this);
-	openBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnOpen, this);
-	saveBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnSave, this);
-	saveAsBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnSaveAs, this);
-	loadToBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnLoadToJmr, this);
-	loadFromBtn->Bind(wxEVT_LEFT_UP, &MainFrame::OnLoadFromJmr, this);
+	newBtn->Bind(wxEVT_BUTTON, &MainFrame::OnNew, this);
+	openBtn->Bind(wxEVT_BUTTON, &MainFrame::OnOpen, this);
+	saveBtn->Bind(wxEVT_BUTTON, &MainFrame::OnSave, this);
+	saveAsBtn->Bind(wxEVT_BUTTON, &MainFrame::OnSaveAs, this);
+	loadToBtn->Bind(wxEVT_BUTTON, &MainFrame::OnLoadToJmr, this);
+	loadFromBtn->Bind(wxEVT_BUTTON, &MainFrame::OnLoadFromJmr, this);
 
 	Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
 }
@@ -106,12 +98,28 @@ void MainFrame::LoadScenarios()
 	scenariosPanel->Select(0);
 }
 
+void MainFrame::UpdateScenarios()
+{
+	vector<Scenario*> scenarios = Scenario::LoadScenarios();
+	vector<SideMenuCtrl*> pages = scenariosPanel->GetPages();
+	for (char i = 0; i < scenarios.size(); i++)
+	{
+		bool f = true;
+		for (char j = 0; j < pages.size() && f; j++)
+		{
+			if (scenarios[i]->GetOldPath() == pages[j]->GetSource()->GetOldPath()) 
+				f = false;
+		}
+		if (f) scenariosPanel->NewPage(scenarios[i]);
+	}
+}
+
 void MainFrame::NewScenario()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
 	nameSetter->ShowModal();
 	Scenario* newScen = new Scenario(nameSetter->name);
-	if (nameSetter->ok && !scenariosPanel->AddPage(newScen)) {
+	if (nameSetter->ok && !scenariosPanel->NewPage(newScen)) {
 		scenariosPanel->Unsave(true);
 	}
 }
@@ -120,7 +128,7 @@ void MainFrame::NewLoad()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter load name", Load::ValidateName);
 	nameSetter->ShowModal();
-	if (nameSetter->ok && !loadsPanel->AddPage(new Load(nameSetter->name))) loadsPanel->Unsave(true);
+	if (nameSetter->ok && !loadsPanel->NewPage(new Load(nameSetter->name))) loadsPanel->Unsave(true);
 }
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
@@ -140,11 +148,12 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 		separator->Hide();
 		loadToBtn->Hide();
 		loadFromBtn->Hide();
+		UpdateScenarios();
 	}
 	Layout();
 }
 
-void MainFrame::OnNew(wxMouseEvent& e) {
+void MainFrame::OnNew(wxCommandEvent& e) {
 	switch (notebook->GetSelection())
 	{
 	case Scenarios:
@@ -158,7 +167,7 @@ void MainFrame::OnNew(wxMouseEvent& e) {
 	}
 }
 
-void MainFrame::OnOpen(wxMouseEvent& e)
+void MainFrame::OnOpen(wxCommandEvent& e)
 {
 	wxFileDialog dialog(this, "Select Load/s", "", "", "Load files (*.dvnl)|*.dvnl", wxFD_MULTIPLE);
 	wxArrayString paths;
@@ -180,7 +189,7 @@ void MainFrame::OnOpen(wxMouseEvent& e)
 	}
 }
 
-void MainFrame::OnSave(wxMouseEvent& e)
+void MainFrame::OnSave(wxCommandEvent& e)
 {
 	switch (notebook->GetSelection())
 	{
@@ -196,18 +205,18 @@ void MainFrame::OnSave(wxMouseEvent& e)
 	e.Skip();
 }
 
-void MainFrame::OnSaveAs(wxMouseEvent& e)
+void MainFrame::OnSaveAs(wxCommandEvent& e)
 {
 	loadsPanel->SaveCurrent(true);
 }
 
-void MainFrame::OnLoadFromJmr(wxMouseEvent& e)
+void MainFrame::OnLoadFromJmr(wxCommandEvent& e)
 {
 	JammersWindow jammersWindow(this);
 	jammersWindow.ShowModal();
 }
 
-void MainFrame::OnLoadToJmr(wxMouseEvent& e)
+void MainFrame::OnLoadToJmr(wxCommandEvent& e)
 {
 	JammersWindow jammersWindow(this);
 	jammersWindow.ShowModal();

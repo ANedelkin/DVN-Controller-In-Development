@@ -4,12 +4,12 @@
 #include "Scenario.h"
 #include "BandsPanel.h"
 
-class SideNotebook;
+class ScenariosPanel;
 
 class ScenSelectDialog : public wxDialog
 {
 private:
-	SideNotebook* scenariosPanel;
+	ScenariosPanel* scenariosPanel;
 public:
 	ScenSelectDialog(wxWindow* parent);
 	void LoadScenarios();

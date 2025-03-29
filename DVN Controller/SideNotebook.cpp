@@ -1,9 +1,9 @@
 #include "SideNotebook.h"
 #include "ScenSelectDialog.h"
 
-SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* source, const char style) : SideNotebookPanel(parent, source)
+SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* source) : SideNotebookPanel(parent, source)
 {
-	this->style = style;
+	contextMenu = new wxMenu();
 
 	mainSizer = new wxBoxSizer(wxHORIZONTAL);
 
@@ -23,38 +23,33 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* so
 
 	this->SetSizerAndFit(mainSizer);
 
-	Bind(EVT_LOAD, &SideNotebook::OnLoad, this);
-	Bind(EVT_DELETE, &SideNotebook::OnDelete, this);
-	Bind(EVT_CLOSE_PAGE, &SideNotebook::OnClose, this);
-
 	this->source = source;
 }
 
 void SideNotebook::SetContent(SideNotebookPanel* content) {
-	if (this->content) {
-		this->content->DestroyChildren();
-		this->content->Destroy();
-	}
+	//if (this->content) {
+	//	this->content->DestroyChildren();
+	//	this->content->Destroy();
+	//}
 	this->content = content;
 	mainSizer->Add(this->content, 1, wxEXPAND | wxLEFT, FromDIP(5));
 	if (source) {
 		for (DVNFileData* child : source->children) {
-			AddPage(child);
+			NewPage(child);
 		}
 	}
 }
 
-Status SideNotebook::AddPage(DVNFileData* data)
+Status SideNotebook::NewPage(DVNFileData* data)
 {
-	if (style & (1 << CLOSEABLE)) {
-		for (SideMenuCtrl* page : pages) {
-			if (page->GetSource()->GetNewPath() == data->GetNewPath() && page->GetSource()->folder != "") {
-				wxMessageDialog(base, "A file with the name \"" + data->GetName() + "\" is already open!", "Error", wxOK | wxICON_ERROR).ShowModal();
-				return NameAlreadyExists;
-			}
-		}
-	}
-	SideMenuCtrl* page = new SideMenuCtrl(pagesList, this, data, style);
+	SideMenuCtrl* page = new SideMenuCtrl(pagesList, this, data);
+	return AddPage(page);
+}
+
+Status SideNotebook::AddPage(SideMenuCtrl* page)
+{
+	page->SetContextMenu(contextMenu);
+
 	pages.push_back(page);
 	pagesSizer->Add(page, 0, wxEXPAND | wxBOTTOM, FromDIP(10));
 	ChangeSelection(page);
@@ -65,6 +60,11 @@ Status SideNotebook::AddPage(DVNFileData* data)
 	return Success;
 }
 
+vector<SideMenuCtrl*> SideNotebook::GetPages()
+{
+	return pages;
+}
+
 void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 {
 	if (cur) cur->SetBackgroundColour(wxColour(255, 255, 255));
@@ -72,19 +72,16 @@ void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 	cur = page;
 
 	DVNFileData* s = cur->GetSource();
-	content->ChangeSource(s);
+	content->SetSource(s);
 }
 
-void SideNotebook::OnLoad(wxCommandEvent& e)
-{
-	ScenSelectDialog* dialog = new ScenSelectDialog(base);
-	if (dialog->ShowModal() == wxID_OK) {
-		SideMenuCtrl* page = (SideMenuCtrl*)e.GetEventObject();
-		Scenario* selection = dialog->GetSelection();
-		*(Scenario*)page->GetSource() = *selection;
-		page->Refresh();
-		page->MarkUnsaved();
-		if (cur == page) ChangeSelection(cur);
+void SideMenuCtrl::OnRename(wxCommandEvent& e) {
+	NameSetter* nameSetter = new NameSetter(base, "Enter name", DVNFileData::ValidateName, source->GetName());
+	nameSetter->ShowModal();
+	if (nameSetter->ok && source->GetName() != nameSetter->name) {
+		source->Rename(nameSetter->name);
+		SetLabel(nameSetter->name);
+		MarkUnsaved();
 	}
 }
 
@@ -93,22 +90,6 @@ void SideNotebook::OnSelect(wxMouseEvent& e)
 	SideMenuCtrl* page = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
 	if (page != cur) ChangeSelection(page);
 	e.Skip();
-}
-
-void SideNotebook::OnDelete(wxCommandEvent& e)
-{
-	wxMessageDialog dialog(base, "If you delete this you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
-	if (dialog.ShowModal() == wxID_YES) {
-		SideMenuCtrl* target = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
-		if (exists(target->GetSource()->GetOldPath())) {
-			remove(target->GetSource()->GetOldPath());
-		}
-		Close(target);
-	}
-}
-
-void SideNotebook::OnClose(wxCommandEvent& e) {
-	Close(dynamic_cast<SideMenuCtrl*>(e.GetEventObject()));
 }
 
 void SideNotebook::OnUnsave(wxCommandEvent& e)
@@ -175,13 +156,13 @@ void SideNotebook::Select(char i)
 	if(pages.size() > i) ChangeSelection(pages[i]);
 }
 
-void SideNotebook::ChangeSource(DVNFileData* source) {
+void SideNotebook::SetSource(DVNFileData* source) {
 	this->source = source;
 	for (char i = 0; i < pages.size(); i++)
 	{
-		pages[i]->ChangeSource(source->children[i]);
+		pages[i]->SetSource(source->children[i]);
 	}
-	content->ChangeSource(cur->GetSource());
+	content->SetSource(cur->GetSource());
 }
 
 void SideNotebook::SaveCurrent(bool saveAs)

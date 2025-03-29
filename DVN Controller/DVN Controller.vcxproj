@@ -154,12 +154,14 @@
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="JammersWindow.cpp" />
     <ClCompile Include="Load.cpp" />
+    <ClCompile Include="LoadsPanel.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="ModelConstants.cpp" />
     <ClCompile Include="NameSetter.cpp" />
     <ClCompile Include="SaveDialog.h" />
     <ClCompile Include="Scenario.cpp" />
+    <ClCompile Include="ScenariosPanel.cpp" />
     <ClCompile Include="ScenSelectDialog.cpp" />
     <ClCompile Include="SideMenuCtrl.cpp" />
     <ClCompile Include="SideNotebook.cpp" />
@@ -177,6 +179,7 @@
     <ClInclude Include="Includes.h" />
     <ClInclude Include="JammersWindow.h" />
     <ClInclude Include="Load.h" />
+    <ClInclude Include="LoadsPanel.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="ModelConstants.h" />
     <ClInclude Include="NameSetter.h" />
@@ -184,6 +187,7 @@
     <ClInclude Include="resource1.h" />
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="ScenarioPreset.h" />
+    <ClInclude Include="ScenariosPanel.h" />
     <ClInclude Include="ScenSelectDialog.h" />
     <ClInclude Include="SideMenuCtrl.h" />
     <ClInclude Include="SideNotebook.h" />
