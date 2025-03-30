@@ -5,16 +5,12 @@
 
 class SideMenuCtrl : public wxButton {
 private:
+	DVNFileData* source;
+	
 	wxPanel* mainPanel;
 	wxMenu* contextMenu = nullptr;
-	DVNFileData* source;
 
-	void OnContextMenu(wxMouseEvent& e);
-	//void OnRename(wxCommandEvent& e);
-	//void OnDelete(wxCommandEvent& eIn);
-	//void OnClose(wxCommandEvent& eIn);
-	//void OnSave(wxCommandEvent& e);
-	//void OnLoad(wxCommandEvent& eIn);
+	void OnContextMenu(wxContextMenuEvent& e);
 public:
 	SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source);
 
@@ -26,5 +22,7 @@ public:
 	void Save();
 	void MarkSaved();
 	void MarkUnsaved();
-	void OnRename(wxCommandEvent& e);
+	void SetLabel(const wxString& label) override;
+
+	//void OnRename(wxCommandEvent& e);
 };

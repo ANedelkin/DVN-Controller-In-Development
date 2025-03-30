@@ -13,19 +13,6 @@ string DVNFileData::GetName() const { return name; }
 
 string DVNFileData::GetNameWithExt() const { return name + extension; }
 
-Status DVNFileData::ValidateName(const string& name)
-{
-	string invalidChars = "\\/:*?\"<>|";
-	for (char ch : name) {
-		if (invalidChars.find(ch) != string::npos) {
-			return InvalidSymbols;
-		}
-	}
-	if (name.length() == 0) return NameWhitespace;
-	if (all_of(name.begin(), name.end(), [](unsigned char c) { return isspace(c); })) return NameWhitespace;
-	return Success;
-}
-
 string DVNFileData::GetOldPath() const
 {
 	return folder + "\\" + oldName + extension;

@@ -24,8 +24,8 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 	loadsPanel = new LoadsPanel(notebook);
 	loadsPanel->Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, loadsPanel);
 
-	notebook->AddPage(scenariosPanel, "Scenarios");
 	notebook->AddPage(loadsPanel, "Loads");	
+	notebook->AddPage(scenariosPanel, "Scenarios");
 	
 	mainSizer->Add(toolBar, 0, wxEXPAND);
 	mainSizer->Add(notebook, 0, wxEXPAND);
@@ -47,19 +47,15 @@ void MainFrame::CreateToolBar()
 
 	newBtn = new wxButton(toolBar, wxID_ANY, "New");
 	openBtn = new wxButton(toolBar, wxID_ANY, "Open");
-	openBtn->Hide();
 	saveBtn = new wxButton(toolBar, wxID_ANY, "Save");
 	saveAsBtn = new wxButton(toolBar, wxID_ANY, "Save As");
-	saveAsBtn->Hide();
 	addBtn = new wxButton(toolBar, wxID_ANY, "Add existing");
+	addBtn->Hide();
 
 	separator = new wxStaticLine(toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVERTICAL);
-	separator->Hide();
 
 	loadToBtn = new wxButton(toolBar, wxID_UP, "Load to jammer");
 	loadFromBtn = new wxButton(toolBar, wxID_DOWN, "Load from jammer");
-	loadToBtn->Hide();
-	loadFromBtn->Hide();
 
 	aboutBtn = new wxButton(toolBar, wxID_ANY, "About");
 
@@ -116,17 +112,17 @@ void MainFrame::UpdateScenarios()
 
 void MainFrame::NewScenario()
 {
-	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
+	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name");
 	nameSetter->ShowModal();
 	Scenario* newScen = new Scenario(nameSetter->name);
-	if (nameSetter->ok && !scenariosPanel->NewPage(newScen)) {
+	if (nameSetter->ok && !scenariosPanel->AddPage(newScen)) {
 		scenariosPanel->Unsave(true);
 	}
 }
 
 void MainFrame::NewLoad()
 {
-	NameSetter* nameSetter = new NameSetter(this, "Enter load name", Load::ValidateName);
+	NameSetter* nameSetter = new NameSetter(this, "Enter load name");
 	nameSetter->ShowModal();
 	if (nameSetter->ok && !loadsPanel->NewPage(new Load(nameSetter->name))) loadsPanel->Unsave(true);
 }
@@ -184,7 +180,7 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 				data << stream.rdbuf();
 				loadsPanel->AddPage(Load::ToLoad(name, fn.GetPath().ToStdString(), data));
 			}
-			else ErrorMessage(this, FileNonexistent, name.c_str());
+			else ErrorMessage(this, FileNonexistent, 0, name.c_str());
 		}
 	}
 }

@@ -28,15 +28,15 @@ enum Status {
     StartValueHigherThanEndvalue,
     EndValueLowerThanStartValue,
     BandAtLastPlace,
-    InvalidName,
     InvalidSymbols,
     NameWhitespace,
-    NameAlreadyExists,
     JammerNotSelected,
     FileNonexistent,
     FileAlreadyOpen,
     ScenarioAlreadyExists,
     FreqNotPositiveNumber,
+    NameTooLong,
+    ErrorMessageTooLong,
 };
 
 extern map<Status, const char*> errorMessages;
@@ -46,20 +46,20 @@ extern map<Status, const char*> errorMessages;
 
 extern vector<string> Split(const string& str, char delimiter);
 extern Status ValidateName(string& name);
-extern int ErrorMessage(wxWindow* parent, Status stat, const char* param = "", const char style = 0);
+extern int ErrorMessage(wxWindow* parent, Status stat, const char style = 0, ...);
 
 
 //Tabs
 
-enum Tabs {
-    Scenarios,
+enum Tabs { //Move to MainFrame
     Loads,
+    Scenarios,
 };
 
 
 //BandRow column tags
 
-enum InputType {
+enum InputType { //Change to defines
     ScenName,
     BandName,
     Start,
