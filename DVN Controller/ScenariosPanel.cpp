@@ -36,7 +36,7 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, Load* source, const char style)
 Status ScenariosPanel::AddPage(Scenario* data)
 {
 	for (SideMenuCtrl* page : pages) {
-		if (page->GetSource()->GetNewPath() == data->GetNewPath() && page->GetSource()->folder != "") {
+		if (page->GetSource()->GetNewPath() == data->GetNewPath()) {
 			ErrorMessage(base, ScenarioAlreadyExists, 0, data->DVNFileData::GetName().c_str());
 			return ScenarioAlreadyExists;
 		}
@@ -47,7 +47,7 @@ Status ScenariosPanel::AddPage(Scenario* data)
 
 void ScenariosPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	NameSetter* nameSetter = new NameSetter(base, "Enter name", DVNFileData::ValidateName, target->GetSource()->GetName()); //Create a different Scenario::ValidateName
+	NameSetter* nameSetter = new NameSetter(base, "Enter name", target->GetSource()->GetName());
 	nameSetter->ShowModal();
 	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
 		target->GetSource()->Rename(nameSetter->name);

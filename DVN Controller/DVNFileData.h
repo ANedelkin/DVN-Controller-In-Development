@@ -20,7 +20,6 @@ public:
 	Status Rename(const string& name);
 	string GetName() const;
 	string GetNameWithExt() const;
-	static Status ValidateName(const string& name);
 
 	string GetOldPath() const;
 	string GetNewPath() const;

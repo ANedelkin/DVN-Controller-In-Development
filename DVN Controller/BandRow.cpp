@@ -178,7 +178,14 @@ Status BandRow::Rename() {
     if (newName == scenario->GetName(bandNum)) return Success;
     Status stat = scenario->Rename(newName, bandNum);
     if (stat) {
-        if (ErrorMessage(base, stat, DIALOG) == wxID_CANCEL) {
+        int res;
+
+        if (stat == NameTooLong)
+            res = ErrorMessage(base, stat, DIALOG, NAME_MAX_LENGTH);
+        else
+            res = ErrorMessage(base, stat, DIALOG);
+
+        if (res == wxID_CANCEL) {
             name->SetValue(scenario->GetName(bandNum));
             return Success;
         }

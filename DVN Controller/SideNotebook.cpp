@@ -56,6 +56,7 @@ Status SideNotebook::AddPage(SideMenuCtrl* page)
 	if (!content->IsInited()) content->Init();
 	Refresh();
 	Layout();
+	page->SetLabel(page->GetSource()->GetName());
 	page->Bind(wxEVT_LEFT_UP, &SideNotebook::OnSelect, this);
 	return Success;
 }
@@ -75,15 +76,16 @@ void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 	content->SetSource(s);
 }
 
-void SideMenuCtrl::OnRename(wxCommandEvent& e) {
-	NameSetter* nameSetter = new NameSetter(base, "Enter name", DVNFileData::ValidateName, source->GetName());
-	nameSetter->ShowModal();
-	if (nameSetter->ok && source->GetName() != nameSetter->name) {
-		source->Rename(nameSetter->name);
-		SetLabel(nameSetter->name);
-		MarkUnsaved();
-	}
-}
+//void SideNotebook::OnRename(wxCommandEvent& e) {
+//	SideMenuCtrl* target = contextMenu->GetInvokingWindow();
+//	NameSetter* nameSetter = new NameSetter(base, "Enter name", source->GetName());
+//	nameSetter->ShowModal();
+//	if (nameSetter->ok && source->GetName() != nameSetter->name) {
+//		source->Rename(nameSetter->name);
+//		SetLabel(nameSetter->name);
+//		MarkUnsaved();
+//	}
+//}
 
 void SideNotebook::OnSelect(wxMouseEvent& e)
 {
@@ -138,7 +140,7 @@ bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs)
 			for (SideMenuCtrl* existing : pages) {
 				if (existing == page) continue;
 				if (existing->GetSource()->GetOldPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {
-					ErrorMessage(base, FileAlreadyOpen, 0, name.c_str());
+					ErrorMessage(base, FileAlreadyOpen, 0, name.c_str(), existing->GetSource()->GetName().c_str());
 					return false;
 				}
 			}

@@ -7,21 +7,20 @@ wxWindow* focused = nullptr;
 char ctrlHeight = 0;
 
 map<Status, const char*> errorMessages = {
-    {StartValueOutOfBounds , "Start value outside bounds!"},
-    {EndValueOutOfBounds, "End value outside bounds!"},
+    {StartValueOutOfBounds , "This frequency can't be below %d!"},
+    {EndValueOutOfBounds, "This frequency can't be over %d!"},
     {StartValueHigherThanEndvalue, "Start value higher than end value!"},
     {EndValueLowerThanStartValue, "End value lower than start value!"},
-    {BandAtLastPlace, "The range between the start and end values of the last band of this range cannot include the value %s!"},
-    {InvalidName, "The name cannot contain the symbol \"|\"!"},
-    {InvalidSymbols, "The name cannot contain the symbols { \\ / : * ? \" < > | }!"},
+    {BandAtLastPlace, "The range between the start and end values of the last band of this range cannot include the value %d!"},
+    {InvalidSymbols, "The name contains invalid symbol/s!"},
     {NameWhitespace, "The name cannot be empty!"},
     {BandUninitialized, "Start and end frequencies have to be set in order to turn band on!"},
-    {NameAlreadyExists, "A scenario with this name already exists!"},
     {JammerNotSelected, "You haven't selected a jammer!"},
     {FileNonexistent, "The file \"%s\" does not exist!"},
     {FileAlreadyOpen, "The file \"%s\" is already open as \"%s\"!"},
     {ScenarioAlreadyExists, "A scenario with the name \"%s\" already exists!"},
     {FreqNotPositiveNumber, "The frequency has to be a positive whole number!"},
+    {NameTooLong, "The name can't be longer than %d symbols!"},
     {ErrorMessageTooLong, "The error message the program tried to generate was too long!"},
 };
 
@@ -35,8 +34,9 @@ vector<string> Split(const string& str, char delimiter) {
     return tokens;
 }
 
-Status ValidateName(string& name) {
-    if (name.find('|') != string::npos) return InvalidName;
+Status ValidateName(string& name) { //Unused
+    if (name.find('|') != string::npos) return InvalidSymbols;
+    if (name.length() > NAME_MAX_LENGTH) return NameTooLong;
     return Success;
 }
 

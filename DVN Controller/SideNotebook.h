@@ -25,10 +25,10 @@ protected:
 
 	void ChangeSelection(SideMenuCtrl* scenCtrl);
 
+	//void OnRename(wxCommandEvent& e);
 	void OnSelect(wxMouseEvent& e);
 
 	void Close(SideMenuCtrl* win);
-
 	bool Save(SideMenuCtrl* page, bool saveAs);
 public:
 	void Select(char i);

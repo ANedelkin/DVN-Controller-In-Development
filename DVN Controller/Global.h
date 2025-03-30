@@ -28,15 +28,14 @@ enum Status {
     StartValueHigherThanEndvalue,
     EndValueLowerThanStartValue,
     BandAtLastPlace,
-    InvalidName,
     InvalidSymbols,
     NameWhitespace,
-    NameAlreadyExists,
     JammerNotSelected,
     FileNonexistent,
     FileAlreadyOpen,
     ScenarioAlreadyExists,
     FreqNotPositiveNumber,
+    NameTooLong,
     ErrorMessageTooLong,
 };
 

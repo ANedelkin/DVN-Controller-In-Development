@@ -29,7 +29,7 @@ Status LoadsPanel::AddPage(Load* data)
 {
 	for (SideMenuCtrl* page : pages) {
 		if (page->GetSource()->GetOldPath() == data->GetOldPath() && page->GetSource()->folder != "") {
-			ErrorMessage(base, FileAlreadyOpen, 0, data->GetName().c_str(), page->GetSource()->GetName());
+			ErrorMessage(base, FileAlreadyOpen, 0, data->GetName().c_str(), page->GetSource()->GetName().c_str());
 			return FileAlreadyOpen;
 		}
 	}
@@ -55,7 +55,7 @@ void LoadsPanel::OnClose(wxCommandEvent& e) {
 
 void LoadsPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	NameSetter* nameSetter = new NameSetter(base, "Enter name", DVNFileData::ValidateName, target->GetSource()->GetName()); //Create a different Load::ValidateName
+	NameSetter* nameSetter = new NameSetter(base, "Enter name", target->GetSource()->GetName()); //Create a different Load::ValidateName
 	nameSetter->ShowModal();
 	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
 		target->GetSource()->Rename(nameSetter->name);
