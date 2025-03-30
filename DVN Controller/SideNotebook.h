@@ -26,7 +26,7 @@ protected:
 	void ChangeSelection(SideMenuCtrl* scenCtrl);
 
 	//void OnRename(wxCommandEvent& e);
-	void OnSelect(wxMouseEvent& e);
+	void OnSelect(wxCommandEvent& e);
 
 	void Close(SideMenuCtrl* win);
 	bool Save(SideMenuCtrl* page, bool saveAs);

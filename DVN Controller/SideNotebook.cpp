@@ -57,7 +57,7 @@ Status SideNotebook::AddPage(SideMenuCtrl* page)
 	Refresh();
 	Layout();
 	page->SetLabel(page->GetSource()->GetName());
-	page->Bind(wxEVT_LEFT_UP, &SideNotebook::OnSelect, this);
+	page->Bind(wxEVT_BUTTON, &SideNotebook::OnSelect, this);
 	return Success;
 }
 
@@ -87,7 +87,7 @@ void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 //	}
 //}
 
-void SideNotebook::OnSelect(wxMouseEvent& e)
+void SideNotebook::OnSelect(wxCommandEvent& e)
 {
 	SideMenuCtrl* page = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
 	if (page != cur) ChangeSelection(page);

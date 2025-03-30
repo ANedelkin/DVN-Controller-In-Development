@@ -16,19 +16,20 @@ void BandRow::OnResize(wxSizeEvent& e) {
 }
 void BandRow::OnNameEnter(wxKeyEvent& e) {
     int key = e.GetKeyCode();
+    bool f;
     if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !Rename()) {
         if (key == WXK_TAB) {
             if(wxGetKeyState(WXK_SHIFT)) 
-                focused->Navigate(wxNavigationKeyEvent::IsBackward);
+              f = focused->Navigate(wxNavigationKeyEvent::IsBackward);
             else 
-                focused->Navigate();
+              f = focused->Navigate();
         }
         else {
             Unfocus();
             focused = nullptr;
         }
     }
-    e.Skip();
+    else e.Skip();
 }
 void BandRow::OnStartEnter(wxKeyEvent& e) {
     int key = e.GetKeyCode();
@@ -44,7 +45,7 @@ void BandRow::OnStartEnter(wxKeyEvent& e) {
             focused = nullptr;
         }
     }
-    e.Skip();
+    else e.Skip();
 }
 void BandRow::OnEndEnter(wxKeyEvent& e) {
     int key = e.GetKeyCode();
@@ -60,7 +61,7 @@ void BandRow::OnEndEnter(wxKeyEvent& e) {
             focused = nullptr;
         }
     }
-    e.Skip();
+    else e.Skip();
 }
 void BandRow::OnStatusChanged(wxCommandEvent& e)
 {
