@@ -1,8 +1,11 @@
 #include "SideMenuCtrl.h"
 
-void SideMenuCtrl::OnContextMenu(wxMouseEvent& e) {
-	if(contextMenu)
-		PopupMenu(contextMenu, e.GetPosition());
+void SideMenuCtrl::OnContextMenu(wxContextMenuEvent& e) {
+	if (contextMenu) {
+		PopupMenu(contextMenu, wxWindow::ScreenToClient(e.GetPosition()));
+	}
+	Refresh();
+	e.Skip();
 }
 
 SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source) : wxButton(parent, wxID_ANY) {
@@ -12,7 +15,7 @@ SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* so
 	this->mainPanel = mainPanel;
 	SetBackgroundColour(wxColour(255, 255, 255));
 
-	Bind(wxEVT_RIGHT_UP, &SideMenuCtrl::OnContextMenu, this);
+	Bind(wxEVT_CONTEXT_MENU, &SideMenuCtrl::OnContextMenu, this);
 }
 
 DVNFileData* SideMenuCtrl::GetSource() { return source; }

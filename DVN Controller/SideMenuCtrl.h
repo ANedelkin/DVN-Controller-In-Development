@@ -10,7 +10,7 @@ private:
 	wxPanel* mainPanel;
 	wxMenu* contextMenu = nullptr;
 
-	void OnContextMenu(wxMouseEvent& e);
+	void OnContextMenu(wxContextMenuEvent& e);
 public:
 	SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source);
 
