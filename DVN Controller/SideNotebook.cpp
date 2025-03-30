@@ -96,18 +96,19 @@ void SideNotebook::OnSelect(wxMouseEvent& e)
 
 void SideNotebook::OnUnsave(wxCommandEvent& e)
 {
-	Unsave(false);
+	Unsave(false, (SideMenuCtrl*)e.GetEventObject());
 }
 
-void SideNotebook::Unsave(bool created)
+void SideNotebook::Unsave(bool created, SideMenuCtrl* target)
 {
-	DVNFileData* source = cur->GetSource();
+	target = target ? target : cur;
+	DVNFileData* source = target->GetSource();
 	string ss = source->SaveString();
 	string nm = source->GetName();
 	if (!created && (source->oldSaveString == ss && source->oldName == nm))
-		cur->MarkSaved();
+		target->MarkSaved();
 	else
-		cur->Unsave();
+		target->Unsave();
 }
 
 void SideNotebook::Close(SideMenuCtrl* win)

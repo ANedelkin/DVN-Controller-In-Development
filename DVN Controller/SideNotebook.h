@@ -34,7 +34,7 @@ public:
 	void Select(char i);
 
 	void OnUnsave(wxCommandEvent& e);
-	void Unsave(bool created);
+	void Unsave(bool created, SideMenuCtrl* target = nullptr);
 
 	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr);
 

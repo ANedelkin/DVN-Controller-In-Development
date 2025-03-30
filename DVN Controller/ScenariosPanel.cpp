@@ -52,8 +52,10 @@ void ScenariosPanel::OnRename(wxCommandEvent& e) {
 	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
 		target->GetSource()->Rename(nameSetter->name);
 		target->SetLabel(nameSetter->name);
-		target->Unsave();
-		Unsave(false);
+		if (source)
+			MarkUnsaved();
+		else
+			Unsave(false, target);
 	}
 }
 
@@ -67,6 +69,10 @@ void ScenariosPanel::OnLoad(wxCommandEvent& e)
 		target->Refresh();
 		target->MarkUnsaved();
 		if (cur == target) ChangeSelection(cur);
+		if (source)
+			MarkUnsaved();
+		else
+			Unsave(false, target);
 	}
 }
 

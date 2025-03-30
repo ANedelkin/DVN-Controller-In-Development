@@ -60,7 +60,6 @@ void LoadsPanel::OnRename(wxCommandEvent& e) {
 	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
 		target->GetSource()->Rename(nameSetter->name);
 		target->SetLabel(nameSetter->name);
-		target->Unsave();
-		MarkUnsaved();
+		Unsave(false, target);
 	}
 }
