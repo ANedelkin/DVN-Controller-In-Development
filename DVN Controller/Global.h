@@ -2,6 +2,13 @@
 
 #include "Includes.h"
 
+
+//Random defines:
+
+#define NAME_INPUT_LEN 200
+#define FREQ_INPUT_LEN 100
+
+
 //Styles:
 
 #define CLOSEABLE   0b00000001

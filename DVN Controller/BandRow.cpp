@@ -16,13 +16,12 @@ void BandRow::OnResize(wxSizeEvent& e) {
 }
 void BandRow::OnNameEnter(wxKeyEvent& e) {
     int key = e.GetKeyCode();
-    bool f;
     if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !Rename()) {
         if (key == WXK_TAB) {
             if(wxGetKeyState(WXK_SHIFT)) 
-              f = focused->Navigate(wxNavigationKeyEvent::IsBackward);
+              focused->Navigate(wxNavigationKeyEvent::IsBackward);
             else 
-              f = focused->Navigate();
+              focused->Navigate();
         }
         else {
             Unfocus();
@@ -109,9 +108,9 @@ void BandRow::InitForeground() {
     num = new wxStaticText(this, wxID_ANY, to_string(bandNum + 1) + '.', wxDefaultPosition, FromDIP(wxSize(15, -1)));
     num->SetBackgroundColour(wxColour(255, 255, 255));
 
-    name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, FromDIP(wxSize(250, -1)), wxTE_PROCESS_ENTER);
-    startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 0)), wxDefaultPosition, FromDIP(wxSize(110, -1)), wxTE_PROCESS_ENTER);
-    endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 1)), wxDefaultPosition, FromDIP(wxSize(110, -1)), wxTE_PROCESS_ENTER);
+    name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, FromDIP(wxSize(NAME_INPUT_LEN, -1)), wxTE_PROCESS_ENTER);
+    startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 0)), wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)), wxTE_PROCESS_ENTER);
+    endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 1)), wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)), wxTE_PROCESS_ENTER);
     
     bool active = scenario->IsActive(bandNum);
     statBtn = new ColourfulBtn(this, active ? "ON" : "OFF");

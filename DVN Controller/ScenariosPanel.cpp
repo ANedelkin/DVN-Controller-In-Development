@@ -57,6 +57,7 @@ void ScenariosPanel::OnRename(wxCommandEvent& e) {
 		else
 			Unsave(false, target);
 	}
+	target->Refresh();
 }
 
 void ScenariosPanel::OnLoad(wxCommandEvent& e)
@@ -66,13 +67,14 @@ void ScenariosPanel::OnLoad(wxCommandEvent& e)
 		SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 		Scenario* selection = dialog->GetSelection();
 		*(Scenario*)target->GetSource() = *selection;
-		target->Refresh();
+		target->SetLabel(target->GetSource()->GetName());
 		target->MarkUnsaved();
 		if (cur == target) ChangeSelection(cur);
 		if (source)
 			MarkUnsaved();
 		else
 			Unsave(false, target);
+		target->Refresh();
 	}
 }
 
@@ -83,11 +85,13 @@ void ScenariosPanel::OnSave(wxCommandEvent& e) {
 void ScenariosPanel::OnDelete(wxCommandEvent& e)
 {
 	wxMessageDialog dialog(base, "If you delete a scenario you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
+	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	if (dialog.ShowModal() == wxID_YES) {
-		SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 		if (exists(target->GetSource()->GetOldPath())) {
 			remove(target->GetSource()->GetOldPath());
 		}
 		Close(target);
 	}
+	else
+		target->Refresh();
 }

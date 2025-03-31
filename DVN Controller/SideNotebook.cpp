@@ -11,14 +11,19 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* so
 	pagesBoxSizer = new wxStaticBoxSizer(wxVERTICAL, pagesBox, sideMenuTxt);
 	pagesBoxSizer->AddSpacer(FromDIP(38));
 	pagesBox->SetSizerAndFit(pagesBoxSizer);
-	pagesBox->SetMinSize(FromDIP(wxSize(210, -1)));
+	pagesBox->SetMinSize(FromDIP(wxSize(NAME_INPUT_LEN + 30, -1)));
 
+	scrollWrapper = new wxScrolledWindow(pagesBox);
+	wxBoxSizer* scrollSizer = new wxBoxSizer(wxVERTICAL);
+	scrollWrapper->SetSizerAndFit(scrollSizer);
+	scrollWrapper->SetScrollRate(0, FromDIP(5));
+	
 	pagesSizer = new wxBoxSizer(wxVERTICAL);
-	pagesList = new wxPanel(pagesBox);
-	pagesList->SetSizerAndFit(pagesSizer);
+	pagesList = new wxPanel(scrollWrapper);
+	pagesList->SetSizer(pagesSizer);
 
-	pagesBoxSizer->Add(pagesList, 1, wxEXPAND);
-
+	pagesBoxSizer->Add(scrollWrapper, 1, wxEXPAND);
+	scrollSizer->Add(pagesList, 0, wxEXPAND | wxRIGHT, FromDIP(5));
 	mainSizer->Add(pagesBox, 0, wxEXPAND);
 
 	this->SetSizerAndFit(mainSizer);
@@ -27,10 +32,6 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* so
 }
 
 void SideNotebook::SetContent(SideNotebookPanel* content) {
-	//if (this->content) {
-	//	this->content->DestroyChildren();
-	//	this->content->Destroy();
-	//}
 	this->content = content;
 	mainSizer->Add(this->content, 1, wxEXPAND | wxLEFT, FromDIP(5));
 	if (source) {
@@ -54,8 +55,8 @@ Status SideNotebook::AddPage(SideMenuCtrl* page)
 	pagesSizer->Add(page, 0, wxEXPAND | wxBOTTOM, FromDIP(10));
 	ChangeSelection(page);
 	if (!content->IsInited()) content->Init();
-	Refresh();
 	Layout();
+	Refresh();
 	page->SetLabel(page->GetSource()->GetName());
 	page->Bind(wxEVT_BUTTON, &SideNotebook::OnSelect, this);
 	return Success;
@@ -75,17 +76,6 @@ void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 	DVNFileData* s = cur->GetSource();
 	content->SetSource(s);
 }
-
-//void SideNotebook::OnRename(wxCommandEvent& e) {
-//	SideMenuCtrl* target = contextMenu->GetInvokingWindow();
-//	NameSetter* nameSetter = new NameSetter(base, "Enter name", source->GetName());
-//	nameSetter->ShowModal();
-//	if (nameSetter->ok && source->GetName() != nameSetter->name) {
-//		source->Rename(nameSetter->name);
-//		SetLabel(nameSetter->name);
-//		MarkUnsaved();
-//	}
-//}
 
 void SideNotebook::OnSelect(wxCommandEvent& e)
 {

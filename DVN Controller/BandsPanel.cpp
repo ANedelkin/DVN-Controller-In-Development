@@ -21,9 +21,9 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
 
     wxFont labelsFont = wxFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
-    wxStaticText* nameLabel = new wxStaticText(labels, wxID_ANY, "Name", wxDefaultPosition, FromDIP(wxSize(250, -1)));
-    wxStaticText* startValueLabel = new wxStaticText(labels, wxID_ANY, "Start frequecy", wxDefaultPosition, FromDIP(wxSize(110, -1)));
-    wxStaticText* endValueLabel = new wxStaticText(labels, wxID_ANY, "End frequency", wxDefaultPosition, FromDIP(wxSize(110, -1)));
+    wxStaticText* nameLabel = new wxStaticText(labels, wxID_ANY, "Name", wxDefaultPosition, FromDIP(wxSize(NAME_INPUT_LEN, -1)));
+    wxStaticText* startValueLabel = new wxStaticText(labels, wxID_ANY, "Start frequecy", wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)));
+    wxStaticText* endValueLabel = new wxStaticText(labels, wxID_ANY, "End frequency", wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)));
     wxStaticText* activeLabel = new wxStaticText(labels, wxID_ANY, "Status");
 
     nameLabel->SetFont(labelsFont);

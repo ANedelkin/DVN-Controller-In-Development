@@ -4,12 +4,11 @@ void SideMenuCtrl::OnContextMenu(wxContextMenuEvent& e) {
 	if (contextMenu) {
 		PopupMenu(contextMenu, wxWindow::ScreenToClient(e.GetPosition()));
 	}
-	Refresh();
-	e.Skip();
+	//e.Skip();
 }
 
 SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source) : wxButton(parent, wxID_ANY) {
-	SetMinSize(FromDIP(wxSize(-1, 40)));
+	SetMinSize(FromDIP(wxSize(NAME_INPUT_LEN, 40)));
 
 	this->source = source;
 	this->mainPanel = mainPanel;
@@ -28,11 +27,6 @@ void SideMenuCtrl::SetSource(DVNFileData* source) {
 void SideMenuCtrl::SetContextMenu(wxMenu* menu)
 {
 	contextMenu = menu;
-}
-
-void SideMenuCtrl::Refresh()
-{
-	SetLabel(source->GetName());
 }
 
 void SideMenuCtrl::Unsave() {
@@ -73,7 +67,7 @@ void SideMenuCtrl::SetLabel(const wxString& label)
 	int textWidth, textHeight;
 	dc.GetTextExtent(temp, &textWidth, &textHeight);
 
-	int maxWidth = GetSize().GetWidth() - 30;
+	int maxWidth = GetSize().GetWidth() - FromDIP(50);
 	if (textWidth > maxWidth) {
 		do {
 			temp = temp.Left(temp.Length() - 3);

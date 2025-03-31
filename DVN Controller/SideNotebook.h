@@ -15,6 +15,8 @@ protected:
 	vector<SideMenuCtrl*> pages;
 
 	wxBoxSizer* mainSizer;
+
+	wxScrolledWindow* scrollWrapper;
 	wxStaticBox* pagesBox;
 	wxStaticBoxSizer* pagesBoxSizer;
 	wxPanel* pagesList;
@@ -23,9 +25,9 @@ protected:
 
 	SideNotebookPanel* content = nullptr;
 
+	void SetContent(SideNotebookPanel* content);
 	void ChangeSelection(SideMenuCtrl* scenCtrl);
 
-	//void OnRename(wxCommandEvent& e);
 	void OnSelect(wxCommandEvent& e);
 
 	void Close(SideMenuCtrl* win);
@@ -38,7 +40,6 @@ public:
 
 	SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* data = nullptr);
 
-	void SetContent(SideNotebookPanel* content);
 
 	Status NewPage(DVNFileData* data);
 	Status AddPage(SideMenuCtrl* page);
