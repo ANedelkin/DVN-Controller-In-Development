@@ -8,8 +8,8 @@ Scenario::Scenario(string name) : DVNFileData(name) {
 	this->extension = ".dvns";
 	int k = 0;
 	for (int i = 0; i < BAND_RANGES_COUNT; i++) {
-		BandInfo band = BandInfo(i, bandRanges[i][0], bandRanges[i][1]);
-		for (int j = 0; j < bandRanges[i][3]; j++)
+		BandInfo band = BandInfo(i, BAND_RANGES[i][0], BAND_RANGES[i][1]);
+		for (int j = 0; j < BAND_RANGES[i][3]; j++)
 		{
 			bands[k] = band;
 			bands[k].name = "Band ";
@@ -108,8 +108,8 @@ Status Scenario::Rename(string name, char i) {
 //int Scenario::GetEndValue(char i) const { return bands[i].endValue; }
 int Scenario::GetFreq(char bandIndex, char freqIndex) const { return freqIndex ? bands[bandIndex].endValue : bands[bandIndex].startValue; }
 int Scenario::GetRangeIndex(char i) const { return bands[i].rangeIndex; }
-int Scenario::GetStartValueBorder(char i) const { return bandRanges[bands[i].rangeIndex][0]; }
-int Scenario::GetEndValueBorder(char i) const { return bandRanges[bands[i].rangeIndex][1]; }
+int Scenario::GetStartValueBorder(char i) const { return BAND_RANGES[bands[i].rangeIndex][0]; }
+int Scenario::GetEndValueBorder(char i) const { return BAND_RANGES[bands[i].rangeIndex][1]; }
 bool Scenario::IsEnabled(char i) const { return bands[i].enabled; }
 bool Scenario::IsActive(char i) const { return bands[i].working; }
 void Scenario::Enable(char i) {
@@ -124,7 +124,7 @@ Scenario* Scenario::ToScenario(const string& name, stringstream& stream)
 {
 	Scenario* scenario = new Scenario(name);
 	string bandString;
-	for (int i = 0; i < BANDS_COUNT && getline(stream, bandString); i++) {
+	for (int i = 0; i < GetBandsCount() && getline(stream, bandString); i++) {
 		vector<string> values = Split(bandString, '|');
 		BandInfo band(values[0], scenario->GetRangeIndex(i), stoi(values[1]), stoi(values[2]), values[3] == "ON");
 		scenario->SetBandData(i, band.name, band.startValue, band.endValue, band.working);

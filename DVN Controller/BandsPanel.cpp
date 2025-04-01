@@ -42,7 +42,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
 
     this->source = scenario;
 
-    for (char i = 0; i < BANDS_COUNT; i++) {
+    for (char i = 0; i < GetBandsCount(); i++) {
         bandRows[i] = new BandRow(content, scenario, i, style);
         contentSizer->Add(bandRows[i], 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(10));
     }
@@ -65,11 +65,11 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
     this->SetSizerAndFit(panelSizer);
 }
 
-void BandsPanel::SetSource(DVNFileData* source)
+void BandsPanel::SetSource(DVNFileData* source) //Make only called when needen, not on initial scenario loading
 {
     this->source = source;
     Scenario* scen = dynamic_cast<Scenario*>(source);
-    for (char i = 0; i < bandRows.size(); i++)
+    for (char i = 0; i < GetBandsCount(); i++)
     {
         bandRows[i]->ChangeScenario(scen);
     }

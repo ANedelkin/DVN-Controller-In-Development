@@ -149,7 +149,7 @@ void SideNotebook::Select(char i)
 	if(pages.size() > i) ChangeSelection(pages[i]);
 }
 
-void SideNotebook::SetSource(DVNFileData* source) {
+void SideNotebook::SetSource(DVNFileData* source) { //make only for scenarios panel
 	this->source = source;
 	for (char i = 0; i < pages.size(); i++)
 	{
