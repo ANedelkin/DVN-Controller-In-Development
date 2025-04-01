@@ -17,7 +17,6 @@ public:
 	DVNFileData* GetSource();
 	void SetSource(DVNFileData* source);
 	void SetContextMenu(wxMenu* menu);
-	void Refresh();
 	void Unsave();
 	void Save();
 	void MarkSaved();

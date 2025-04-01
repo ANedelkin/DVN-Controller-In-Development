@@ -7,7 +7,7 @@
 class BandsPanel : public SideNotebookPanel
 {
 private:
-	array<BandRow*, BANDS_COUNT> bandRows;
+	array<BandRow*, GetBandsCount()> bandRows;
 	wxScrolled<wxPanel>* scrollWrapper;
 public:
 	wxPanel* table;

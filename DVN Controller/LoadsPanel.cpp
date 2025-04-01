@@ -40,13 +40,15 @@ Status LoadsPanel::AddPage(Load* data)
 void LoadsPanel ::OnDelete(wxCommandEvent& e)
 {
 	wxMessageDialog dialog(base, "If you delete a load you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
+	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	if (dialog.ShowModal() == wxID_YES) {
-		SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 		if (exists(target->GetSource()->GetOldPath())) {
 			remove(target->GetSource()->GetOldPath());
 		}
 		Close(target);
 	}
+	else
+		target->Refresh();
 }
 
 void LoadsPanel::OnClose(wxCommandEvent& e) {
@@ -62,4 +64,5 @@ void LoadsPanel::OnRename(wxCommandEvent& e) {
 		target->SetLabel(nameSetter->name);
 		Unsave(false, target);
 	}
+	target->Refresh();
 }

@@ -21,9 +21,9 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
 
     wxFont labelsFont = wxFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
-    wxStaticText* nameLabel = new wxStaticText(labels, wxID_ANY, "Name", wxDefaultPosition, FromDIP(wxSize(250, -1)));
-    wxStaticText* startValueLabel = new wxStaticText(labels, wxID_ANY, "Start frequecy", wxDefaultPosition, FromDIP(wxSize(110, -1)));
-    wxStaticText* endValueLabel = new wxStaticText(labels, wxID_ANY, "End frequency", wxDefaultPosition, FromDIP(wxSize(110, -1)));
+    wxStaticText* nameLabel = new wxStaticText(labels, wxID_ANY, "Name", wxDefaultPosition, FromDIP(wxSize(NAME_INPUT_LEN, -1)));
+    wxStaticText* startValueLabel = new wxStaticText(labels, wxID_ANY, "Start frequecy", wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)));
+    wxStaticText* endValueLabel = new wxStaticText(labels, wxID_ANY, "End frequency", wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)));
     wxStaticText* activeLabel = new wxStaticText(labels, wxID_ANY, "Status");
 
     nameLabel->SetFont(labelsFont);
@@ -42,7 +42,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
 
     this->source = scenario;
 
-    for (char i = 0; i < BANDS_COUNT; i++) {
+    for (char i = 0; i < GetBandsCount(); i++) {
         bandRows[i] = new BandRow(content, scenario, i, style);
         contentSizer->Add(bandRows[i], 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(10));
     }
@@ -65,11 +65,11 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
     this->SetSizerAndFit(panelSizer);
 }
 
-void BandsPanel::SetSource(DVNFileData* source)
+void BandsPanel::SetSource(DVNFileData* source) //Make only called when needen, not on initial scenario loading
 {
     this->source = source;
     Scenario* scen = dynamic_cast<Scenario*>(source);
-    for (char i = 0; i < bandRows.size(); i++)
+    for (char i = 0; i < GetBandsCount(); i++)
     {
         bandRows[i]->ChangeScenario(scen);
     }

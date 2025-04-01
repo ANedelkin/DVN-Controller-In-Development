@@ -1,7 +1,11 @@
 #include "ModelConstants.h"
 
-int bandRanges[3][4] = {
-	{0, 499, -1, 10},
-	{500, 2999, 1250, 10},
-	{3000, 6000, -1, 10},
-};
+//constexpr char GetBandsCount()
+//{
+//	char count = 0;
+//	for (char i = 0; i < BAND_RANGES_COUNT; i++)
+//	{
+//		count += BAND_RANGES[i][3];
+//	}
+//	return count;
+//}

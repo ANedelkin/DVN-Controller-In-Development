@@ -7,7 +7,7 @@
 
 class Scenario : public DVNFileData {
 private:
-	array<BandInfo, BANDS_COUNT> bands;
+	array<BandInfo, GetBandsCount()> bands;
 public:
 	Scenario();
 	Scenario(string name);
