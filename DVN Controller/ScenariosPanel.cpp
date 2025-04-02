@@ -47,7 +47,7 @@ Status ScenariosPanel::AddPage(Scenario* data)
 
 void ScenariosPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	NameSetter* nameSetter = new NameSetter(base, "Enter name", Scenario::ValidateName, target->GetSource()->GetName());
+	NameSetter* nameSetter = new NameSetter(base, "Enter name", Scenario::ValidateName, target->GetSource()->GetName(), target->GetSource()->oldName);
 	nameSetter->ShowModal();
 	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
 		target->GetSource()->Rename(nameSetter->name);

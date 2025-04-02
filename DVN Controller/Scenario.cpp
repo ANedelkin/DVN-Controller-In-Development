@@ -97,12 +97,9 @@ void Scenario::TurnOff(char i) {
 	bands[i].working = false;
 }
 string Scenario::GetName(char i) { return bands[i].name; }
-Status Scenario::Rename(string name, char i) {
-	if (name.length() == 0) return NameWhitespace;
-	if (all_of(name.begin(), name.end(), [](unsigned char c) { return std::isspace(c); })) return NameWhitespace;
-	if (name.find('|') != string::npos) return InvalidSymbols;
-	if (name.length() > NAME_MAX_LENGTH) return NameTooLong;
-
+Status Scenario::Rename(const string& name, char i) {
+	Status stat = BandInfo::ValidateName(name);
+	if (stat) return stat;
 	bands[i].name = name;
 	return Success;
 }

@@ -55,8 +55,9 @@ extern map<Status, const char*> errorMessages;
 //Funcs:
 
 extern vector<string> Split(const string& str, char delimiter);
-extern Status ValidateName(string& name);
 extern int ErrorMessage(wxWindow* parent, Status stat, const char style = 0, ...);
+extern bool HasNonStdChars(const string& str);
+extern Status ValidateNameBasic(const string& name);
 
 
 //Tabs

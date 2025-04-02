@@ -15,10 +15,7 @@ Status DVNFileData::ValidateName(const string& name)
 			return InvalidSymbols;
 		}
 	}
-	if (name.length() == 0) return NameWhitespace;
-	if (all_of(name.begin(), name.end(), [](unsigned char c) { return isspace(c); })) return NameWhitespace;
-	if (name.length() > NAME_MAX_LENGTH) return NameTooLong;
-	return Success;
+	return ValidateNameBasic(name);
 }
 
 Status DVNFileData::Rename(const string& name) {

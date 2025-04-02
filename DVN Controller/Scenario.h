@@ -25,7 +25,7 @@ public:
 	Status TurnOn(char i);
 	void TurnOff(char i);
 	string GetName(char i);
-	Status Rename(string name, char i);
+	Status Rename(const string& name, char i);
 
 	//int GetStartValue(char i) const;
 	//int GetEndValue(char i) const;

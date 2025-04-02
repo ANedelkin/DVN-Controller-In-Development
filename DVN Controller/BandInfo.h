@@ -21,4 +21,9 @@ struct BandInfo {
 		this->endValue = endvalue;
 		this->working = working;
 	}
+
+	static Status ValidateName(const string& name) {
+		if (name.find('|') != string::npos) return InvalidSymbols;
+		return ValidateNameBasic(name);
+	}
 };

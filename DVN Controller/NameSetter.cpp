@@ -3,9 +3,10 @@
 #include "NameSetter.h"
 
 
-NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name), const string& defaultValue)
+NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name), const string& defaultValue, const string& oldName)
           : wxDialog(parent, wxID_ANY, title)
           , validator(validator)
+          , name(oldName)
 {
     SetSize(FromDIP(wxSize(250, 190)));
 
@@ -41,18 +42,23 @@ NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validato
 }
 
 void NameSetter::OnOK(wxCommandEvent& e) {
-    string name = input->GetValue().ToStdString();
-    Status stat = validator(name);
+    string newName = input->GetValue().ToUTF8().data();
+    if (newName == this->name) {
+        ok = true;
+        Close();
+        return;
+    }
+    Status stat = validator(newName);
     if (stat) {
         if (stat == NameTooLong)
             ErrorMessage(this, stat, 0, NAME_MAX_LENGTH);
         else if (stat == ScenarioAlreadyExists)
-            ErrorMessage(this, stat, 0, name.c_str());
+            ErrorMessage(this, stat, 0, newName.c_str());
         else 
             ErrorMessage(this, stat, 0);
         return;
     }
-    this->name = name;
+    this->name = newName;
     ok = true;
-    this->Close();
+    Close();
 }
