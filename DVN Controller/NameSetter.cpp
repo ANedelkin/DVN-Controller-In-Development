@@ -3,8 +3,10 @@
 #include "NameSetter.h"
 
 
-NameSetter::NameSetter(wxWindow* parent, const wxString& title, const string& defaultValue)
+NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name), const string& defaultValue, const string& oldName)
           : wxDialog(parent, wxID_ANY, title)
+          , validator(validator)
+          , name(oldName)
 {
     SetSize(FromDIP(wxSize(250, 190)));
 
@@ -39,34 +41,24 @@ NameSetter::NameSetter(wxWindow* parent, const wxString& title, const string& de
     okButton->Bind(wxEVT_BUTTON, &NameSetter::OnOK, this);
 }
 
-Status NameSetter::ValidateName(const string& name)
-{
-    const char* charsToSeek = "\\/:*?\"<>|";
-    const char len = strlen(charsToSeek);
-
-    for (char i = 0; i < len; i++)
-    {
-        if (name.find(charsToSeek[i]) != string::npos) {
-            return InvalidSymbols;
-        }
-    }
-    if (name.length() == 0) return NameWhitespace;
-    if (all_of(name.begin(), name.end(), [](unsigned char c) { return isspace(c); })) return NameWhitespace;
-    if (name.length() > NAME_MAX_LENGTH) return NameTooLong;
-    return Success;
-}
-
 void NameSetter::OnOK(wxCommandEvent& e) {
-    string temp = input->GetValue().ToStdString();
-    Status stat = ValidateName(temp);
+    string newName = input->GetValue().ToUTF8().data();
+    if (newName == this->name) {
+        ok = true;
+        Close();
+        return;
+    }
+    Status stat = validator(newName);
     if (stat) {
-        if(stat == NameTooLong) 
+        if (stat == NameTooLong)
             ErrorMessage(this, stat, 0, NAME_MAX_LENGTH);
+        else if (stat == ScenarioAlreadyExists)
+            ErrorMessage(this, stat, 0, newName.c_str());
         else 
             ErrorMessage(this, stat, 0);
         return;
     }
-    name = temp;
+    this->name = newName;
     ok = true;
-    this->Close();
+    Close();
 }

@@ -2,10 +2,13 @@
 
 #include "Scenario.h"
 
+const string Scenario::folder = "./scenarios";
+const string Scenario::extension = ".dvns";
+
 Scenario::Scenario() : Scenario("Unnamed scenario") {}
 Scenario::Scenario(string name) : DVNFileData(name) {
-	this->folder = "./scenarios";
-	this->extension = ".dvns";
+	DVNFileData::folder = folder;
+	DVNFileData::extension = extension;
 	int k = 0;
 	for (int i = 0; i < BAND_RANGES_COUNT; i++) {
 		BandInfo band = BandInfo(i, BAND_RANGES[i][0], BAND_RANGES[i][1]);
@@ -94,12 +97,9 @@ void Scenario::TurnOff(char i) {
 	bands[i].working = false;
 }
 string Scenario::GetName(char i) { return bands[i].name; }
-Status Scenario::Rename(string name, char i) {
-	if (name.length() == 0) return NameWhitespace;
-	if (all_of(name.begin(), name.end(), [](unsigned char c) { return std::isspace(c); })) return NameWhitespace;
-	if (name.find('|') != string::npos) return InvalidSymbols;
-	if (name.length() > NAME_MAX_LENGTH) return NameTooLong;
-
+Status Scenario::Rename(const string& name, char i) {
+	Status stat = BandInfo::ValidateName(name);
+	if (stat) return stat;
 	bands[i].name = name;
 	return Success;
 }
@@ -120,6 +120,14 @@ void Scenario::Disable(char i) {
 	bands[i].working = false;
 }
 
+Status Scenario::ValidateName(const string& name)
+{
+	Status stat = DVNFileData::ValidateName(name);
+	if (stat) return stat;
+	
+	if (ifstream(folder + "\\" + name + extension)) return ScenarioAlreadyExists;
+}
+
 Scenario* Scenario::ToScenario(const string& name, stringstream& stream)
 {
 	Scenario* scenario = new Scenario(name);
@@ -135,8 +143,8 @@ Scenario* Scenario::ToScenario(const string& name, stringstream& stream)
 vector<Scenario*> Scenario::LoadScenarios()
 {
 	vector<Scenario*> output;
-	if (filesystem::exists("./scenarios")) {
-		directory_iterator dirItr("./scenarios");
+	if (filesystem::exists(folder)) {
+		directory_iterator dirItr(folder);
 		for (const auto& scenario : dirItr) {
 			ifstream stream(scenario.path());
 			stringstream data;

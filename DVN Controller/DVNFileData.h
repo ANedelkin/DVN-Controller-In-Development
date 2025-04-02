@@ -15,6 +15,8 @@ public:
 
 	DVNFileData(const string& name);
 
+	static Status ValidateName(const string& name);
+
 	vector<DVNFileData*> children;
 
 	Status Rename(const string& name);

@@ -124,7 +124,7 @@ bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs)
 {
 	DVNFileData* curData = page->GetSource();
 	if (curData->folder == "" || saveAs) {
-		wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"" + curData->GetName(), "", curData->GetNameWithExt(), "Load files (*.dvnl)|*.dvnl", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+		wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"", "", curData->GetNameWithExt(), "Load files (*.dvnl)|*.dvnl", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 		if (dialog.ShowModal() == wxID_OK) {
 			string name = wxFileName(dialog.GetPath()).GetName().ToStdString();
 			string folder = dialog.GetDirectory().ToStdString();
@@ -172,7 +172,7 @@ bool SideNotebook::CheckForUnsaved()
 	for (char i = 0; i < pages.size(); i++)
 	{
 		if (!pages[i]->GetSource()->upToDate) {
-			switch (SaveDialog(this, pages[i]->GetSource()->GetName()).ShowModal()) {
+			switch (SaveDialog(this, pages[i]->GetSource()->GetName(), SAVING_MANY).ShowModal()) {
 			case SaveDialog::ID_SAVE:
 				if (!Save(pages[i], false)) return false;
 				break;

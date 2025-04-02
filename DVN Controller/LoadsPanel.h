@@ -7,11 +7,12 @@
 
 class LoadsPanel : public SideNotebook
 {
-public:
-	LoadsPanel(wxWindow* parent);
-	Status AddPage(Load* data);
+private:
 	void OnDelete(wxCommandEvent& e);
 	void OnClose(wxCommandEvent& e);
 	void OnRename(wxCommandEvent& e);
+public:
+	LoadsPanel(wxWindow* parent);
+	Status AddPage(Load* data);
 };
 

@@ -8,6 +8,9 @@
 class Scenario : public DVNFileData {
 private:
 	array<BandInfo, GetBandsCount()> bands;
+
+	static const string folder;
+	static const string extension;
 public:
 	Scenario();
 	Scenario(string name);
@@ -22,7 +25,7 @@ public:
 	Status TurnOn(char i);
 	void TurnOff(char i);
 	string GetName(char i);
-	Status Rename(string name, char i);
+	Status Rename(const string& name, char i);
 
 	//int GetStartValue(char i) const;
 	//int GetEndValue(char i) const;
@@ -34,6 +37,8 @@ public:
 	bool IsActive(char i) const;
 	void Enable(char i);
 	void Disable(char i);
+
+	static Status ValidateName(const string& name);
 
 	static Scenario* ToScenario(const string& name, stringstream& data);
 	static vector<Scenario*> LoadScenarios();

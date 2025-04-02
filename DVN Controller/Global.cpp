@@ -34,12 +34,6 @@ vector<string> Split(const string& str, char delimiter) {
     return tokens;
 }
 
-Status ValidateName(string& name) { //Unused
-    if (name.find('|') != string::npos) return InvalidSymbols;
-    if (name.length() > NAME_MAX_LENGTH) return NameTooLong;
-    return Success;
-}
-
 int ErrorMessage(wxWindow* parent, Status stat, const char style, ...)
 {
     char buffer[256];
@@ -48,7 +42,8 @@ int ErrorMessage(wxWindow* parent, Status stat, const char style, ...)
     va_list args;
     va_start(args, style);
 
-    if (vsnprintf(buffer, sizeof(buffer), errorMessages[stat], args) > sizeof(buffer) - 1)
+    int buffSize = sizeof(buffer);
+    if (vsnprintf(buffer, buffSize, errorMessages[stat], args) > buffSize - 1)
         return ErrorMessage(parent, ErrorMessageTooLong);
 
     msg = buffer;
@@ -60,6 +55,23 @@ int ErrorMessage(wxWindow* parent, Status stat, const char style, ...)
     }
 
     return wxMessageDialog(parent, msg, "Error", wxOK | wxICON_ERROR).ShowModal();
+}
+
+bool HasNonStdChars(const string& str)
+{
+    for (char ch : str) {
+        if (ch < 32 || ch > 126) return true;
+    }
+    return false;
+}
+
+Status ValidateNameBasic(const string& name)
+{
+    if (HasNonStdChars(name)) return InvalidSymbols;
+    if (name.length() == 0) return NameWhitespace;
+    if (all_of(name.begin(), name.end(), [](unsigned char c) { return isspace(c); })) return NameWhitespace;
+    if (name.length() > NAME_MAX_LENGTH) return NameTooLong;
+    return Success;
 }
 
 wxDEFINE_EVENT(EVT_LOAD, wxCommandEvent);
