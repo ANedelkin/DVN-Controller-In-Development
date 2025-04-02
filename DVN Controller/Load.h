@@ -6,6 +6,8 @@
 #include "ModelConstants.h"
 
 class Load : public DVNFileData {
+private:
+	static const string extension;
 public:
 	Load();
 	Load(const string& name);

@@ -4,6 +4,23 @@ DVNFileData::DVNFileData(const string& name) : name(name), upToDate(true), oldNa
 {
 }
 
+Status DVNFileData::ValidateName(const string& name)
+{
+	const char* charsToSeek = "\\/:*?\"<>|";
+	const char len = strlen(charsToSeek);
+
+	for (char i = 0; i < len; i++)
+	{
+		if (name.find(charsToSeek[i]) != string::npos) {
+			return InvalidSymbols;
+		}
+	}
+	if (name.length() == 0) return NameWhitespace;
+	if (all_of(name.begin(), name.end(), [](unsigned char c) { return isspace(c); })) return NameWhitespace;
+	if (name.length() > NAME_MAX_LENGTH) return NameTooLong;
+	return Success;
+}
+
 Status DVNFileData::Rename(const string& name) {
 	this->name = name;
 	return Success;

@@ -48,7 +48,8 @@ int ErrorMessage(wxWindow* parent, Status stat, const char style, ...)
     va_list args;
     va_start(args, style);
 
-    if (vsnprintf(buffer, sizeof(buffer), errorMessages[stat], args) > sizeof(buffer) - 1)
+    int buffSize = sizeof(buffer);
+    if (vsnprintf(buffer, buffSize, errorMessages[stat], args) > buffSize - 1)
         return ErrorMessage(parent, ErrorMessageTooLong);
 
     msg = buffer;

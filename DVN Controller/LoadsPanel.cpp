@@ -69,7 +69,7 @@ void LoadsPanel::OnClose(wxCommandEvent& e) {
 
 void LoadsPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	NameSetter* nameSetter = new NameSetter(base, "Enter name", target->GetSource()->GetName()); //Create a different Load::ValidateName
+	NameSetter* nameSetter = new NameSetter(base, "Enter name", Load::ValidateName, target->GetSource()->GetName()); //Create a different Load::ValidateName
 	nameSetter->ShowModal();
 	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
 		target->GetSource()->Rename(nameSetter->name);

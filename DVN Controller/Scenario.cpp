@@ -2,10 +2,13 @@
 
 #include "Scenario.h"
 
+const string Scenario::folder = "./scenarios";
+const string Scenario::extension = ".dvns";
+
 Scenario::Scenario() : Scenario("Unnamed scenario") {}
 Scenario::Scenario(string name) : DVNFileData(name) {
-	this->folder = "./scenarios";
-	this->extension = ".dvns";
+	DVNFileData::folder = folder;
+	DVNFileData::extension = extension;
 	int k = 0;
 	for (int i = 0; i < BAND_RANGES_COUNT; i++) {
 		BandInfo band = BandInfo(i, BAND_RANGES[i][0], BAND_RANGES[i][1]);
@@ -120,6 +123,14 @@ void Scenario::Disable(char i) {
 	bands[i].working = false;
 }
 
+Status Scenario::ValidateName(const string& name)
+{
+	Status stat = DVNFileData::ValidateName(name);
+	if (stat) return stat;
+	
+	if (ifstream(folder + "\\" + name + extension)) return ScenarioAlreadyExists;
+}
+
 Scenario* Scenario::ToScenario(const string& name, stringstream& stream)
 {
 	Scenario* scenario = new Scenario(name);
@@ -135,8 +146,8 @@ Scenario* Scenario::ToScenario(const string& name, stringstream& stream)
 vector<Scenario*> Scenario::LoadScenarios()
 {
 	vector<Scenario*> output;
-	if (filesystem::exists("./scenarios")) {
-		directory_iterator dirItr("./scenarios");
+	if (filesystem::exists(folder)) {
+		directory_iterator dirItr(folder);
 		for (const auto& scenario : dirItr) {
 			ifstream stream(scenario.path());
 			stringstream data;

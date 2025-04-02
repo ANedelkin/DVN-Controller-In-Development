@@ -112,7 +112,7 @@ void MainFrame::UpdateScenarios()
 
 void MainFrame::NewScenario()
 {
-	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name");
+	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateName);
 	nameSetter->ShowModal();
 	Scenario* newScen = new Scenario(nameSetter->name);
 	if (nameSetter->ok && !scenariosPanel->AddPage(newScen)) {
@@ -122,7 +122,7 @@ void MainFrame::NewScenario()
 
 void MainFrame::NewLoad()
 {
-	NameSetter* nameSetter = new NameSetter(this, "Enter load name");
+	NameSetter* nameSetter = new NameSetter(this, "Enter load name", Scenario::ValidateName);
 	nameSetter->ShowModal();
 	if (nameSetter->ok && !loadsPanel->NewPage(new Load(nameSetter->name))) loadsPanel->Unsave(true);
 }
