@@ -30,6 +30,7 @@ private:
 
     void OnResize(wxSizeEvent& e);
 
+    void EmptyHandler(wxEvent& e);
     void OnNameEnter(wxKeyEvent& e);
     void OnStartEnter(wxKeyEvent& e);
     void OnEndEnter(wxKeyEvent& e);

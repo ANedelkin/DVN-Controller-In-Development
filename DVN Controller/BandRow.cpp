@@ -14,6 +14,9 @@ void BandRow::OnResize(wxSizeEvent& e) {
         toBeInited = false;
     }
 }
+void BandRow::EmptyHandler(wxEvent& e)
+{
+}
 void BandRow::OnNameEnter(wxKeyEvent& e) {
     int key = e.GetKeyCode();
     if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !Rename()) {
@@ -143,6 +146,10 @@ void BandRow::BindEventHandlers()
         name->Bind(wxEVT_KEY_DOWN, &BandRow::OnNameEnter, this);
         startValue->Bind(wxEVT_KEY_DOWN, &BandRow::OnStartEnter, this);
         endValue->Bind(wxEVT_KEY_DOWN, &BandRow::OnEndEnter, this);
+
+        name->Bind(wxEVT_CONTEXT_MENU, &BandRow::EmptyHandler, this);
+        startValue->Bind(wxEVT_CONTEXT_MENU, &BandRow::EmptyHandler, this);
+        endValue->Bind(wxEVT_CONTEXT_MENU, &BandRow::EmptyHandler, this);
 
         statBtn->Bind(wxEVT_BUTTON, &BandRow::OnStatusChanged, this);
     }
