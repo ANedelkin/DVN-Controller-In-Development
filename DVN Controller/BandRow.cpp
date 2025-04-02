@@ -174,6 +174,7 @@ void BandRow::ChangeScenario(Scenario* scenario) {
 }
 
 Status BandRow::Rename() {
+    name->SetInsertionPoint(0);
     string newName = name->GetValue().ToUTF8().data();
     if (newName == scenario->GetName(bandNum)) return Success;
     Status stat = scenario->Rename(newName, bandNum);
