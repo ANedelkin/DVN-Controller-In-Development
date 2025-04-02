@@ -172,7 +172,7 @@ bool SideNotebook::CheckForUnsaved()
 	for (char i = 0; i < pages.size(); i++)
 	{
 		if (!pages[i]->GetSource()->upToDate) {
-			switch (SaveDialog(this, pages[i]->GetSource()->GetName()).ShowModal()) {
+			switch (SaveDialog(this, pages[i]->GetSource()->GetName(), SAVING_MANY).ShowModal()) {
 			case SaveDialog::ID_SAVE:
 				if (!Save(pages[i], false)) return false;
 				break;

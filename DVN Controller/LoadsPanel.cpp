@@ -52,7 +52,19 @@ void LoadsPanel ::OnDelete(wxCommandEvent& e)
 }
 
 void LoadsPanel::OnClose(wxCommandEvent& e) {
-	Close((SideMenuCtrl*)contextMenu->GetInvokingWindow());
+	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
+	switch (SaveDialog(base, target->GetSource()->GetName()).ShowModal()) {
+	case SaveDialog::ID_SAVE:
+		if (Save(target, false))
+			Close(target);
+		break;
+	case SaveDialog::ID_SKIP:
+		Close(target);
+		break;
+	default:
+		target->Refresh();
+		break;
+	}
 }
 
 void LoadsPanel::OnRename(wxCommandEvent& e) {

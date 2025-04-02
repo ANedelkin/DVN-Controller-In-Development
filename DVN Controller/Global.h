@@ -13,12 +13,13 @@
 
 //Styles:
 
-#define CLOSEABLE   0b00000001
-#define DELETABLE   0b00000010
-#define LOADABLE    0b00000100
-#define READ_ONLY   0b00001000
-#define DIALOG      0b00010000
+#define CLOSEABLE       0b00000001
+#define DELETABLE       0b00000010
+#define LOADABLE        0b00000100
+#define READ_ONLY       0b00001000
 
+#define DIALOG          0b00010000
+#define SAVING_MANY     0b00100000
 
 //Vars:
 
