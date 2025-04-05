@@ -120,7 +120,7 @@ void SideNotebook::Close(SideMenuCtrl* win)
 	win->Destroy();
 }
 
-bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs)
+bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs) //move  to load class
 {
 	DVNFileData* curData = page->GetSource();
 	if (curData->folder == "" || saveAs) {
@@ -136,7 +136,9 @@ bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs)
 				}
 			}
 			curData->Rename(name);
+			page->SetLabel(name);
 			curData->folder = folder;
+			if (saveAs) curData->oldName = name;
 		}
 		else return false;
 	}

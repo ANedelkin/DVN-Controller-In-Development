@@ -31,6 +31,7 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, Load* source, const char style)
 	}
 
 	SetContent(new BandsPanel(this, new Scenario(), style));
+	content->UnInit();
 }
 
 Status ScenariosPanel::AddPage(Scenario* data)

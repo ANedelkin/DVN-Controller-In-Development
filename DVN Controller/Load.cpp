@@ -1,10 +1,11 @@
 #include "Load.h"
 
-const string extension = ".dvnl";
+const string Load::extension = ".dvnl";
 
 Load::Load() : Load("Unnamed load") {}
 Load::Load(const string& name) : Load(name, "") {}
 Load::Load(const string& name, const string& folder) : DVNFileData(name) {
+	DVNFileData::extension = extension;
 	this->folder = folder;
 	for (char i = 0; i < SCENARIOS_COUNT; i++)
 	{

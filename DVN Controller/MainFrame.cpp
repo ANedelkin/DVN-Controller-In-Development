@@ -86,12 +86,14 @@ void MainFrame::LoadScenarios()
 {
 	vector<Scenario*> scenarios = Scenario::LoadScenarios();
 	Freeze();
-	for (char i = 0; i < scenarios.size(); i++)
-	{
-		if (scenarios[i]->ok)
-			scenariosPanel->AddPage(scenarios[i]);
+	if (scenarios.size() > 0) {
+		for (char i = 0; i < scenarios.size(); i++)
+		{
+			if (scenarios[i]->ok)
+				scenariosPanel->AddPage(scenarios[i]);
+		}
+		scenariosPanel->Select(0);
 	}
-	scenariosPanel->Select(0);
 	Thaw();
 }
 
