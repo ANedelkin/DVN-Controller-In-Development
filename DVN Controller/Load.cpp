@@ -27,13 +27,25 @@ string Load::SaveString() const {
 
 Load* Load::ToLoad(const string& name, const string& folder, stringstream& data) {
 	Load* load = new Load(name, folder);
+	if (Load::ValidateName(name))
+		goto NotOkay;
 	for (char i = 0; i < SCENARIOS_COUNT; i++)
 	{
 		string scenName;
-		getline(data, scenName);
-		Scenario* scenario = Scenario::ToScenario(scenName, data);
-		load->children[i] = scenario;
+		if (getline(data, scenName)) {
+			Scenario* scenario = Scenario::ToScenario(scenName, data);
+			if (scenario->ok)
+				load->children[i] = scenario;
+			else
+				goto NotOkay;
+		}
+		else
+			goto NotOkay;
+
 	}
 	load->oldSaveString = load->SaveString();
+	return load;
+NotOkay:
+	load->ok = false;
 	return load;
 }

@@ -13,6 +13,6 @@ public:
 	string name = "";
 	bool ok = false;
 	
-	NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name), const string& defaultValue = "", const string& oldName = "\001");
+	NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name), const string& defaultValue = "");
 };
 

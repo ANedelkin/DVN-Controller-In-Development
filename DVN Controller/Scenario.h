@@ -38,7 +38,7 @@ public:
 	void Enable(char i);
 	void Disable(char i);
 
-	static Status ValidateName(const string& name);
+	static Status ValidateNameUnique(const string& name);
 
 	static Scenario* ToScenario(const string& name, stringstream& data);
 	static vector<Scenario*> LoadScenarios();

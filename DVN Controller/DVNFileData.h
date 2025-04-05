@@ -8,6 +8,7 @@ protected:
 	string name;
 	string extension;
 public:
+	bool ok = true;
 	string oldName;
 	string folder;
 	string oldSaveString;

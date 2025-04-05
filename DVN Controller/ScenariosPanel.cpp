@@ -47,7 +47,7 @@ Status ScenariosPanel::AddPage(Scenario* data)
 
 void ScenariosPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	NameSetter* nameSetter = new NameSetter(base, "Enter name", Scenario::ValidateName, target->GetSource()->GetName(), target->GetSource()->oldName);
+	NameSetter* nameSetter = new NameSetter(base, "Enter name", Scenario::ValidateName, target->GetSource()->GetName());
 	nameSetter->ShowModal();
 	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
 		target->GetSource()->Rename(nameSetter->name);
@@ -81,7 +81,7 @@ void ScenariosPanel::OnLoad(wxCommandEvent& e)
 void ScenariosPanel::OnSave(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	Scenario scenario = *(Scenario*)target->GetSource();
-	NameSetter* nameSetter = new NameSetter(base, "Enter template name", Scenario::ValidateName, scenario.DVNFileData::GetName());
+	NameSetter* nameSetter = new NameSetter(base, "Enter template name", Scenario::ValidateNameUnique, scenario.DVNFileData::GetName());
 	nameSetter->ShowModal();
 	if (nameSetter->ok) {
 		scenario.DVNFileData::Rename(nameSetter->name);

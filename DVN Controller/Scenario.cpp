@@ -120,11 +120,11 @@ void Scenario::Disable(char i) {
 	bands[i].working = false;
 }
 
-Status Scenario::ValidateName(const string& name)
+Status Scenario::ValidateNameUnique(const string& name)
 {
 	Status stat = DVNFileData::ValidateName(name);
 	if (stat) return stat;
-	
+
 	if (ifstream(folder + "\\" + name + extension)) return ScenarioAlreadyExists;
 }
 
@@ -132,12 +132,36 @@ Scenario* Scenario::ToScenario(const string& name, stringstream& stream)
 {
 	Scenario* scenario = new Scenario(name);
 	string bandString;
-	for (int i = 0; i < GetBandsCount() && getline(stream, bandString); i++) {
-		vector<string> values = Split(bandString, '|');
-		BandInfo band(values[0], scenario->GetRangeIndex(i), stoi(values[1]), stoi(values[2]), values[3] == "ON");
-		scenario->SetBandData(i, band.name, band.startValue, band.endValue, band.working);
+	if (Scenario::ValidateName(name))
+		goto NotOkay;
+	for (int i = 0; i < GetBandsCount(); i++) {
+		if (getline(stream, bandString)) {
+			vector<string> values = Split(bandString, '|');
+			if (values.size() == 4) {
+				bool on;
+				if (values[3] == "ON")
+					on = true;
+				else  if (values[3] == "OFF")
+					on = false;
+				else
+					goto NotOkay;
+				int start;
+				int end;
+				if(TryParse(values[1], &start) || TryParse(values[2], &end))
+					goto NotOkay;
+				else if (scenario->SetBandData(i, values[0], stoi(values[1]), stoi(values[2]), on))
+					goto NotOkay;
+			}
+			else
+				goto NotOkay;
+		}
+		else
+			goto NotOkay;
 	}
 	scenario->oldSaveString = scenario->SaveString();
+	return scenario;
+NotOkay:
+	scenario->ok = false;
 	return scenario;
 }
 vector<Scenario*> Scenario::LoadScenarios()
@@ -145,12 +169,14 @@ vector<Scenario*> Scenario::LoadScenarios()
 	vector<Scenario*> output;
 	if (filesystem::exists(folder)) {
 		directory_iterator dirItr(folder);
-		for (const auto& scenario : dirItr) {
-			ifstream stream(scenario.path());
+		for (const auto& dir : dirItr) {
+			path path = dir.path();
+			ifstream stream(path);
 			stringstream data;
 			data << stream.rdbuf();
-			const string name = scenario.path().filename().string();
-			output.push_back(ToScenario(name.substr(0, name.length() - 5), data));
+			const string name = path.stem().string();
+			Scenario* scenario = ToScenario(name, data);
+			output.push_back(scenario);
 		}
 	}
 	return output;

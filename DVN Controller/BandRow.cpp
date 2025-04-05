@@ -206,8 +206,8 @@ Status BandRow::UpdateFreq(wxTextCtrl* ctrl)
 {
     Status stat;
     int freqToChange = (int)ctrl->GetClientData() == Start ? 0 : 1;
-    int newEnd;
-    stat = TryParse(ctrl->GetValue(), &newEnd);
+    int newValue;
+    stat = TryParse(ctrl->GetValue(), &newValue);
     if (stat) {
         if (ErrorMessage(base, stat, DIALOG) == wxID_CANCEL) {
             ctrl->SetValue(to_string(scenario->GetFreq(bandNum, freqToChange)));
@@ -215,8 +215,8 @@ Status BandRow::UpdateFreq(wxTextCtrl* ctrl)
         };
     }
     else {
-        if (newEnd == scenario->GetFreq(bandNum, freqToChange)) return Success;
-        stat = scenario->SetFreq(bandNum, freqToChange, newEnd);
+        if (newValue == scenario->GetFreq(bandNum, freqToChange)) return Success;
+        stat = scenario->SetFreq(bandNum, freqToChange, newValue);
         if (stat) {
             if (ErrorMessage(base, stat, DIALOG) == wxID_CANCEL) {
                 ctrl->SetValue(to_string(scenario->GetFreq(bandNum, freqToChange)));
@@ -238,12 +238,4 @@ void BandRow::MarkUnsaved()
 {
     wxCommandEvent e(EVT_UNSAVE);
     GetParent()->GetEventHandler()->ProcessEvent(e);
-}
-
-Status BandRow::TryParse(const wxString& str, int* result)
-{
-    char* endptr = nullptr;
-    *result = strtol(str.c_str(), &endptr, 10);
-    if (*result > numeric_limits<int>::max() || *result < 0 || *endptr != '\0') return FreqNotPositiveNumber;
-    return Success;
 }
