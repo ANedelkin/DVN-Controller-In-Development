@@ -26,8 +26,6 @@ private:
 
     void MarkUnsaved();
 
-    Status TryParse(const wxString& str, int* result);
-
     void OnResize(wxSizeEvent& e);
 
     void EmptyHandler(wxEvent& e);

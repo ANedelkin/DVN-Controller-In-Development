@@ -21,6 +21,7 @@ map<Status, const char*> errorMessages = {
     {ScenarioAlreadyExists, "A scenario with the name \"%s\" already exists!"},
     {FreqNotPositiveNumber, "The frequency has to be a positive whole number!"},
     {NameTooLong, "The name can't be longer than %d symbols!"},
+    {InvalidFile, "The file \"%s\" contains invalid data and can't be opened!"},
     {ErrorMessageTooLong, "The error message the program tried to generate was too long!"},
 };
 
@@ -71,6 +72,14 @@ Status ValidateNameBasic(const string& name)
     if (name.length() == 0) return NameWhitespace;
     if (all_of(name.begin(), name.end(), [](unsigned char c) { return isspace(c); })) return NameWhitespace;
     if (name.length() > NAME_MAX_LENGTH) return NameTooLong;
+    return Success;
+}
+
+Status TryParse(const wxString& str, int* result)
+{
+    char* endptr = nullptr;
+    *result = strtol(str.c_str(), &endptr, 10);
+    if (*result > numeric_limits<int>::max() || *result < 0 || *endptr != '\0') return FreqNotPositiveNumber;
     return Success;
 }
 

@@ -46,6 +46,7 @@ enum Status {
     ScenarioAlreadyExists,
     FreqNotPositiveNumber,
     NameTooLong,
+    InvalidFile,
     ErrorMessageTooLong,
 };
 
@@ -58,6 +59,7 @@ extern vector<string> Split(const string& str, char delimiter);
 extern int ErrorMessage(wxWindow* parent, Status stat, const char style = 0, ...);
 extern bool HasNonStdChars(const string& str);
 extern Status ValidateNameBasic(const string& name);
+extern Status TryParse(const wxString& str, int* result);
 
 
 //Tabs
