@@ -7,9 +7,10 @@ class DVNFileData
 protected:
 	string name;
 	string extension;
+
+
 public:
 	bool ok = true;
-	string oldName;
 	string folder;
 	string oldSaveString;
 	bool upToDate;
@@ -24,8 +25,7 @@ public:
 	string GetName() const;
 	string GetNameWithExt() const;
 
-	string GetOldPath() const;
-	string GetNewPath() const;
+	string GetPath() const;
 	string GetExtension() const;
 
 	virtual string SaveString() const;

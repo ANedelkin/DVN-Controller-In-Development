@@ -107,7 +107,7 @@ void MainFrame::UpdateScenarios()
 			bool f = true;
 			for (char j = 0; j < pages.size() && f; j++)
 			{
-				if (scenarios[i]->GetOldPath() == pages[j]->GetSource()->GetOldPath())
+				if (scenarios[i]->GetPath() == pages[j]->GetSource()->GetPath())
 					f = false;
 			}
 			if (f) scenariosPanel->NewPage(scenarios[i]);

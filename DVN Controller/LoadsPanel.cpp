@@ -28,7 +28,7 @@ LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", nullptr
 Status LoadsPanel::AddPage(Load* data)
 {
 	for (SideMenuCtrl* page : pages) {
-		if (page->GetSource()->GetOldPath() == data->GetOldPath() && page->GetSource()->folder != "") {
+		if (page->GetSource()->GetPath() == data->GetPath() && page->GetSource()->folder != "") {
 			ErrorMessage(base, FileAlreadyOpen, 0, data->GetName().c_str(), page->GetSource()->GetName().c_str());
 			return FileAlreadyOpen;
 		}
@@ -42,8 +42,8 @@ void LoadsPanel ::OnDelete(wxCommandEvent& e)
 	wxMessageDialog dialog(base, "If you delete a load you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	if (dialog.ShowModal() == wxID_YES) {
-		if (exists(target->GetSource()->GetOldPath())) {
-			remove(target->GetSource()->GetOldPath());
+		if (exists(target->GetSource()->GetPath())) {
+			remove(target->GetSource()->GetPath());
 		}
 		Close(target);
 	}

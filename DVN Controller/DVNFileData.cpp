@@ -1,6 +1,6 @@
 #include "DVNFileData.h"
 
-DVNFileData::DVNFileData(const string& name) : name(name), upToDate(true), oldName(name)
+DVNFileData::DVNFileData(const string& name) : name(name), upToDate(true)
 {
 }
 
@@ -27,12 +27,7 @@ string DVNFileData::GetName() const { return name; }
 
 string DVNFileData::GetNameWithExt() const { return name + extension; }
 
-string DVNFileData::GetOldPath() const
-{
-	return folder + "\\" + oldName + extension;
-}
-
-string DVNFileData::GetNewPath() const {
+string DVNFileData::GetPath() const {
 	return folder + "\\" + name + extension;
 }
 
@@ -48,15 +43,7 @@ string DVNFileData::SaveString() const
 
 void DVNFileData::Save() {
 	if (!exists(folder)) create_directory(folder);
-	const string oldPath = GetOldPath();
-	oldName = name;
-	if (exists(oldPath)) {
-		const string newPath = GetOldPath();
-		rename(oldPath, newPath);
-	}
-	ostringstream fileName;
-	fileName << GetOldPath();
-	ofstream stream(fileName.str());
+	ofstream stream(GetPath());
 	stream << SaveString();
 	oldSaveString = SaveString();
 	stream.close();

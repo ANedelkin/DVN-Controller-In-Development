@@ -44,6 +44,7 @@ enum Status {
     FileNonexistent,
     FileAlreadyOpen,
     ScenarioAlreadyExists,
+    ScenarioAlreadyExistsAs,
     FreqNotPositiveNumber,
     NameTooLong,
     InvalidFile,

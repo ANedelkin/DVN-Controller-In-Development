@@ -95,7 +95,7 @@ void SideNotebook::Unsave(bool created, SideMenuCtrl* target)
 	DVNFileData* source = target->GetSource();
 	string ss = source->SaveString();
 	string nm = source->GetName();
-	if (!created && (source->oldSaveString == ss && source->oldName == nm))
+	if (!created && (source->oldSaveString == ss))
 		target->MarkSaved();
 	else
 		target->Unsave();
@@ -130,15 +130,14 @@ bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs) //move  to load class
 			string folder = dialog.GetDirectory().ToStdString();
 			for (SideMenuCtrl* existing : pages) {
 				if (existing == page) continue;
-				if (existing->GetSource()->GetOldPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {
-					ErrorMessage(base, FileAlreadyOpen, 0, name.c_str(), existing->GetSource()->GetName().c_str());
+				if (existing->GetSource()->GetPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {
+					ErrorMessage(base, FileAlreadyOpen, 0, name.c_str());
 					return false;
 				}
 			}
 			curData->Rename(name);
 			page->SetLabel(name);
 			curData->folder = folder;
-			if (saveAs) curData->oldName = name;
 		}
 		else return false;
 	}

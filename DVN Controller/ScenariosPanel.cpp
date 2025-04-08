@@ -36,12 +36,12 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, Load* source, const char style)
 
 Status ScenariosPanel::AddPage(Scenario* data)
 {
-	for (SideMenuCtrl* page : pages) {
-		if (page->GetSource()->GetNewPath() == data->GetNewPath()) {
-			ErrorMessage(base, ScenarioAlreadyExists, 0, data->DVNFileData::GetName().c_str());
-			return ScenarioAlreadyExists;
-		}
-	}
+	//for (SideMenuCtrl* page : pages) {
+	//	if (page->GetSource()->GetNewPath() == data->GetNewPath()) {
+	//		ErrorMessage(base, ScenarioAlreadyExists, 0, data->DVNFileData::GetName().c_str());
+	//		return ScenarioAlreadyExists;
+	//	}
+	//}
 
 	return SideNotebook::NewPage(data);
 }
@@ -96,8 +96,8 @@ void ScenariosPanel::OnDelete(wxCommandEvent& e)
 	wxMessageDialog dialog(base, "If you delete a scenario you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	if (dialog.ShowModal() == wxID_YES) {
-		if (exists(target->GetSource()->GetOldPath())) {
-			remove(target->GetSource()->GetOldPath());
+		if (exists(target->GetSource()->GetPath())) {
+			remove(target->GetSource()->GetPath());
 		}
 		Close(target);
 	}
