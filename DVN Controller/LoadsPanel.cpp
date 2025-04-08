@@ -76,9 +76,11 @@ void LoadsPanel::OnRename(wxCommandEvent& e) {
 	NameSetter* nameSetter = new NameSetter(base, "Enter name", Load::ValidateName, target->GetSource()->GetName()); //Create a different Load::ValidateName
 	nameSetter->ShowModal();
 	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
-		target->GetSource()->Rename(nameSetter->name);
+		DVNFileData* source = target->GetSource();
+		string oldPath = source->GetPath();
+		source->Rename(nameSetter->name);
+		rename(oldPath, source->GetPath());
 		target->SetLabel(nameSetter->name);
-		Unsave(false, target);
 	}
 	target->Refresh();
 }

@@ -55,8 +55,6 @@ void ScenariosPanel::OnRename(wxCommandEvent& e) {
 		target->SetLabel(nameSetter->name);
 		if (source)
 			MarkUnsaved();
-		else
-			Unsave(false, target);
 	}
 	target->Refresh();
 }
