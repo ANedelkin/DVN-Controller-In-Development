@@ -1,7 +1,6 @@
 #pragma once
 #include "Global.h"
 #include "BandInfo.h"
-#include "BandPreset.h"
 #include "DVNFileData.h"
 #include "ModelConstants.h"
 
@@ -16,19 +15,13 @@ public:
 	Scenario(string name);
 
 	Status SetBandData(char i, string name, int startValue, int endValue, bool working);
-
-	//Status SetStartValue(char i, int value);
-	//Status SetEndValue(char i, int value);
 	Status SetFreq(char bandIndex, char freqIndex, int value);
-	//void CheckIfFull(char i);
 
 	Status TurnOn(char i);
 	void TurnOff(char i);
 	string GetName(char i);
 	Status Rename(const string& name, char i);
 
-	//int GetStartValue(char i) const;
-	//int GetEndValue(char i) const;
 	int GetFreq(char bandIndex, char freqIndex) const;
 	int GetRangeIndex(char i) const;
 	int GetStartValueBorder(char i) const;

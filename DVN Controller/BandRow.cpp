@@ -18,52 +18,16 @@ void BandRow::EmptyHandler(wxEvent& e)
 {
 }
 void BandRow::OnNameEnter(wxKeyEvent& e) {
-    int key = e.GetKeyCode();
-    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !Rename()) {
-        if (key == WXK_TAB) {
-            if(wxGetKeyState(WXK_SHIFT)) 
-              focused->Navigate(wxNavigationKeyEvent::IsBackward);
-            else 
-              focused->Navigate();
-        }
-        else {
-            Unfocus();
-            focused = nullptr;
-        }
-    }
-    else e.Skip();
+    if (!ProcessKey(e.GetKeyCode()))
+        e.Skip();
 }
 void BandRow::OnStartEnter(wxKeyEvent& e) {
-    int key = e.GetKeyCode();
-    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !UpdateFreq(startValue)) {
-        if (key == WXK_TAB) {
-            if (wxGetKeyState(WXK_SHIFT))
-                focused->Navigate(wxNavigationKeyEvent::IsBackward);
-            else
-                focused->Navigate();
-        }
-        else {
-            Unfocus();
-            focused = nullptr;
-        }
-    }
-    else e.Skip();
+    if (!ProcessKey(e.GetKeyCode()))
+        e.Skip();
 }
 void BandRow::OnEndEnter(wxKeyEvent& e) {
-    int key = e.GetKeyCode();
-    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE) && !UpdateFreq(endValue)) {
-        if (key == WXK_TAB) {
-            if (wxGetKeyState(WXK_SHIFT))
-                focused->Navigate(wxNavigationKeyEvent::IsBackward);
-            else
-                focused->Navigate();
-        }
-        else {
-            Unfocus();
-            focused = nullptr;
-        }
-    }
-    else e.Skip();
+    if (!ProcessKey(e.GetKeyCode()))
+        e.Skip();
 }
 void BandRow::OnStatusChanged(wxCommandEvent& e)
 {
@@ -238,4 +202,31 @@ void BandRow::MarkUnsaved()
 {
     wxCommandEvent e(EVT_UNSAVE);
     GetParent()->GetEventHandler()->ProcessEvent(e);
+}
+
+bool BandRow::ProcessKey(int key)
+{
+    if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE)) {
+        bool updateSuccess;
+        if ((int)focused->GetClientData() == BandName)
+            updateSuccess = !Rename();
+        else
+            updateSuccess = !UpdateFreq((wxTextCtrl*)focused);
+
+        if (updateSuccess) {
+            if (key == WXK_TAB) {
+                if (wxGetKeyState(WXK_SHIFT))
+                    focused->Navigate(wxNavigationKeyEvent::IsBackward);
+                else
+                    focused->Navigate();
+            }
+            else {
+                Unfocus();
+                focused = nullptr;
+            }
+            return true;
+        }
+        else return false;
+    }
+    else return false;
 }

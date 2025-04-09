@@ -107,13 +107,7 @@
     <ClInclude Include="BandInfo.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
-    <ClInclude Include="BandPreset.h">
-      <Filter>Header Files\Data</Filter>
-    </ClInclude>
     <ClInclude Include="Scenario.h">
-      <Filter>Header Files\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="ScenarioPreset.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="DVNFileData.h">
@@ -150,9 +144,6 @@
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="resource1.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="Global.h">

@@ -22,6 +22,4 @@ public:
 	void MarkSaved();
 	void MarkUnsaved();
 	void SetLabel(const wxString& label) override;
-
-	//void OnRename(wxCommandEvent& e);
 };

@@ -2,7 +2,6 @@
 #include "Global.h"
 #include "Scenario.h"
 
-#include "ScenarioPreset.h"
 #include "ModelConstants.h"
 
 class Load : public DVNFileData {

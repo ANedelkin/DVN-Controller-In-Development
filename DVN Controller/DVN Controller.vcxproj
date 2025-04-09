@@ -169,7 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BandInfo.h" />
-    <ClInclude Include="BandPreset.h" />
     <ClInclude Include="BandRow.h" />
     <ClInclude Include="BandsPanel.h" />
     <ClInclude Include="ColourfulButton.h" />
@@ -184,9 +183,7 @@
     <ClInclude Include="ModelConstants.h" />
     <ClInclude Include="NameSetter.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="Scenario.h" />
-    <ClInclude Include="ScenarioPreset.h" />
     <ClInclude Include="ScenariosPanel.h" />
     <ClInclude Include="ScenSelectDialog.h" />
     <ClInclude Include="SideMenuCtrl.h" />
