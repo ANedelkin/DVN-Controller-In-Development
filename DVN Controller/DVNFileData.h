@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Global.h"
+#include "Validation.h"
+
+using namespace Status;
 
 class DVNFileData
 {
@@ -17,11 +20,11 @@ public:
 
 	DVNFileData(const string& name);
 
-	static Status ValidateName(const string& name);
+	static string ValidateName(const string& name);
 
 	vector<DVNFileData*> children;
 
-	Status Rename(const string& name);
+	string Rename(const string& name);
 	string GetName() const;
 	string GetNameWithExt() const;
 

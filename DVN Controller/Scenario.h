@@ -3,6 +3,9 @@
 #include "BandInfo.h"
 #include "DVNFileData.h"
 #include "ModelConstants.h"
+#include "Validation.h"
+
+using namespace Status;
 
 class Scenario : public DVNFileData {
 private:
@@ -11,16 +14,18 @@ private:
 	static const string folder;
 	static const string extension;
 public:
+	static Scenario* placeHolder;
+
 	Scenario();
 	Scenario(string name);
 
-	Status SetBandData(char i, string name, int startValue, int endValue, bool working);
-	Status SetFreq(char bandIndex, char freqIndex, int value);
+	string SetBandData(char i, string name, int startValue, int endValue, bool working);
+	string SetFreq(char bandIndex, char freqIndex, int value);
 
-	Status TurnOn(char i);
+	void TurnOn(char i);
 	void TurnOff(char i);
 	string GetName(char i);
-	Status Rename(const string& name, char i);
+	string Rename(const string& name, char i);
 
 	int GetFreq(char bandIndex, char freqIndex) const;
 	int GetRangeIndex(char i) const;
@@ -31,7 +36,7 @@ public:
 	void Enable(char i);
 	void Disable(char i);
 
-	static Status ValidateNameUnique(const string& name);
+	static string ValidateNameUnique(const string& name);
 
 	static Scenario* ToScenario(const string& name, stringstream& data);
 	static vector<Scenario*> LoadScenarios();

@@ -16,7 +16,7 @@ MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
 
 	notebook = new wxNotebook(mainPanel, wxID_ANY);
 
-	scenariosPanel = new ScenariosPanel(notebook, nullptr, DELETABLE);
+	scenariosPanel = new ScenariosPanel(notebook, DELETABLE);
 	scenariosPanel->Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, scenariosPanel);
 
 	loadsPanel = new LoadsPanel(notebook);
@@ -190,9 +190,9 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 				if (load->ok)
 					loadsPanel->AddPage(load);
 				else
-					ErrorMessage(this, InvalidFile, 0, name.c_str());
+					ShowError(this, ToString(InvalidFile, name.c_str()));
 			}
-			else ErrorMessage(this, FileNonexistent, 0, name.c_str());
+			else ShowError(this, ToString(FileNonexistent, name.c_str()));
 		}
 	}
 }

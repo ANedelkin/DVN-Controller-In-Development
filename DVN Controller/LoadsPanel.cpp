@@ -19,17 +19,16 @@ LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", nullptr
 	contextMenu->Append(closeItem);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnClose, this, closeItem->GetId());
 
-	ScenariosPanel* scenPanel = new ScenariosPanel(this, new Load(), LOADABLE);
-	scenPanel->Select(0);
+	LoadsPanelContent* scenPanel = new LoadsPanelContent(this);
 	scenPanel->UnInit();
 	SetContent(scenPanel);
 }
 
-Status LoadsPanel::AddPage(Load* data)
+StatusCode LoadsPanel::AddPage(Load* data)
 {
 	for (SideMenuCtrl* page : pages) {
 		if (page->GetSource()->GetPath() == data->GetPath() && page->GetSource()->folder != "") {
-			ErrorMessage(base, FileAlreadyOpen, 0, data->GetName().c_str(), page->GetSource()->GetName().c_str());
+			ShowError(base, ToString(FileAlreadyOpen, data->GetName().c_str(), page->GetSource()->GetName().c_str()));
 			return FileAlreadyOpen;
 		}
 	}
@@ -75,12 +74,7 @@ void LoadsPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	NameSetter* nameSetter = new NameSetter(base, "Enter name", Load::ValidateName, target->GetSource()->GetName()); //Create a different Load::ValidateName
 	nameSetter->ShowModal();
-	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
-		DVNFileData* source = target->GetSource();
-		string oldPath = source->GetPath();
-		source->Rename(nameSetter->name);
-		rename(oldPath, source->GetPath());
-		target->SetLabel(nameSetter->name);
-	}
+	if (nameSetter->ok)
+		Rename(target, nameSetter->name);
 	target->Refresh();
 }

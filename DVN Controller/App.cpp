@@ -16,7 +16,7 @@ public:
 				base->Refresh();
 
 				BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
-				Status stat = Success;
+				string stat = ToString(Success);
 
 				switch ((int)focused->GetClientData())
 				{
@@ -33,7 +33,7 @@ public:
 					break;
 				}
 
-				if (!stat) { //Success
+				if (stat.empty()) { //Success
 					focused = nullptr;
 
 					int type = (int)(target->GetClientData());

@@ -1,6 +1,7 @@
 #include "Load.h"
 
 const string Load::extension = ".dvnl";
+Load* Load::placeHolder = new Load();
 
 Load::Load() : Load("Unnamed load") {}
 Load::Load(const string& name) : Load(name, "") {}
@@ -28,7 +29,7 @@ string Load::SaveString() const {
 
 Load* Load::ToLoad(const string& name, const string& folder, stringstream& data) {
 	Load* load = new Load(name, folder);
-	if (Load::ValidateName(name))
+	if (!Load::ValidateName(name).empty())
 		goto NotOkay;
 	for (char i = 0; i < SCENARIOS_COUNT; i++)
 	{

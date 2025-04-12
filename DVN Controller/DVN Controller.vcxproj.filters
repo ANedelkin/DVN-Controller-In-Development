@@ -48,9 +48,6 @@
     <ClCompile Include="SideNotebook.cpp">
       <Filter>Source Files\Controls</Filter>
     </ClCompile>
-    <ClCompile Include="SideNotebookPanel.cpp">
-      <Filter>Source Files\Controls</Filter>
-    </ClCompile>
     <ClCompile Include="SideMenuCtrl.cpp">
       <Filter>Source Files\Controls</Filter>
     </ClCompile>
@@ -99,6 +96,18 @@
     <ClCompile Include="LoadsPanel.cpp">
       <Filter>Source Files\Controls</Filter>
     </ClCompile>
+    <ClCompile Include="Status.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Validation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadsPanelContent.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="SideNotebookContent.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Load.h">
@@ -137,9 +146,6 @@
     <ClInclude Include="SideNotebook.h">
       <Filter>Header Files\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="SideNotebookPanel.h">
-      <Filter>Header Files\Controls</Filter>
-    </ClInclude>
     <ClInclude Include="ftd2xx.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
@@ -162,6 +168,18 @@
       <Filter>Header Files\Controls</Filter>
     </ClInclude>
     <ClInclude Include="LoadsPanel.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Validation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadsPanelContent.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="SideNotebookContent.h">
       <Filter>Header Files\Controls</Filter>
     </ClInclude>
   </ItemGroup>

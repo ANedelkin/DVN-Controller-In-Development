@@ -1,7 +1,7 @@
 #include "SideNotebook.h"
 #include "ScenSelectDialog.h"
 
-SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* source) : SideNotebookPanel(parent, source)
+SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, string(*pageNameValidator)(const string& name)) : wxPanel(parent)
 {
 	contextMenu = new wxMenu();
 
@@ -27,27 +27,20 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, DVNFileData* so
 	mainSizer->Add(pagesBox, 0, wxEXPAND);
 
 	this->SetSizerAndFit(mainSizer);
-
-	this->source = source;
 }
 
-void SideNotebook::SetContent(SideNotebookPanel* content) {
+void SideNotebook::SetContent(SideNotebookContent* content) {
 	this->content = content;
 	mainSizer->Add(this->content, 1, wxEXPAND | wxLEFT, FromDIP(5));
-	if (source) {
-		for (DVNFileData* child : source->children) {
-			NewPage(child);
-		}
-	}
 }
 
-Status SideNotebook::NewPage(DVNFileData* data)
+StatusCode SideNotebook::NewPage(DVNFileData* data)
 {
 	SideMenuCtrl* page = new SideMenuCtrl(pagesList, this, data);
 	return AddPage(page);
 }
 
-Status SideNotebook::AddPage(SideMenuCtrl* page)
+StatusCode SideNotebook::AddPage(SideMenuCtrl* page)
 {
 	page->SetContextMenu(contextMenu);
 
@@ -62,7 +55,7 @@ Status SideNotebook::AddPage(SideMenuCtrl* page)
 	return Success;
 }
 
-vector<SideMenuCtrl*> SideNotebook::GetPages()
+vector<SideMenuCtrl*>& SideNotebook::GetPages()
 {
 	return pages;
 }
@@ -101,11 +94,23 @@ void SideNotebook::Unsave(bool created, SideMenuCtrl* target)
 		target->Unsave();
 }
 
-void SideNotebook::Close(SideMenuCtrl* win)
+void SideNotebook::Rename(SideMenuCtrl* page, const string& name, bool renameFile)
 {
-	int i = find(pages.begin(), pages.end(), win) - pages.begin();
+	if (page->GetSource()->GetName() != name) {
+		DVNFileData* source = page->GetSource();
+		string oldPath = source->GetPath();
+		source->Rename(name);
+		if(renameFile)
+			rename(oldPath, source->GetPath());
+		page->SetLabel(name);
+	}
+}
+
+void SideNotebook::Close(SideMenuCtrl* page)
+{
+	int i = find(pages.begin(), pages.end(), page) - pages.begin();
 	pages.erase(pages.begin() + i);
-	if (cur == win) {
+	if (cur == page) {
 		if (pages.size() > 0) {
 			if (i < pages.size()) ChangeSelection(pages[i]);
 			else ChangeSelection(pages[i - 1]);
@@ -117,7 +122,7 @@ void SideNotebook::Close(SideMenuCtrl* win)
 	}
 	pagesSizer->Remove(i);
 	Layout();
-	win->Destroy();
+	page->Destroy();
 }
 
 bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs) //move  to load class
@@ -131,7 +136,7 @@ bool SideNotebook::Save(SideMenuCtrl* page, bool saveAs) //move  to load class
 			for (SideMenuCtrl* existing : pages) {
 				if (existing == page) continue;
 				if (existing->GetSource()->GetPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {
-					ErrorMessage(base, FileAlreadyOpen, 0, name.c_str());
+					ShowError(base, ToString(FileAlreadyOpen, name.c_str()));
 					return false;
 				}
 			}
@@ -150,12 +155,8 @@ void SideNotebook::Select(char i)
 	if(pages.size() > i) ChangeSelection(pages[i]);
 }
 
-void SideNotebook::SetSource(DVNFileData* source) { //make only for scenarios panel
-	this->source = source;
-	for (char i = 0; i < pages.size(); i++)
-	{
-		pages[i]->SetSource(source->children[i]);
-	}
+void SideNotebook::UpdateContent()
+{
 	content->SetSource(cur->GetSource());
 }
 
@@ -191,16 +192,4 @@ bool SideNotebook::CheckForUnsaved()
 		}
 	}
 	return true;
-}
-
-void SideNotebook::Init() {
-	SideNotebookPanel::Init();
-	pagesList->Show();
-	content->Init();
-}
-
-void SideNotebook::UnInit() {
-	SideNotebookPanel::UnInit();
-	pagesList->Hide();
-	content->UnInit();
 }

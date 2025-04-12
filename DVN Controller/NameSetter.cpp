@@ -3,7 +3,7 @@
 #include "NameSetter.h"
 
 
-NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name), const string& defaultValue)
+NameSetter::NameSetter(wxWindow* parent, const wxString& title, string(*validator)(const string& name), const string& defaultValue)
           : wxDialog(parent, wxID_ANY, title)
           , validator(validator)
           , name(defaultValue)
@@ -47,17 +47,12 @@ void NameSetter::OnOK(wxCommandEvent& e) {
         Close();
         return;
     }
-    Status stat = validator(newName);
-    if (stat) {
-        if (stat == NameTooLong)
-            ErrorMessage(this, stat, 0, NAME_MAX_LENGTH);
-        else if (stat == ScenarioAlreadyExists)
-            ErrorMessage(this, stat, 0, newName.c_str());
-        else 
-            ErrorMessage(this, stat, 0);
-        return;
+    string stat = validator(newName);
+    if (!stat.empty())
+        Status::ShowError(this, stat);
+    else {
+        this->name = newName;
+        ok = true;
+        Close();
     }
-    this->name = newName;
-    ok = true;
-    Close();
 }

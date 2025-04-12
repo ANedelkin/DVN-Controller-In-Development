@@ -8,6 +8,7 @@ class Load : public DVNFileData {
 private:
 	static const string extension;
 public:
+	static Load* placeHolder;
 	Load();
 	Load(const string& name);
 	Load(const string& name, const string& folder);

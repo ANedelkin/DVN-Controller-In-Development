@@ -15,9 +15,11 @@ private:
 	void OnLoad(wxCommandEvent& e);
 	void OnSave(wxCommandEvent& e);
 	void OnDelete(wxCommandEvent& e);
-public:
-	ScenariosPanel(wxWindow* parent, Load* data = nullptr, const char style = 0);
-	Status AddPage(Scenario* data);
 	void OnRename(wxCommandEvent& e);
+public:
+	ScenariosPanel(wxWindow* parent, const char style = 0);
+	StatusCode AddPage(Scenario* data);
+
+	friend class LoadsPanelContent;
 };
 

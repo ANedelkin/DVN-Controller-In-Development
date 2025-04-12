@@ -1,5 +1,8 @@
 #pragma once
 #include "Global.h"
+#include "Validation.h"
+
+using namespace Status;
 
 struct BandInfo {
 	string name;
@@ -22,8 +25,8 @@ struct BandInfo {
 		this->working = working;
 	}
 
-	static Status ValidateName(const string& name) {
-		if (name.find('|') != string::npos) return InvalidSymbols;
-		return ValidateNameBasic(name);
+	static string ValidateName(const string& name) {
+		if (name.find('|') != string::npos) return ToString(InvalidSymbols);
+		return Validation::ValidateNameBasic(name);
 	}
 };

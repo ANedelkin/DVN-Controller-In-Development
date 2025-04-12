@@ -3,7 +3,7 @@
 #include "Global.h"
 #include "Load.h"
 #include "SideNotebook.h"
-#include "ScenariosPanel.h"
+#include "LoadsPanelContent.h"
 
 class LoadsPanel : public SideNotebook
 {
@@ -13,6 +13,6 @@ private:
 	void OnRename(wxCommandEvent& e);
 public:
 	LoadsPanel(wxWindow* parent);
-	Status AddPage(Load* data);
+	StatusCode AddPage(Load* data);
 };
 

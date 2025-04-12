@@ -11,7 +11,7 @@ ScenSelectDialog::ScenSelectDialog(wxWindow* parent) : wxDialog(parent, wxID_ANY
 	wxPanel* contentPanel = new wxPanel(mainPanel);
 	contentPanel->SetBackgroundColour(wxColour(255, 255, 255));
 	wxBoxSizer* contentSizer = new wxBoxSizer(wxHORIZONTAL);
-	scenariosPanel = new ScenariosPanel(contentPanel, nullptr, READ_ONLY);
+	scenariosPanel = new ScenariosPanel(contentPanel, READ_ONLY);
 
 	contentSizer->Add(scenariosPanel, 1, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, FromDIP(5));
 	contentPanel->SetSizerAndFit(contentSizer);

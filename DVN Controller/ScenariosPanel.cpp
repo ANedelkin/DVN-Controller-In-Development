@@ -1,6 +1,8 @@
 #include "ScenariosPanel.h"
+#include "SideNotebookContent.h"
 
-ScenariosPanel::ScenariosPanel(wxWindow* parent, Load* source, const char style) : SideNotebook(parent, "Scenarios", source)
+ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style) 
+			  : SideNotebook(parent, "Scenarios", Scenario::ValidateName)
 {
 	this->style = style;
 
@@ -30,47 +32,54 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, Load* source, const char style)
 		}
 	}
 
-	SetContent(new BandsPanel(this, new Scenario(), style));
+	SetContent(new BandsPanel(this, Scenario::placeHolder, style));
+	if (style & CONTENT) {
+		SideNotebookContent* parent = dynamic_cast<SideNotebookContent*>(GetParent());
+		assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");
+		Load* source = dynamic_cast<Load*>(parent->GetSource());
+		assert(source != nullptr && "Source is not a Load or derived");
+		for (DVNFileData* child : source->children)
+			NewPage(child);
+	}
 	content->UnInit();
 }
 
-Status ScenariosPanel::AddPage(Scenario* data)
+StatusCode ScenariosPanel::AddPage(Scenario* data)
 {
-	//for (SideMenuCtrl* page : pages) {
-	//	if (page->GetSource()->GetNewPath() == data->GetNewPath()) {
-	//		ErrorMessage(base, ScenarioAlreadyExists, 0, data->DVNFileData::GetName().c_str());
-	//		return ScenarioAlreadyExists;
-	//	}
-	//}
-
 	return SideNotebook::NewPage(data);
 }
 
 void ScenariosPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	NameSetter* nameSetter = new NameSetter(base, "Enter name", Scenario::ValidateName, target->GetSource()->GetName());
-	nameSetter->ShowModal();
-	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
-		target->GetSource()->Rename(nameSetter->name);
-		target->SetLabel(nameSetter->name);
-		if (source)
-			MarkUnsaved();
+	NameSetter nameSetter(base, "Enter name", Scenario::ValidateName, target->GetSource()->GetName());
+	nameSetter.ShowModal();
+	if (nameSetter.ok && target->GetSource()->GetName() != nameSetter.name) {
+		target->GetSource()->Rename(nameSetter.name);
+		target->SetLabel(nameSetter.name);
+		if (style & CONTENT) {
+			SideNotebookContent* parent = dynamic_cast<SideNotebookContent*>(GetParent());
+			assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");
+			parent->MarkUnsaved();
+		}
 	}
 	target->Refresh();
 }
 
 void ScenariosPanel::OnLoad(wxCommandEvent& e)
 {
-	ScenSelectDialog* dialog = new ScenSelectDialog(base);
-	if (dialog->ShowModal() == wxID_OK) {
+	ScenSelectDialog dialog(base);
+	if (dialog.ShowModal() == wxID_OK) {
 		SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-		Scenario* selection = dialog->GetSelection();
+		Scenario* selection = dialog.GetSelection();
 		*(Scenario*)target->GetSource() = *selection;
 		target->SetLabel(target->GetSource()->GetName());
 		target->MarkUnsaved();
 		if (cur == target) ChangeSelection(cur);
-		if (source)
-			MarkUnsaved();
+		if (style & CONTENT) {
+			SideNotebookContent* parent = dynamic_cast<SideNotebookContent*>(GetParent());
+			assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");
+			parent->MarkUnsaved();
+		}
 		else
 			Unsave(false, target);
 		target->Refresh();
@@ -80,10 +89,10 @@ void ScenariosPanel::OnLoad(wxCommandEvent& e)
 void ScenariosPanel::OnSave(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	Scenario scenario = *(Scenario*)target->GetSource();
-	NameSetter* nameSetter = new NameSetter(base, "Enter template name", Scenario::ValidateNameUnique, scenario.DVNFileData::GetName());
-	nameSetter->ShowModal();
-	if (nameSetter->ok) {
-		scenario.DVNFileData::Rename(nameSetter->name);
+	NameSetter nameSetter(base, "Enter template name", Scenario::ValidateNameUnique, scenario.DVNFileData::GetName());
+	nameSetter.ShowModal();
+	if (nameSetter.ok) {
+		scenario.DVNFileData::Rename(nameSetter.name);
 		Save(target, false);
 	}
 	target->Refresh();

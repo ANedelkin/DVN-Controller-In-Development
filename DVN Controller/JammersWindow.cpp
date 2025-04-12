@@ -77,7 +77,7 @@ void JammersWindow::LoadJammers()
 void JammersWindow::Select()
 {
 	int selection = list->GetSelection();
-	if (selection == wxNOT_FOUND) ErrorMessage(this, JammerNotSelected);
+	if (selection == wxNOT_FOUND) Status::ShowError(this, Status::ToString(Status::JammerNotSelected));
 	else {
 		wxString jammerName = list->GetString(selection);
 		int len = jammerName.Length();

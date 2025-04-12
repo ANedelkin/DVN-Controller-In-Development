@@ -17,9 +17,10 @@
 #define DELETABLE       0b00000010
 #define LOADABLE        0b00000100
 #define READ_ONLY       0b00001000
+#define CONTENT         0b00010000
 
-#define DIALOG          0b00010000
-#define SAVING_MANY     0b00100000
+#define DIALOG          0b00000001
+#define SAVING_MANY     0b00000010
 
 //Vars:
 
@@ -28,39 +29,10 @@ extern wxWindow* focused;
 extern char ctrlHeight;
 
 
-//Errors:
-
-enum Status {
-    Success,
-    BandUninitialized,
-    StartValueOutOfBounds,
-    EndValueOutOfBounds,
-    StartValueHigherThanEndvalue,
-    EndValueLowerThanStartValue,
-    BandAtLastPlace,
-    InvalidSymbols,
-    NameWhitespace,
-    JammerNotSelected,
-    FileNonexistent,
-    FileAlreadyOpen,
-    ScenarioAlreadyExists,
-    ScenarioAlreadyExistsAs,
-    FreqNotPositiveNumber,
-    NameTooLong,
-    InvalidFile,
-    ErrorMessageTooLong,
-};
-
-extern map<Status, const char*> errorMessages;
-
-
 //Funcs:
 
 extern vector<string> Split(const string& str, char delimiter);
-extern int ErrorMessage(wxWindow* parent, Status stat, const char style = 0, ...);
 extern bool HasNonStdChars(const string& str);
-extern Status ValidateNameBasic(const string& name);
-extern Status TryParse(const wxString& str, int* result);
 
 
 //Tabs

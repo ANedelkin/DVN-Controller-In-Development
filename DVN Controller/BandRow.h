@@ -30,9 +30,7 @@ private:
     void OnResize(wxSizeEvent& e);
 
     void EmptyHandler(wxEvent& e);
-    void OnNameEnter(wxKeyEvent& e);
-    void OnStartEnter(wxKeyEvent& e);
-    void OnEndEnter(wxKeyEvent& e);
+    void OnKey(wxKeyEvent& e);
     void OnStatusChanged(wxCommandEvent& e);
     void OnFocus(wxFocusEvent& e);
 public:
@@ -43,8 +41,8 @@ public:
 
     void ChangeScenario(Scenario* scenario);
 
-    Status Rename();
-    Status UpdateFreq(wxTextCtrl* ctrl);
+    string Rename();
+    string UpdateFreq(wxTextCtrl* ctrl);
 
     void Unfocus();
 };
