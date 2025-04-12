@@ -42,7 +42,7 @@ public:
     void ChangeScenario(Scenario* scenario);
 
     string Rename();
-    string UpdateFreq(wxTextCtrl* ctrl);
+    string UpdateFreq(int i);
 
     void Unfocus();
 };

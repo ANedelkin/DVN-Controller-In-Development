@@ -3,18 +3,20 @@
 LoadsPanelContent::LoadsPanelContent(wxWindow* parent) : SideNotebookContent(parent, Load::placeHolder)
 {
 	wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-	scenPanel = new ScenariosPanel(this, CONTENT);
+	scenPanel = new ScenariosPanel(this, CONTENT | LOADABLE);
 	sizer->Add(scenPanel, 1, wxEXPAND);
 	SetSizerAndFit(sizer);
 }
 
 void LoadsPanelContent::SetSource(DVNFileData* source)
 {
-	this->source = source;
+	Load* load = dynamic_cast<Load*>(source);
+	assert(load != nullptr && "source is not a Load or derived");
+	this->source = load;
 	vector<SideMenuCtrl*>& pages = scenPanel->GetPages();
 	for (char i = 0; i < pages.size(); i++)
 	{
-		pages[i]->SetSource(source->children[i]);
+		pages[i]->SetSource(load->GetScenarios()[i]);
 	}
 	scenPanel->UpdateContent();
 }

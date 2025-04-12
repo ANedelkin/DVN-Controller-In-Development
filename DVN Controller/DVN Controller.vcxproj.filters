@@ -72,9 +72,6 @@
     <ClCompile Include="Global.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="ModelConstants.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="MainFrame.cpp">
       <Filter>Source Files\Frames</Filter>
     </ClCompile>

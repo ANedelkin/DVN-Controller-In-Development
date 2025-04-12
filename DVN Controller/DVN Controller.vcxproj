@@ -158,7 +158,6 @@
     <ClCompile Include="LoadsPanelContent.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="App.cpp" />
-    <ClCompile Include="ModelConstants.cpp" />
     <ClCompile Include="NameSetter.cpp" />
     <ClCompile Include="SaveDialog.h" />
     <ClCompile Include="Scenario.cpp" />

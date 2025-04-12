@@ -10,8 +10,6 @@ class DVNFileData
 protected:
 	string name;
 	string extension;
-
-
 public:
 	bool ok = true;
 	string folder;
@@ -21,8 +19,6 @@ public:
 	DVNFileData(const string& name);
 
 	static string ValidateName(const string& name);
-
-	vector<DVNFileData*> children;
 
 	string Rename(const string& name);
 	string GetName() const;

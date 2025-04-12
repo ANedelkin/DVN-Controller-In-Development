@@ -26,9 +26,8 @@ void BandRow::OnStatusChanged(wxCommandEvent& e)
     Refresh();
     if (scenario->IsActive(bandNum)) {
         scenario->TurnOff(bandNum);
-        statBtn->SetForegroundColour(wxColour(*wxRED));
+        statBtn->SetForegroundColour(*wxRED);
         statBtn->SetLabel("OFF");
-        MarkUnsaved();
     }
     else {
         scenario->TurnOn(bandNum);
@@ -44,7 +43,10 @@ void BandRow::OnFocus(wxFocusEvent& e) {
     e.Skip();
 }
 
-BandRow::BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const char style) : wxPanel(parent, wxID_ANY), style(style) {
+BandRow::BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const char style) 
+        : wxPanel(parent, wxID_ANY), 
+          style(style) 
+{
     this->scenario = scenario;
     this->bandNum = bandNum;
 
@@ -78,9 +80,9 @@ void BandRow::InitForeground() {
         statBtn->Disable();
     }
     else {
-        name->SetClientData((void*)BandName);
-        startValue->SetClientData((void*)Start);
-        endValue->SetClientData((void*)End);
+        name->SetClientData((void*)BAND_NAME);
+        startValue->SetClientData((void*)START);
+        endValue->SetClientData((void*)END);
     }
 
     SetUpSizers();
@@ -151,28 +153,30 @@ string BandRow::Rename() {
     return stat;
 }
 
-string BandRow::UpdateFreq(wxTextCtrl* ctrl)
+string BandRow::UpdateFreq(int freqToChange)
 {
+    assert(freqToChange == START || freqToChange == END);
     string stat;
-    int freqToChange = (int)ctrl->GetClientData() == Start ? 0 : 1;
+    wxTextCtrl* ctrl = (int)freqToChange == START ? startValue : endValue;
+    int i = (int)freqToChange == START ? 0 : 1;
     int newValue;
-    stat = Validation::TryParse(ctrl->GetValue(), &newValue)?ToString(Success):ToString(FreqNotPositiveNumber);
+    stat = Validation::TryParse(ctrl->GetValue(), &newValue) ? ToString(Success) : ToString(FreqNotPositiveNumber);
     if (!stat.empty()) {
         if (ShowError(base, stat, DIALOG) == wxID_CANCEL) {
-            ctrl->SetValue(to_string(scenario->GetFreq(bandNum, freqToChange)));
+            ctrl->SetValue(to_string(scenario->GetFreq(bandNum, i)));
             return ToString(Success);
         };
     }
     else {
-        if (newValue == scenario->GetFreq(bandNum, freqToChange)) return ToString(Success);
-        stat = scenario->SetFreq(bandNum, freqToChange, newValue);
+        if (newValue == scenario->GetFreq(bandNum, i)) return ToString(Success);
+        stat = scenario->SetFreq(bandNum, i, newValue);
         if (!stat.empty()) {
             if (ShowError(base, stat, DIALOG) == wxID_CANCEL) {
-                ctrl->SetValue(to_string(scenario->GetFreq(bandNum, freqToChange)));
+                ctrl->SetValue(to_string(scenario->GetFreq(bandNum, i)));
                 return ToString(Success);
             }
         }
-        else ctrl->SetValue(to_string(scenario->GetFreq(bandNum, freqToChange)));
+        else ctrl->SetValue(to_string(scenario->GetFreq(bandNum, i)));
     }
     MarkUnsaved();
     return stat;
@@ -194,10 +198,10 @@ bool BandRow::ProcessKey(int key)
     int tabDir = wxGetKeyState(WXK_SHIFT);
     if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE)) {
         bool updateSuccess;
-        if ((int)focused->GetClientData() == BandName)
+        if ((int)focused->GetClientData() == BAND_NAME)
             updateSuccess = Rename().empty();
         else
-            updateSuccess = UpdateFreq((wxTextCtrl*)focused).empty();
+            updateSuccess = UpdateFreq((int)focused->GetClientData()).empty();
 
         if (updateSuccess) {
             if (key == WXK_TAB) {

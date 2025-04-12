@@ -26,31 +26,19 @@
 
 extern wxWindow* base;
 extern wxWindow* focused;
-extern char ctrlHeight;
 
 
 //Funcs:
 
 extern vector<string> Split(const string& str, char delimiter);
-extern bool HasNonStdChars(const string& str);
-
-
-//Tabs
-
-enum Tabs { //Move to MainFrame
-    Loads,
-    Scenarios,
-};
 
 
 //BandRow column tags
 
-enum InputType { //Change to defines
-    ScenName,
-    BandName,
-    Start,
-    End,
-};
+#define SCEN_NAME		0
+#define BAND_NAME		1
+#define START			2
+#define END				3
 
 
 //Colours
@@ -59,7 +47,4 @@ enum InputType { //Change to defines
 
 
 //Events
-wxDECLARE_EVENT(EVT_LOAD, wxCommandEvent);
-wxDECLARE_EVENT(EVT_CLOSE_PAGE, wxCommandEvent);
-wxDECLARE_EVENT(EVT_DELETE, wxCommandEvent);
 wxDECLARE_EVENT(EVT_UNSAVE, wxCommandEvent);

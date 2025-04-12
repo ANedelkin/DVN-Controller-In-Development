@@ -18,7 +18,7 @@ private:
 	void OnRename(wxCommandEvent& e);
 public:
 	ScenariosPanel(wxWindow* parent, const char style = 0);
-	StatusCode AddPage(Scenario* data);
+	StatusCode NewPage(Scenario* data);
 
 	friend class LoadsPanelContent;
 };

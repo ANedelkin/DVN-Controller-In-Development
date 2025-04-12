@@ -96,7 +96,7 @@ string Scenario::ValidateNameUnique(const string& name)
 	string stat = DVNFileData::ValidateName(name);
 	if (!stat.empty()) return stat;
 
-	if (ifstream(folder + "\\" + name + extension)) return ToString(ScenarioAlreadyExists);
+	if (ifstream(folder + "\\" + name + extension)) return ToString(ScenarioAlreadyExists, name.c_str());
 	return ToString(Success);
 }
 
@@ -139,7 +139,7 @@ NotOkay:
 vector<Scenario*> Scenario::LoadScenarios()
 {
 	vector<Scenario*> output;
-	if (filesystem::exists(folder)) {
+	if (exists(folder)) {
 		directory_iterator dirItr(folder);
 		for (const auto& dir : dirItr) {
 			path path = dir.path();

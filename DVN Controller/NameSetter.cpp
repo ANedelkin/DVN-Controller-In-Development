@@ -15,10 +15,8 @@ NameSetter::NameSetter(wxWindow* parent, const wxString& title, string(*validato
     wxPanel* inputPanel = new wxPanel(this);
     wxBoxSizer* inputSizer = new wxBoxSizer(wxHORIZONTAL);
 
-    //wxStaticText* text = new wxStaticText(inputPanel, wxID_ANY, "Enter name:", wxPoint(20, 20));
     input = new wxTextCtrl(inputPanel, wxID_ANY, defaultValue, FromDIP(wxPoint(20, 50)), FromDIP(wxSize(200, 25)));
 
-    //inputSizer->Add(text, 0, wxALIGN_CENTER | wxALL, 10);
     inputSizer->Add(input, 1, wxALIGN_CENTER | wxALL, FromDIP(10));
     inputPanel->SetSizerAndFit(inputSizer);
 
@@ -43,10 +41,6 @@ NameSetter::NameSetter(wxWindow* parent, const wxString& title, string(*validato
 
 void NameSetter::OnOK(wxCommandEvent& e) {
     string newName = input->GetValue().ToUTF8().data();
-    if (newName == this->name) {
-        Close();
-        return;
-    }
     string stat = validator(newName);
     if (!stat.empty())
         Status::ShowError(this, stat);

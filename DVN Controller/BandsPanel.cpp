@@ -65,10 +65,11 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
     this->SetSizerAndFit(panelSizer);
 }
 
-void BandsPanel::SetSource(DVNFileData* source) //Make only called when needed, not on initial scenario loading
+void BandsPanel::SetSource(DVNFileData* source)
 {
     this->source = source;
     Scenario* scen = dynamic_cast<Scenario*>(source);
+    assert(scen != nullptr && "source is not Scenario or derived");
     for (char i = 0; i < GetBandsCount(); i++)
     {
         bandRows[i]->ChangeScenario(scen);

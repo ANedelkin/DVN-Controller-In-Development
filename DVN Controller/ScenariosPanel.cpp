@@ -2,7 +2,7 @@
 #include "SideNotebookContent.h"
 
 ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style) 
-			  : SideNotebook(parent, "Scenarios", Scenario::ValidateName)
+			  : SideNotebook(parent, "Scenarios", Scenario::ValidateNameUnique)
 {
 	this->style = style;
 
@@ -38,29 +38,24 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style)
 		assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");
 		Load* source = dynamic_cast<Load*>(parent->GetSource());
 		assert(source != nullptr && "Source is not a Load or derived");
-		for (DVNFileData* child : source->children)
+		for (Scenario* child : source->GetScenarios())
 			NewPage(child);
 	}
 	content->UnInit();
 }
 
-StatusCode ScenariosPanel::AddPage(Scenario* data)
+StatusCode ScenariosPanel::NewPage(Scenario* data)
 {
 	return SideNotebook::NewPage(data);
 }
 
 void ScenariosPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	NameSetter nameSetter(base, "Enter name", Scenario::ValidateName, target->GetSource()->GetName());
-	nameSetter.ShowModal();
-	if (nameSetter.ok && target->GetSource()->GetName() != nameSetter.name) {
-		target->GetSource()->Rename(nameSetter.name);
-		target->SetLabel(nameSetter.name);
-		if (style & CONTENT) {
-			SideNotebookContent* parent = dynamic_cast<SideNotebookContent*>(GetParent());
-			assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");
-			parent->MarkUnsaved();
-		}
+	bool isContent = style & CONTENT;
+	if (Rename(target, !isContent) && isContent) {
+		SideNotebookContent* parent = dynamic_cast<SideNotebookContent*>(GetParent());
+		assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");
+		parent->MarkUnsaved();
 	}
 	target->Refresh();
 }
@@ -93,7 +88,7 @@ void ScenariosPanel::OnSave(wxCommandEvent& e) {
 	nameSetter.ShowModal();
 	if (nameSetter.ok) {
 		scenario.DVNFileData::Rename(nameSetter.name);
-		Save(target, false);
+		Save(target);
 	}
 	target->Refresh();
 }

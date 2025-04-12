@@ -15,6 +15,10 @@
 class MainFrame : public wxFrame
 {
 private:
+	enum Tabs {
+		Loads,
+		Scenarios,
+	};
 	wxPanel* mainPanel;
 	wxNotebook* notebook;
 	ScenariosPanel* scenariosPanel;

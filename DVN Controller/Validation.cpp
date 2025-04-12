@@ -18,3 +18,11 @@ bool Validation::TryParse(const wxString& str, int* result)
     if (*result > numeric_limits<int>::max() || *result < 0 || *endptr != '\0') return false;
     return true;
 }
+
+bool Validation::HasNonStdChars(const string& str)
+{
+    for (char ch : str) {
+        if (ch < 32 || ch > 126) return true;
+    }
+    return false;
+}

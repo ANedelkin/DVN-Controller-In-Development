@@ -1,6 +1,11 @@
 #include "LoadsPanel.h"
 
-LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", nullptr)
+void LoadsPanel::SaveCurrentAs()
+{
+	if (cur) SaveAs(cur);
+}
+
+LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", Load::ValidateName)
 {
 	contextMenu = new wxMenu();
 
@@ -24,7 +29,7 @@ LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", nullptr
 	SetContent(scenPanel);
 }
 
-StatusCode LoadsPanel::AddPage(Load* data)
+StatusCode LoadsPanel::NewPage(Load* data)
 {
 	for (SideMenuCtrl* page : pages) {
 		if (page->GetSource()->GetPath() == data->GetPath() && page->GetSource()->folder != "") {
@@ -34,6 +39,41 @@ StatusCode LoadsPanel::AddPage(Load* data)
 	}
 
 	return SideNotebook::NewPage(data);
+}
+
+bool LoadsPanel::Save(SideMenuCtrl* page)
+{
+	DVNFileData* curData = page->GetSource();
+	bool f = true;
+	if (curData->folder == "")
+		f = SaveAs(page);
+	if(f)
+		SideNotebook::Save(page);
+
+	return f;
+}
+
+bool LoadsPanel::SaveAs(SideMenuCtrl* page)
+{
+	DVNFileData* curData = page->GetSource();
+	wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"", "", curData->GetNameWithExt(), "Load files (*.dvnl)|*.dvnl", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+	if (dialog.ShowModal() == wxID_OK) {
+		string name = wxFileName(dialog.GetPath()).GetName().ToStdString();
+		string folder = dialog.GetDirectory().ToStdString();
+		for (SideMenuCtrl* existing : pages) {
+			if (existing == page) continue;
+			if (existing->GetSource()->GetPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {
+				ShowError(base, ToString(FileAlreadyOpen, name.c_str()));
+				return false;
+			}
+		}
+		curData->Rename(name);
+		page->SetLabel(name);
+		curData->folder = folder;
+	}
+	else return false;
+	
+	return true;
 }
 
 void LoadsPanel ::OnDelete(wxCommandEvent& e)
@@ -55,7 +95,7 @@ void LoadsPanel::OnClose(wxCommandEvent& e) {
 	if (!target->GetSource()->upToDate) {
 		switch (SaveDialog(base, target->GetSource()->GetName()).ShowModal()) {
 		case SaveDialog::ID_SAVE:
-			if (Save(target, false))
+			if (Save(target))
 				Close(target);
 			break;
 		case SaveDialog::ID_SKIP:
@@ -72,9 +112,6 @@ void LoadsPanel::OnClose(wxCommandEvent& e) {
 
 void LoadsPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	NameSetter* nameSetter = new NameSetter(base, "Enter name", Load::ValidateName, target->GetSource()->GetName()); //Create a different Load::ValidateName
-	nameSetter->ShowModal();
-	if (nameSetter->ok)
-		Rename(target, nameSetter->name);
+	Rename(target);
 	target->Refresh();
 }

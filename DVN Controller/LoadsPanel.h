@@ -8,11 +8,14 @@
 class LoadsPanel : public SideNotebook
 {
 private:
+	bool Save(SideMenuCtrl* page) override;
+	bool SaveAs(SideMenuCtrl* page);
 	void OnDelete(wxCommandEvent& e);
 	void OnClose(wxCommandEvent& e);
 	void OnRename(wxCommandEvent& e);
 public:
+	void SaveCurrentAs();
 	LoadsPanel(wxWindow* parent);
-	StatusCode AddPage(Load* data);
+	StatusCode NewPage(Load* data);
 };
 

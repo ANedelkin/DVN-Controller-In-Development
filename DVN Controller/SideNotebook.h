@@ -29,10 +29,11 @@ protected:
 	void UpdateContent();
 	void SetContent(SideNotebookContent* content);
 	void ChangeSelection(SideMenuCtrl* scenCtrl);
+	StatusCode NewPage(DVNFileData* data);
 
-	void Rename(SideMenuCtrl* page, const string& name, bool renameFile = true);
+	bool Rename(SideMenuCtrl* page, bool renameFile = true);
 	void Close(SideMenuCtrl* page);
-	bool Save(SideMenuCtrl* page, bool saveAs);
+	virtual bool Save(SideMenuCtrl* page);
 
 	void OnSelect(wxCommandEvent& e);
 public:
@@ -43,11 +44,9 @@ public:
 	void OnUnsave(wxCommandEvent& e);
 	void Unsave(bool created, SideMenuCtrl* target = nullptr);
 
-	StatusCode NewPage(DVNFileData* data);
-	StatusCode AddPage(SideMenuCtrl* page);
 	vector<SideMenuCtrl*>& GetPages();
 
-	void SaveCurrent(bool saveAs);
+	void SaveCurrent();
 	SideMenuCtrl* GetCurrent();
 	bool CheckForUnsaved();
 };

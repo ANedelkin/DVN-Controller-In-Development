@@ -90,7 +90,7 @@ void MainFrame::LoadScenarios()
 		for (char i = 0; i < scenarios.size(); i++)
 		{
 			if (scenarios[i]->ok)
-				scenariosPanel->AddPage(scenarios[i]);
+				scenariosPanel->NewPage(scenarios[i]);
 		}
 		scenariosPanel->Select(0);
 	}
@@ -119,8 +119,7 @@ void MainFrame::NewScenario()
 {
 	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateNameUnique);
 	nameSetter->ShowModal();
-	Scenario* newScen = new Scenario(nameSetter->name);
-	if (nameSetter->ok && !scenariosPanel->AddPage(newScen)) {
+	if (nameSetter->ok && !scenariosPanel->NewPage(new Scenario(nameSetter->name))) {
 		scenariosPanel->Unsave(true);
 	}
 }
@@ -188,7 +187,7 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 				data << stream.rdbuf();
 				Load* load = Load::ToLoad(name, fn.GetPath().ToStdString(), data);
 				if (load->ok)
-					loadsPanel->AddPage(load);
+					loadsPanel->NewPage(load);
 				else
 					ShowError(this, ToString(InvalidFile, name.c_str()));
 			}
@@ -202,10 +201,10 @@ void MainFrame::OnSave(wxCommandEvent& e)
 	switch (notebook->GetSelection())
 	{
 	case Scenarios:
-		scenariosPanel->SaveCurrent(false);
+		scenariosPanel->SaveCurrent();
 		break;
 	case Loads:
-		loadsPanel->SaveCurrent(false);
+		loadsPanel->SaveCurrent();
 		break;
 	default:
 		break;
@@ -215,7 +214,7 @@ void MainFrame::OnSave(wxCommandEvent& e)
 
 void MainFrame::OnSaveAs(wxCommandEvent& e)
 {
-	loadsPanel->SaveCurrent(true);
+	loadsPanel->SaveCurrentAs();
 }
 
 void MainFrame::OnLoadFromJmr(wxCommandEvent& e)

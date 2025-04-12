@@ -4,7 +4,6 @@ void SideMenuCtrl::OnContextMenu(wxContextMenuEvent& e) {
 	if (contextMenu) {
 		PopupMenu(contextMenu, wxWindow::ScreenToClient(e.GetPosition()));
 	}
-	//e.Skip();
 }
 
 SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source) : wxButton(parent, wxID_ANY) {
