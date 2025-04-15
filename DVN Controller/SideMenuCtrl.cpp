@@ -16,6 +16,11 @@ SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* so
 	Bind(wxEVT_CONTEXT_MENU, &SideMenuCtrl::OnContextMenu, this);
 }
 
+SideMenuCtrl::~SideMenuCtrl()
+{
+	delete source;
+}
+
 DVNFileData* SideMenuCtrl::GetSource() { return source; }
 
 void SideMenuCtrl::SetSource(DVNFileData* source) {

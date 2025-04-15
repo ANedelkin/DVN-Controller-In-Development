@@ -76,7 +76,7 @@ bool LoadsPanel::SaveAs(SideMenuCtrl* page)
 	return true;
 }
 
-void LoadsPanel ::OnDelete(wxCommandEvent& e)
+void LoadsPanel::OnDelete(wxCommandEvent& e)
 {
 	wxMessageDialog dialog(base, "If you delete a load you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();

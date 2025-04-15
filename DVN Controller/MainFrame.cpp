@@ -111,24 +111,25 @@ void MainFrame::UpdateScenarios()
 					f = false;
 			}
 			if (f) scenariosPanel->NewPage(scenarios[i]);
+			else delete scenarios[i];
 		}
 	}
 }
 
 void MainFrame::NewScenario()
 {
-	NameSetter* nameSetter = new NameSetter(this, "Enter scenario name", Scenario::ValidateNameUnique);
-	nameSetter->ShowModal();
-	if (nameSetter->ok && !scenariosPanel->NewPage(new Scenario(nameSetter->name))) {
+	NameSetter nameSetter(this, "Enter scenario name", Scenario::ValidateNameUnique);
+	nameSetter.ShowModal();
+	if (nameSetter.ok && !scenariosPanel->NewPage(new Scenario(nameSetter.name))) {
 		scenariosPanel->Unsave(true);
 	}
 }
 
 void MainFrame::NewLoad()
 {
-	NameSetter* nameSetter = new NameSetter(this, "Enter load name", Load::ValidateName);
-	nameSetter->ShowModal();
-	if (nameSetter->ok && !loadsPanel->NewPage(new Load(nameSetter->name))) loadsPanel->Unsave(true);
+	NameSetter nameSetter(this, "Enter load name", Load::ValidateName);
+	nameSetter.ShowModal();
+	if (nameSetter.ok && !loadsPanel->NewPage(new Load(nameSetter.name))) loadsPanel->Unsave(true);
 }
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {

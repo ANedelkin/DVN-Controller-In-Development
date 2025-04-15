@@ -15,6 +15,14 @@ Load::Load(const string& name, const string& folder) : DVNFileData(name) {
 	oldSaveString = SaveString();
 }
 
+Load::~Load()
+{
+	for (char i = 0; i < SCENARIOS_COUNT; i++)
+	{
+		delete scenarios[i];
+	}
+}
+
 string Load::GetName() { return name; }
 
 array<Scenario*, SCENARIOS_COUNT>& Load::GetScenarios()

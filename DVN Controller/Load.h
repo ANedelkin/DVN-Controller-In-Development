@@ -14,6 +14,7 @@ public:
 	Load();
 	Load(const string& name);
 	Load(const string& name, const string& folder);
+	~Load();
 
 	string GetName();
 	array<Scenario*, SCENARIOS_COUNT>& GetScenarios();

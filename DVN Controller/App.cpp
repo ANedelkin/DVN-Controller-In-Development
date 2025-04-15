@@ -16,6 +16,7 @@ public:
 				base->Refresh();
 
 				BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
+				assert(row != nullptr && "Focused's parent is not BandRow or derived.");
 				string stat = ToString(Success);
 				int type = (int)focused->GetClientData();
 				if (type == BAND_NAME)

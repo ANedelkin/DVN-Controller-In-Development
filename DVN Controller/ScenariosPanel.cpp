@@ -2,7 +2,7 @@
 #include "SideNotebookContent.h"
 
 ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style) 
-			  : SideNotebook(parent, "Scenarios", Scenario::ValidateNameUnique)
+			  : SideNotebook(parent, "Scenarios", style & CONTENT ? Scenario::ValidateName : Scenario::ValidateNameUnique)
 {
 	this->style = style;
 
@@ -97,6 +97,7 @@ void ScenariosPanel::OnDelete(wxCommandEvent& e)
 {
 	wxMessageDialog dialog(base, "If you delete a scenario you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
+	assert(target != nullptr && "Delete target is not SideMenuCtrl or derived");
 	if (dialog.ShowModal() == wxID_YES) {
 		if (exists(target->GetSource()->GetPath())) {
 			remove(target->GetSource()->GetPath());

@@ -82,7 +82,6 @@ void SideNotebook::OnSelect(wxCommandEvent& e)
 void SideNotebook::OnUnsave(wxCommandEvent& e)
 {
 	SideMenuCtrl* target = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
-	assert(target != nullptr && "Unsave target is not SideMenuCtrl or derived.");
 	Unsave(false, target);
 }
 
@@ -100,13 +99,14 @@ void SideNotebook::Unsave(bool created, SideMenuCtrl* target)
 
 bool SideNotebook::Rename(SideMenuCtrl* page, bool renameFile)
 {
+	assert(page != nullptr && "Rename target is not a SideMenuCtrl or derived.");
 	NameSetter nameSetter = NameSetter(base, "Enter name", pageNameValidator, page->GetSource()->GetName());
 	nameSetter.ShowModal();
 	if (nameSetter.ok && page->GetSource()->GetName() != nameSetter.name) {
 		DVNFileData* source = page->GetSource();
 		string oldPath = source->GetPath();
 		source->Rename(nameSetter.name);
-		if(renameFile)
+		if(renameFile && ifstream(oldPath))
 			rename(oldPath, source->GetPath());
 		page->SetLabel(nameSetter.name);
 		return true;
