@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -155,9 +155,9 @@
     <ClCompile Include="JammersWindow.cpp" />
     <ClCompile Include="Load.cpp" />
     <ClCompile Include="LoadsPanel.cpp" />
+    <ClCompile Include="LoadsPanelContent.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="App.cpp" />
-    <ClCompile Include="ModelConstants.cpp" />
     <ClCompile Include="NameSetter.cpp" />
     <ClCompile Include="SaveDialog.h" />
     <ClCompile Include="Scenario.cpp" />
@@ -165,11 +165,12 @@
     <ClCompile Include="ScenSelectDialog.cpp" />
     <ClCompile Include="SideMenuCtrl.cpp" />
     <ClCompile Include="SideNotebook.cpp" />
-    <ClCompile Include="SideNotebookPanel.cpp" />
+    <ClCompile Include="SideNotebookContent.cpp" />
+    <ClCompile Include="Status.cpp" />
+    <ClCompile Include="Validation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BandInfo.h" />
-    <ClInclude Include="BandPreset.h" />
     <ClInclude Include="BandRow.h" />
     <ClInclude Include="BandsPanel.h" />
     <ClInclude Include="ColourfulButton.h" />
@@ -180,18 +181,19 @@
     <ClInclude Include="JammersWindow.h" />
     <ClInclude Include="Load.h" />
     <ClInclude Include="LoadsPanel.h" />
+    <ClInclude Include="LoadsPanelContent.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="ModelConstants.h" />
     <ClInclude Include="NameSetter.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="Scenario.h" />
-    <ClInclude Include="ScenarioPreset.h" />
     <ClInclude Include="ScenariosPanel.h" />
     <ClInclude Include="ScenSelectDialog.h" />
     <ClInclude Include="SideMenuCtrl.h" />
     <ClInclude Include="SideNotebook.h" />
-    <ClInclude Include="SideNotebookPanel.h" />
+    <ClInclude Include="SideNotebookContent.h" />
+    <ClInclude Include="Status.h" />
+    <ClInclude Include="Validation.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\x64\Release\DVN Controller.exe" />

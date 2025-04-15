@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Global.h"
+#include "Status.h"
 #include "ftd2xx.h"
 
 class JammersWindow : public wxDialog

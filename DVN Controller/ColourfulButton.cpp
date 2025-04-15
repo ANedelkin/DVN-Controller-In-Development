@@ -28,7 +28,6 @@ void ColourfulBtn::SetLabel(const wxString& label) {
 
 bool ColourfulBtn::SetForegroundColour(const wxColour& colour)
 {
-	//if (GetForegroundColour() == colour) return false;
 	if (IsEnabled()) wxButton::SetForegroundColour(colour);
 	else txt->SetForegroundColour(colour);
 	return true;

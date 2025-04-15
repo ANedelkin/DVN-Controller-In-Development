@@ -13,6 +13,7 @@ private:
 	void OnContextMenu(wxContextMenuEvent& e);
 public:
 	SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source);
+	~SideMenuCtrl();
 
 	DVNFileData* GetSource();
 	void SetSource(DVNFileData* source);
@@ -22,6 +23,4 @@ public:
 	void MarkSaved();
 	void MarkUnsaved();
 	void SetLabel(const wxString& label) override;
-
-	//void OnRename(wxCommandEvent& e);
 };

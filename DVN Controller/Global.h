@@ -17,67 +17,28 @@
 #define DELETABLE       0b00000010
 #define LOADABLE        0b00000100
 #define READ_ONLY       0b00001000
+#define CONTENT         0b00010000
 
-#define DIALOG          0b00010000
-#define SAVING_MANY     0b00100000
+#define DIALOG          0b00000001
+#define SAVING_MANY     0b00000010
 
 //Vars:
 
 extern wxWindow* base;
 extern wxWindow* focused;
-extern char ctrlHeight;
-
-
-//Errors:
-
-enum Status {
-    Success,
-    BandUninitialized,
-    StartValueOutOfBounds,
-    EndValueOutOfBounds,
-    StartValueHigherThanEndvalue,
-    EndValueLowerThanStartValue,
-    BandAtLastPlace,
-    InvalidSymbols,
-    NameWhitespace,
-    JammerNotSelected,
-    FileNonexistent,
-    FileAlreadyOpen,
-    ScenarioAlreadyExists,
-    FreqNotPositiveNumber,
-    NameTooLong,
-    InvalidFile,
-    ErrorMessageTooLong,
-};
-
-extern map<Status, const char*> errorMessages;
 
 
 //Funcs:
 
 extern vector<string> Split(const string& str, char delimiter);
-extern int ErrorMessage(wxWindow* parent, Status stat, const char style = 0, ...);
-extern bool HasNonStdChars(const string& str);
-extern Status ValidateNameBasic(const string& name);
-extern Status TryParse(const wxString& str, int* result);
-
-
-//Tabs
-
-enum Tabs { //Move to MainFrame
-    Loads,
-    Scenarios,
-};
 
 
 //BandRow column tags
 
-enum InputType { //Change to defines
-    ScenName,
-    BandName,
-    Start,
-    End,
-};
+#define SCEN_NAME		0
+#define BAND_NAME		1
+#define START			2
+#define END				3
 
 
 //Colours
@@ -86,7 +47,4 @@ enum InputType { //Change to defines
 
 
 //Events
-wxDECLARE_EVENT(EVT_LOAD, wxCommandEvent);
-wxDECLARE_EVENT(EVT_CLOSE_PAGE, wxCommandEvent);
-wxDECLARE_EVENT(EVT_DELETE, wxCommandEvent);
 wxDECLARE_EVENT(EVT_UNSAVE, wxCommandEvent);

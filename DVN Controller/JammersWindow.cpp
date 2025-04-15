@@ -66,7 +66,7 @@ void JammersWindow::LoadJammers()
 			list->AppendString(str);
 		}
 	}
-	for (char i = 0; i < 3; i++) list->AppendString(to_string(i) + "xxxxxxx");
+	for (char i = 0; i < 3; i++) list->AppendString(to_string(i) + "xxxxxxx"); //Placeholder data for demo
 	if (list->GetCount() == 0) select->Disable();
 	else {
 		if (list->GetCount() == 1) list->SetSelection(0);
@@ -77,7 +77,7 @@ void JammersWindow::LoadJammers()
 void JammersWindow::Select()
 {
 	int selection = list->GetSelection();
-	if (selection == wxNOT_FOUND) ErrorMessage(this, JammerNotSelected);
+	if (selection == wxNOT_FOUND) Status::ShowError(this, Status::ToString(Status::JammerNotSelected));
 	else {
 		wxString jammerName = list->GetString(selection);
 		int len = jammerName.Length();

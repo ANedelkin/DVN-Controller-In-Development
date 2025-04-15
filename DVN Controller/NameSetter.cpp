@@ -3,7 +3,7 @@
 #include "NameSetter.h"
 
 
-NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validator)(const string& name), const string& defaultValue)
+NameSetter::NameSetter(wxWindow* parent, const wxString& title, string(*validator)(const string& name), const string& defaultValue)
           : wxDialog(parent, wxID_ANY, title)
           , validator(validator)
           , name(defaultValue)
@@ -15,10 +15,8 @@ NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validato
     wxPanel* inputPanel = new wxPanel(this);
     wxBoxSizer* inputSizer = new wxBoxSizer(wxHORIZONTAL);
 
-    //wxStaticText* text = new wxStaticText(inputPanel, wxID_ANY, "Enter name:", wxPoint(20, 20));
     input = new wxTextCtrl(inputPanel, wxID_ANY, defaultValue, FromDIP(wxPoint(20, 50)), FromDIP(wxSize(200, 25)));
 
-    //inputSizer->Add(text, 0, wxALIGN_CENTER | wxALL, 10);
     inputSizer->Add(input, 1, wxALIGN_CENTER | wxALL, FromDIP(10));
     inputPanel->SetSizerAndFit(inputSizer);
 
@@ -43,21 +41,12 @@ NameSetter::NameSetter(wxWindow* parent, const wxString& title, Status(*validato
 
 void NameSetter::OnOK(wxCommandEvent& e) {
     string newName = input->GetValue().ToUTF8().data();
-    if (newName == this->name) {
+    string stat = validator(newName);
+    if (!stat.empty())
+        Status::ShowError(this, stat);
+    else {
+        this->name = newName;
+        ok = true;
         Close();
-        return;
     }
-    Status stat = validator(newName);
-    if (stat) {
-        if (stat == NameTooLong)
-            ErrorMessage(this, stat, 0, NAME_MAX_LENGTH);
-        else if (stat == ScenarioAlreadyExists)
-            ErrorMessage(this, stat, 0, newName.c_str());
-        else 
-            ErrorMessage(this, stat, 0);
-        return;
-    }
-    this->name = newName;
-    ok = true;
-    Close();
 }

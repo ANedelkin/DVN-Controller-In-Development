@@ -1,10 +1,10 @@
 #pragma once
 #include "Global.h"
 
-#include "SideNotebookPanel.h"
+#include "SideNotebookContent.h"
 #include "BandRow.h"
 
-class BandsPanel : public SideNotebookPanel
+class BandsPanel : public SideNotebookContent
 {
 private:
 	array<BandRow*, GetBandsCount()> bandRows;

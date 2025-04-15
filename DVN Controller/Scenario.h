@@ -1,9 +1,11 @@
 #pragma once
 #include "Global.h"
 #include "BandInfo.h"
-#include "BandPreset.h"
 #include "DVNFileData.h"
 #include "ModelConstants.h"
+#include "Validation.h"
+
+using namespace Status;
 
 class Scenario : public DVNFileData {
 private:
@@ -12,23 +14,19 @@ private:
 	static const string folder;
 	static const string extension;
 public:
+	static Scenario* placeHolder;
+
 	Scenario();
 	Scenario(string name);
 
-	Status SetBandData(char i, string name, int startValue, int endValue, bool working);
+	string SetBandData(char i, string name, int startValue, int endValue, bool working);
+	string SetFreq(char bandIndex, char freqIndex, int value);
 
-	//Status SetStartValue(char i, int value);
-	//Status SetEndValue(char i, int value);
-	Status SetFreq(char bandIndex, char freqIndex, int value);
-	//void CheckIfFull(char i);
-
-	Status TurnOn(char i);
+	void TurnOn(char i);
 	void TurnOff(char i);
 	string GetName(char i);
-	Status Rename(const string& name, char i);
+	string Rename(const string& name, char i);
 
-	//int GetStartValue(char i) const;
-	//int GetEndValue(char i) const;
 	int GetFreq(char bandIndex, char freqIndex) const;
 	int GetRangeIndex(char i) const;
 	int GetStartValueBorder(char i) const;
@@ -38,7 +36,7 @@ public:
 	void Enable(char i);
 	void Disable(char i);
 
-	static Status ValidateNameUnique(const string& name);
+	static string ValidateNameUnique(const string& name);
 
 	static Scenario* ToScenario(const string& name, stringstream& data);
 	static vector<Scenario*> LoadScenarios();

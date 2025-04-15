@@ -2,7 +2,6 @@
 
 #include "Global.h"
 #include "Scenario.h"
-#include "BandPreset.h"
 #include "ColourfulButton.h"
 
 class BandRow : public wxPanel
@@ -26,12 +25,12 @@ private:
 
     void MarkUnsaved();
 
+    bool ProcessKey(int key);
+
     void OnResize(wxSizeEvent& e);
 
     void EmptyHandler(wxEvent& e);
-    void OnNameEnter(wxKeyEvent& e);
-    void OnStartEnter(wxKeyEvent& e);
-    void OnEndEnter(wxKeyEvent& e);
+    void OnKey(wxKeyEvent& e);
     void OnStatusChanged(wxCommandEvent& e);
     void OnFocus(wxFocusEvent& e);
 public:
@@ -42,10 +41,8 @@ public:
 
     void ChangeScenario(Scenario* scenario);
 
-    Status Rename();
-    //Status ChangeStart();
-    //Status ChangeEnd();
-    Status UpdateFreq(wxTextCtrl* ctrl);
+    string Rename();
+    string UpdateFreq(int i);
 
     void Unfocus();
 };

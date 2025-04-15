@@ -4,7 +4,6 @@ void SideMenuCtrl::OnContextMenu(wxContextMenuEvent& e) {
 	if (contextMenu) {
 		PopupMenu(contextMenu, wxWindow::ScreenToClient(e.GetPosition()));
 	}
-	//e.Skip();
 }
 
 SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source) : wxButton(parent, wxID_ANY) {
@@ -15,6 +14,11 @@ SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* so
 	SetBackgroundColour(wxColour(255, 255, 255));
 
 	Bind(wxEVT_CONTEXT_MENU, &SideMenuCtrl::OnContextMenu, this);
+}
+
+SideMenuCtrl::~SideMenuCtrl()
+{
+	delete source;
 }
 
 DVNFileData* SideMenuCtrl::GetSource() { return source; }

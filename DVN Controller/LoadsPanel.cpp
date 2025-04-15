@@ -1,6 +1,11 @@
 #include "LoadsPanel.h"
 
-LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", nullptr)
+void LoadsPanel::SaveCurrentAs()
+{
+	if (cur) SaveAs(cur);
+}
+
+LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", Load::ValidateName)
 {
 	contextMenu = new wxMenu();
 
@@ -19,17 +24,16 @@ LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", nullptr
 	contextMenu->Append(closeItem);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnClose, this, closeItem->GetId());
 
-	ScenariosPanel* scenPanel = new ScenariosPanel(this, new Load(), LOADABLE);
-	scenPanel->Select(0);
+	LoadsPanelContent* scenPanel = new LoadsPanelContent(this);
 	scenPanel->UnInit();
 	SetContent(scenPanel);
 }
 
-Status LoadsPanel::AddPage(Load* data)
+StatusCode LoadsPanel::NewPage(Load* data)
 {
 	for (SideMenuCtrl* page : pages) {
-		if (page->GetSource()->GetOldPath() == data->GetOldPath() && page->GetSource()->folder != "") {
-			ErrorMessage(base, FileAlreadyOpen, 0, data->GetName().c_str(), page->GetSource()->GetName().c_str());
+		if (page->GetSource()->GetPath() == data->GetPath() && page->GetSource()->folder != "") {
+			ShowError(base, ToString(FileAlreadyOpen, data->GetName().c_str(), page->GetSource()->GetName().c_str()));
 			return FileAlreadyOpen;
 		}
 	}
@@ -37,13 +41,48 @@ Status LoadsPanel::AddPage(Load* data)
 	return SideNotebook::NewPage(data);
 }
 
-void LoadsPanel ::OnDelete(wxCommandEvent& e)
+bool LoadsPanel::Save(SideMenuCtrl* page)
+{
+	DVNFileData* curData = page->GetSource();
+	bool f = true;
+	if (curData->folder == "")
+		f = SaveAs(page);
+	if(f)
+		SideNotebook::Save(page);
+
+	return f;
+}
+
+bool LoadsPanel::SaveAs(SideMenuCtrl* page)
+{
+	DVNFileData* curData = page->GetSource();
+	wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"", "", curData->GetNameWithExt(), "Load files (*.dvnl)|*.dvnl", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+	if (dialog.ShowModal() == wxID_OK) {
+		string name = wxFileName(dialog.GetPath()).GetName().ToStdString();
+		string folder = dialog.GetDirectory().ToStdString();
+		for (SideMenuCtrl* existing : pages) {
+			if (existing == page) continue;
+			if (existing->GetSource()->GetPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {
+				ShowError(base, ToString(FileAlreadyOpen, name.c_str()));
+				return false;
+			}
+		}
+		curData->Rename(name);
+		page->SetLabel(name);
+		curData->folder = folder;
+	}
+	else return false;
+	
+	return true;
+}
+
+void LoadsPanel::OnDelete(wxCommandEvent& e)
 {
 	wxMessageDialog dialog(base, "If you delete a load you won't be able to get it back!", "Are you sure about that?", wxYES_NO | wxICON_EXCLAMATION);
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	if (dialog.ShowModal() == wxID_YES) {
-		if (exists(target->GetSource()->GetOldPath())) {
-			remove(target->GetSource()->GetOldPath());
+		if (exists(target->GetSource()->GetPath())) {
+			remove(target->GetSource()->GetPath());
 		}
 		Close(target);
 	}
@@ -56,7 +95,7 @@ void LoadsPanel::OnClose(wxCommandEvent& e) {
 	if (!target->GetSource()->upToDate) {
 		switch (SaveDialog(base, target->GetSource()->GetName()).ShowModal()) {
 		case SaveDialog::ID_SAVE:
-			if (Save(target, false))
+			if (Save(target))
 				Close(target);
 			break;
 		case SaveDialog::ID_SKIP:
@@ -73,12 +112,6 @@ void LoadsPanel::OnClose(wxCommandEvent& e) {
 
 void LoadsPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	NameSetter* nameSetter = new NameSetter(base, "Enter name", Load::ValidateName, target->GetSource()->GetName()); //Create a different Load::ValidateName
-	nameSetter->ShowModal();
-	if (nameSetter->ok && target->GetSource()->GetName() != nameSetter->name) {
-		target->GetSource()->Rename(nameSetter->name);
-		target->SetLabel(nameSetter->name);
-		Unsave(false, target);
-	}
+	Rename(target);
 	target->Refresh();
 }

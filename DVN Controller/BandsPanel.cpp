@@ -1,7 +1,7 @@
 #include "BandsPanel.h"
 #include "Load.h"
 
-BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) : SideNotebookPanel(parent, scenario) {
+BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) : SideNotebookContent(parent, scenario) {
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
 
     wxStaticBox* bandsBox = new wxStaticBox(this, wxID_ANY, "Bands");
@@ -65,10 +65,11 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
     this->SetSizerAndFit(panelSizer);
 }
 
-void BandsPanel::SetSource(DVNFileData* source) //Make only called when needen, not on initial scenario loading
+void BandsPanel::SetSource(DVNFileData* source)
 {
     this->source = source;
     Scenario* scen = dynamic_cast<Scenario*>(source);
+    assert(scen != nullptr && "source is not Scenario or derived");
     for (char i = 0; i < GetBandsCount(); i++)
     {
         bandRows[i]->ChangeScenario(scen);
@@ -78,11 +79,11 @@ void BandsPanel::SetSource(DVNFileData* source) //Make only called when needen, 
 
 void BandsPanel::Init()
 {
-    SideNotebookPanel::Init();
+    SideNotebookContent::Init();
     table->Show();
 }
 
 void BandsPanel::UnInit() {
-    SideNotebookPanel::UnInit();
+    SideNotebookContent::UnInit();
     table->Hide();
 }

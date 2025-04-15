@@ -14,13 +14,13 @@ public:
         ID_CANCEL
     };
 
-    SaveDialog(wxWindow* parent, const string& fileName, char style = 0)
-        : wxDialog(parent, wxID_ANY, "Unsaved file")
+    SaveDialog(wxWindow* parent, const string& fileName, char style = 0) 
+             : wxDialog(parent, wxID_ANY, "Unsaved file")
     {
-        wxPanel* content = new wxPanel(this);
         wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-
-        wxBoxSizer* verticalSizer = new wxBoxSizer(wxVERTICAL);
+        
+        wxPanel* content = new wxPanel(this);
+        wxBoxSizer* contentSizer = new wxBoxSizer(wxVERTICAL);
 
         wxStaticText* message = new wxStaticText(
             content, 
@@ -31,7 +31,7 @@ public:
         message->SetFont(wxFont(FromDIP(15), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI"));
         message->SetForegroundColour(wxColour(65, 103, 179));
         message->Wrap(GetSize().GetWidth());
-        verticalSizer->Add(message, 1, wxALIGN_CENTER | wxALL, FromDIP(10));
+        contentSizer->Add(message, 1, wxALIGN_CENTER | wxALL, FromDIP(10));
 
         wxButton* saveButton = new wxButton(content, ID_SAVE, "Save");
         wxButton* skipButton = new wxButton(content, ID_SKIP, "Don't save");
@@ -41,8 +41,7 @@ public:
         horizontalSizer->Add(saveButton, 1, wxALL, FromDIP(5));
         horizontalSizer->Add(skipButton, 1, wxALL, FromDIP(5));
         horizontalSizer->Add(cancelButton, 1, wxALL, FromDIP(5));
-        verticalSizer->Add(horizontalSizer, 0, wxEXPAND, FromDIP(10));
-
+        contentSizer->Add(horizontalSizer, 0, wxEXPAND, FromDIP(10));
 
         mainSizer->Add(content, 1, wxEXPAND | wxALL, FromDIP(10));
 
@@ -55,14 +54,14 @@ public:
             wxButton* saveAllButton = new wxButton(content, ID_SAVE_ALL, "Save all unsaved files");
             wxButton* skipAllButton = new wxButton(content, ID_SKIP_ALL, "Don't save any unsaved files");
             
-            verticalSizer->Add(saveAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
-            verticalSizer->Add(skipAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
+            contentSizer->Add(saveAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
+            contentSizer->Add(skipAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
             
             saveAllButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSaveAll, this);
             skipAllButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSkipAll, this);
         }
         
-        content->SetSizerAndFit(verticalSizer);
+        content->SetSizerAndFit(contentSizer);
         SetSizerAndFit(mainSizer);
     }
 

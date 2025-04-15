@@ -16,28 +16,19 @@ public:
 				base->Refresh();
 
 				BandRow* row = dynamic_cast<BandRow*>(focused->GetParent());
-				Status stat = Success;
-
-				switch ((int)focused->GetClientData())
-				{
-				case BandName:
+				assert(row != nullptr && "Focused's parent is not BandRow or derived.");
+				string stat = ToString(Success);
+				int type = (int)focused->GetClientData();
+				if (type == BAND_NAME)
 					stat = row->Rename();
-					break;
-				case Start:
-					stat = row->UpdateFreq(row->startValue);
-					break;
-				case End:
-					stat = row->UpdateFreq(row->endValue);
-					break;
-				default:
-					break;
-				}
+				else
+					stat = row->UpdateFreq(type);
 
-				if (!stat) { //Success
+				if (stat.empty()) { //Success
 					focused = nullptr;
 
 					int type = (int)(target->GetClientData());
-					if (t == wxEVT_CLOSE_WINDOW || wxGetMouseState().LeftIsDown() && (type == BandName || type == Start || type == End)) return Event_Skip;
+					if (t == wxEVT_CLOSE_WINDOW || wxGetMouseState().LeftIsDown() && (type == BAND_NAME || type == START || type == END)) return Event_Skip;
 					row->Unfocus();
 				}
 				else //Failure, like me
