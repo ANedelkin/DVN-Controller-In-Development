@@ -16,3 +16,4 @@ vector<string> Split(const string& str, char delimiter) {
 }
 
 wxDEFINE_EVENT(EVT_UNSAVE, wxCommandEvent);
+wxDEFINE_EVENT(EVT_SCROLL_TO, wxCommandEvent);

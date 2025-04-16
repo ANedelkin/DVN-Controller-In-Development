@@ -5,10 +5,10 @@
 
 //Random defines:
 
-#define NAME_MAX_LENGTH 27
+#define NAME_MAX_LENGTH	27
 
-#define NAME_INPUT_LEN 200
-#define FREQ_INPUT_LEN 100
+#define NAME_INPUT_LEN	200
+#define FREQ_INPUT_LEN	100
 
 
 //Styles:
@@ -47,4 +47,5 @@ extern vector<string> Split(const string& str, char delimiter);
 
 
 //Events
+wxDECLARE_EVENT(EVT_SCROLL_TO, wxCommandEvent);
 wxDECLARE_EVENT(EVT_UNSAVE, wxCommandEvent);

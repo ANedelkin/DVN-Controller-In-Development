@@ -40,6 +40,9 @@ void BandRow::OnStatusChanged(wxCommandEvent& e)
 
 void BandRow::OnFocus(wxFocusEvent& e) {
     focused = FindFocus();
+    wxCommandEvent eOut(EVT_SCROLL_TO);
+    eOut.SetEventObject(this);
+    GetParent()->GetEventHandler()->ProcessEvent(eOut);
     e.Skip();
 }
 
@@ -106,6 +109,8 @@ void BandRow::BindEventHandlers()
         endValue->Bind(wxEVT_CONTEXT_MENU, &BandRow::EmptyHandler, this);
 
         statBtn->Bind(wxEVT_BUTTON, &BandRow::OnStatusChanged, this);
+        statBtn->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
+        unfocused->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     }
 }
 

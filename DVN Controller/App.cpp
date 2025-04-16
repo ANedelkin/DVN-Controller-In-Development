@@ -21,7 +21,7 @@ public:
 				int type = (int)focused->GetClientData();
 				if (type == BAND_NAME)
 					stat = row->Rename();
-				else
+				else if(type == START || type == END)
 					stat = row->UpdateFreq(type);
 
 				if (stat.empty()) { //Success

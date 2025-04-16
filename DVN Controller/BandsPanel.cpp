@@ -1,6 +1,40 @@
 #include "BandsPanel.h"
 #include "Load.h"
 
+void BandsPanel::OnScrollTo(wxCommandEvent& e)
+{
+    wxWindow* target = (wxWindow*)e.GetEventObject();
+    wxPoint pos = target->GetPosition();
+    int viewStart = scrollWrapper->GetViewStart().y;
+    int x, pxPerUnit;
+    scrollWrapper->GetScrollPixelsPerUnit(&x, &pxPerUnit);
+    int y = pos.y / pxPerUnit;
+
+    if (y < viewStart)
+        scrollWrapper->Scroll(0, y);
+    else  {
+        int targetSize = target->GetSize().y / pxPerUnit;
+        wxSize swSize = scrollWrapper->GetClientSize();
+        int curEnd = viewStart + swSize.y / pxPerUnit - targetSize;
+        if (y > curEnd) {
+            int x, scrollRate;
+            scrollWrapper->GetScrollPixelsPerUnit(&x, &scrollRate);
+            int viewStartY;
+            scrollWrapper->GetViewStart(&x, &viewStartY);
+            int viewStartPy = viewStartY * scrollRate;
+            int targetY = viewStartPy;
+            if (pos.y < viewStartPy) {
+                targetY = pos.y;
+            }
+            else if (pos.y + target->GetSize().y > viewStartPy + swSize.y) {
+                targetY = pos.y + target->GetSize().y - swSize.y;
+            }
+            int targetUnitY = targetY / scrollRate;
+            scrollWrapper->Scroll(0, targetUnitY + 1);
+        }
+    }
+}
+
 BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) : SideNotebookContent(parent, scenario) {
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -62,7 +96,9 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
     bandsBox->SetSizerAndFit(mainSizer);
 
     panelSizer->Add(bandsBox);
-    this->SetSizerAndFit(panelSizer);
+    SetSizerAndFit(panelSizer);
+
+    Bind(EVT_SCROLL_TO, &BandsPanel::OnScrollTo, this);
 }
 
 void BandsPanel::SetSource(DVNFileData* source)
