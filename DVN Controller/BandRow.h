@@ -37,6 +37,13 @@ public:
     wxTextCtrl* name;
     wxTextCtrl* startValue;
     wxTextCtrl* endValue;
+
+    enum {
+        Name,
+        Start,
+        End,
+    };
+
     BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const  char style = 0);
 
     void ChangeScenario(Scenario* scenario);

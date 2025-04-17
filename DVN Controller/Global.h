@@ -33,14 +33,6 @@ extern wxWindow* focused;
 extern vector<string> Split(const string& str, char delimiter);
 
 
-//BandRow column tags
-
-#define SCEN_NAME		0
-#define BAND_NAME		1
-#define START			2
-#define END				3
-
-
 //Colours
 
 #define DARK_GREEN wxColour(0, 127, 14)

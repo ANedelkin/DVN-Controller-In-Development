@@ -83,9 +83,9 @@ void BandRow::InitForeground() {
         statBtn->Disable();
     }
     else {
-        name->SetClientData((void*)BAND_NAME);
-        startValue->SetClientData((void*)START);
-        endValue->SetClientData((void*)END);
+        name->SetClientData((void*)Name);
+        startValue->SetClientData((void*)Start);
+        endValue->SetClientData((void*)End);
     }
 
     SetUpSizers();
@@ -160,10 +160,10 @@ string BandRow::Rename() {
 
 string BandRow::UpdateFreq(int freqToChange)
 {
-    assert(freqToChange == START || freqToChange == END);
+    assert(freqToChange == Start || freqToChange == End);
     string stat;
-    wxTextCtrl* ctrl = (int)freqToChange == START ? startValue : endValue;
-    int i = (int)freqToChange == START ? 0 : 1;
+    wxTextCtrl* ctrl = (int)freqToChange == End ? startValue : endValue;
+    int i = (int)freqToChange == Start ? 0 : 1;
     int newValue;
     stat = Validation::TryParse(ctrl->GetValue(), &newValue) ? ToString(Success) : ToString(FreqNotPositiveNumber);
     if (!stat.empty()) {
