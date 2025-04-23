@@ -36,7 +36,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "C:\Users\Alex\DVN projects\DVN Controller\DVN Controller\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Alex\Libraries and drivers\VC_redist.x86.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Alex\Libraries and drivers\VC_redist.x86.exe"; DestDir: "{tmp}";
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
