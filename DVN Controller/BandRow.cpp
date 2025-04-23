@@ -203,7 +203,7 @@ bool BandRow::ProcessKey(int key)
     int tabDir = wxGetKeyState(WXK_SHIFT);
     if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE)) {
         bool updateSuccess;
-        if ((int)focused->GetClientData() == BAND_NAME)
+        if ((int)focused->GetClientData() == Name)
             updateSuccess = Rename().empty();
         else
             updateSuccess = UpdateFreq((int)focused->GetClientData()).empty();
