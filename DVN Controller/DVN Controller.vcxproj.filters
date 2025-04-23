@@ -191,6 +191,9 @@
     <None Include="..\mysetup.exe">
       <Filter>Output</Filter>
     </None>
+    <None Include="..\SetUp.exe">
+      <Filter>Output</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DVN Controller.rc">

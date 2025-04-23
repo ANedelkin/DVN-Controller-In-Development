@@ -208,6 +208,7 @@
   <ItemGroup>
     <None Include="..\mysetup.exe" />
     <None Include="..\Release\DVN Controller.exe" />
+    <None Include="..\SetUp.exe" />
     <None Include="..\x64\Release\DVN Controller.exe" />
     <None Include="Icon.xpm" />
   </ItemGroup>
