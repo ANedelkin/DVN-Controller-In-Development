@@ -170,7 +170,7 @@ string BandRow::UpdateFreq(int freqToChange)
         if (ShowError(base, stat, DIALOG) == wxID_CANCEL) {
             ctrl->SetValue(to_string(scenario->GetFreq(bandNum, i)));
             return ToString(Success);
-        };
+        }
     }
     else {
         if (newValue == scenario->GetFreq(bandNum, i)) return ToString(Success);
