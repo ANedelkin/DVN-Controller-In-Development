@@ -162,7 +162,7 @@ string BandRow::UpdateFreq(int freqToChange)
 {
     assert(freqToChange == Start || freqToChange == End);
     string stat;
-    wxTextCtrl* ctrl = (int)freqToChange == End ? startValue : endValue;
+    wxTextCtrl* ctrl = (int)freqToChange == Start ? startValue : endValue;
     int i = (int)freqToChange == Start ? 0 : 1;
     int newValue;
     stat = Validation::TryParse(ctrl->GetValue(), &newValue) ? ToString(Success) : ToString(FreqNotPositiveNumber);
