@@ -32,14 +32,16 @@ private:
     void EmptyHandler(wxEvent& e);
     void OnKey(wxKeyEvent& e);
     void OnStatusChanged(wxCommandEvent& e);
+    void OnTextCtrlFocus(wxFocusEvent& e);
     void OnFocus(wxFocusEvent& e);
+    void ScrollTo();
 public:
     wxTextCtrl* name;
     wxTextCtrl* startValue;
     wxTextCtrl* endValue;
 
     enum {
-        Name,
+        Name = 1,
         Start,
         End,
     };

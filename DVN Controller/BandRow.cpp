@@ -38,12 +38,23 @@ void BandRow::OnStatusChanged(wxCommandEvent& e)
     e.Skip();
 }
 
-void BandRow::OnFocus(wxFocusEvent& e) {
+void BandRow::OnTextCtrlFocus(wxFocusEvent& e) {
     focused = FindFocus();
+    ScrollTo();
+    e.Skip();
+}
+
+void BandRow::OnFocus(wxFocusEvent& e)
+{
+    ScrollTo();
+    e.Skip();
+}
+
+void BandRow::ScrollTo()
+{
     wxCommandEvent eOut(EVT_SCROLL_TO);
     eOut.SetEventObject(this);
     GetParent()->GetEventHandler()->ProcessEvent(eOut);
-    e.Skip();
 }
 
 BandRow::BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const char style) 
@@ -96,9 +107,9 @@ void BandRow::BindEventHandlers()
     Bind(wxEVT_SIZE, &BandRow::OnResize, this);
 
     if (!(style & READ_ONLY)) {
-        name->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
-        startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
-        endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
+        name->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
+        startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
+        endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
 
         name->Bind(wxEVT_KEY_DOWN, &BandRow::OnKey, this);
         startValue->Bind(wxEVT_KEY_DOWN, &BandRow::OnKey, this);
