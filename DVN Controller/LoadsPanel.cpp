@@ -70,6 +70,7 @@ bool LoadsPanel::SaveAs(SideMenuCtrl* page)
 		curData->Rename(name);
 		page->SetLabel(name);
 		curData->folder = folder;
+		Save(page);
 	}
 	else return false;
 	
