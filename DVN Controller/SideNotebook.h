@@ -31,6 +31,7 @@ protected:
 	void ChangeSelection(SideMenuCtrl* scenCtrl);
 	StatusCode NewPage(DVNFileData* data);
 
+	void Duplicate(SideMenuCtrl* page);
 	bool Rename(SideMenuCtrl* page, bool renameFile = true);
 	void Close(SideMenuCtrl* page);
 	virtual bool Save(SideMenuCtrl* page);

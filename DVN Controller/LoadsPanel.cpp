@@ -47,8 +47,10 @@ bool LoadsPanel::Save(SideMenuCtrl* page)
 	bool f = true;
 	if (curData->folder == "")
 		f = SaveAs(page);
-	if(f)
+	if (f) {
 		SideNotebook::Save(page);
+		page->MarkSaved();
+	}
 
 	return f;
 }

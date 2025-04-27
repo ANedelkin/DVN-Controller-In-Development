@@ -29,7 +29,8 @@ public:
 					focused = nullptr;
 
 					int type = (int)target->GetClientData();
-					if (t == wxEVT_CLOSE_WINDOW || wxGetMouseState().LeftIsDown() && (type == BandRow::Name || type == BandRow::Start || type == BandRow::End)) 
+					if (t == wxEVT_CLOSE_WINDOW || wxGetMouseState().LeftIsDown() && 
+												  (type == BandRow::Name || type == BandRow::Start || type == BandRow::End || type == BandRow::StatBtn)) 
 						return Event_Skip;
 					row->Unfocus();
 				}

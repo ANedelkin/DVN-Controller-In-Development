@@ -10,7 +10,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{12139F30-4B1E-4AA6-9415-412D70D55BA9}}
+AppId={{1D15FBE2-F80E-49A8-8037-0E5CDB51F2F1}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -20,11 +20,17 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
+; "ArchitecturesAllowed=x64compatible" specifies that Setup cannot run
+; on anything but x64 and Windows 11 on Arm.
+ArchitecturesAllowed=x86compatible
+; "ArchitecturesInstallIn64BitMode=x64compatible" requests that the
+; install be done in "64-bit mode" on x64 or Windows 11 on Arm,
+; meaning it should use the native 64-bit Program Files directory and
+; the 64-bit view of the registry.
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users).
 PrivilegesRequired=lowest
-OutputDir=C:\Users\Alex\DVN projects\DVN Controller\DVN Controller
-OutputBaseFilename=SetUp
+OutputBaseFilename=mysetup
 SolidCompression=yes
 WizardStyle=modern
 
@@ -44,6 +50,28 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{tmp}\VC_redist.x86.exe"; Parameters: "/install /quiet /norestart"; StatusMsg: "Installing Visual C++ Redistributable..."; Flags: runhidden
+Filename: "{tmp}\VC_redist.x86.exe"; Parameters: "/install /quiet /norestart"; StatusMsg: "Installing Visual C++ Redistributable..."; Flags: runhidden; Check: ShouldInstallVC
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+function ShouldInstallVC: Boolean;
+var
+  installKey: string;
+  installedValue: Cardinal;
+begin
+  installKey := 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86';
+  try
+    if RegValueExists(HKLM, installKey, 'Installed') and
+       RegQueryDWordValue(HKLM, installKey, 'Installed', installedValue) then
+    begin
+      Result := (installedValue <> 1);
+    end
+    else
+    begin
+      Result := True;
+    end;
+  except
+    Result := True;
+  end;
+end;
 

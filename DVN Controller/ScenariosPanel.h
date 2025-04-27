@@ -14,6 +14,7 @@ private:
 
 	void OnLoad(wxCommandEvent& e);
 	void OnSave(wxCommandEvent& e);
+	void OnDuplicate(wxCommandEvent& e);
 	void OnDelete(wxCommandEvent& e);
 	void OnRename(wxCommandEvent& e);
 public:

@@ -19,7 +19,7 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, string(*pageNam
 	wxBoxSizer* scrollSizer = new wxBoxSizer(wxVERTICAL);
 	scrollWrapper->SetSizerAndFit(scrollSizer);
 	scrollWrapper->SetScrollRate(0, FromDIP(5));
-	
+
 	pagesSizer = new wxBoxSizer(wxVERTICAL);
 	pagesList = new wxPanel(scrollWrapper);
 	pagesList->SetSizer(pagesSizer);
@@ -51,7 +51,7 @@ StatusCode SideNotebook::NewPage(DVNFileData* data)
 
 	page->SetLabel(page->GetSource()->GetName());
 	page->Bind(wxEVT_BUTTON, &SideNotebook::OnSelect, this);
-	
+
 	return Success;
 }
 
@@ -62,7 +62,7 @@ vector<SideMenuCtrl*>& SideNotebook::GetPages()
 
 void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 {
-	if (cur) 
+	if (cur)
 		cur->SetBackgroundColour(wxColour(255, 255, 255));
 	page->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
 	cur = page;
@@ -74,7 +74,7 @@ void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 void SideNotebook::OnSelect(wxCommandEvent& e)
 {
 	SideMenuCtrl* page = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
-	if (page != cur) 
+	if (page != cur)
 		ChangeSelection(page);
 	e.Skip();
 }
@@ -97,16 +97,27 @@ void SideNotebook::Unsave(bool created, SideMenuCtrl* target)
 		target->Unsave();
 }
 
+void SideNotebook::Duplicate(SideMenuCtrl* page)
+{
+	DVNFileData* source = new DVNFileData(*page->GetSource());
+	NameSetter nameSetter(base, "Enter copy name", pageNameValidator, source->GetName());
+	nameSetter.ShowModal();
+	if (nameSetter.ok) {
+		source->Rename(nameSetter.name);
+		NewPage(source);
+	}
+}
+
 bool SideNotebook::Rename(SideMenuCtrl* page, bool renameFile)
 {
 	assert(page != nullptr && "Rename target is not a SideMenuCtrl or derived.");
-	NameSetter nameSetter = NameSetter(base, "Enter name", pageNameValidator, page->GetSource()->GetName());
+	NameSetter nameSetter(base, "Enter name", pageNameValidator, page->GetSource()->GetName());
 	nameSetter.ShowModal();
 	if (nameSetter.ok && page->GetSource()->GetName() != nameSetter.name) {
 		DVNFileData* source = page->GetSource();
 		string oldPath = source->GetPath();
 		source->Rename(nameSetter.name);
-		if(renameFile && ifstream(oldPath))
+		if (renameFile && ifstream(oldPath))
 			rename(oldPath, source->GetPath());
 		page->SetLabel(nameSetter.name);
 		return true;
@@ -141,7 +152,7 @@ bool SideNotebook::Save(SideMenuCtrl* page)
 
 void SideNotebook::Select(char i)
 {
-	if(pages.size() > i) ChangeSelection(pages[i]);
+	if (pages.size() > i) ChangeSelection(pages[i]);
 }
 
 void SideNotebook::UpdateContent()

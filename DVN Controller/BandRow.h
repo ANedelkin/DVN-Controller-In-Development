@@ -44,6 +44,7 @@ public:
         Name = 1,
         Start,
         End,
+        StatBtn,
     };
 
     BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const  char style = 0);

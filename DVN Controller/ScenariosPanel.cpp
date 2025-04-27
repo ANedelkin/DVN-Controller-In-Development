@@ -13,6 +13,11 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style)
 		contextMenu->Append(rename);
 		contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnRename, this, rename->GetId());
 
+		wxMenuItem* duplicate = new wxMenuItem(contextMenu, wxID_ANY, "Duplicate");
+		duplicate->SetBitmap(wxArtProvider::GetBitmap(wxART_COPY));
+		contextMenu->Append(duplicate);
+		contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnDuplicate, this, duplicate->GetId());
+
 		if (style & DELETABLE) {
 			wxMenuItem* deleteItem = new wxMenuItem(contextMenu, wxID_DELETE, "Delete");
 			deleteItem->SetBitmap(wxArtProvider::GetBitmap(wxART_DELETE));
@@ -91,6 +96,11 @@ void ScenariosPanel::OnSave(wxCommandEvent& e) {
 		Save(target);
 	}
 	target->Refresh();
+}
+
+void ScenariosPanel::OnDuplicate(wxCommandEvent& e)
+{
+	Duplicate((SideMenuCtrl*)contextMenu->GetInvokingWindow());
 }
 
 void ScenariosPanel::OnDelete(wxCommandEvent& e)

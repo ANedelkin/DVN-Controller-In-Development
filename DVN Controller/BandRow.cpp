@@ -97,6 +97,7 @@ void BandRow::InitForeground() {
         name->SetClientData((void*)Name);
         startValue->SetClientData((void*)Start);
         endValue->SetClientData((void*)End);
+        statBtn->SetClientData((void*)StatBtn);
     }
 
     SetUpSizers();
