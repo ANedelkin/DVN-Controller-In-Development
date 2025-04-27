@@ -21,7 +21,7 @@ Scenario::Scenario(string name) : DVNFileData(name) {
 			k++;
 		}
 	}
-	oldSaveString = SaveString();
+	//oldSaveString = SaveString();
 }
 
 string Scenario::SetBandData(char i, string name, int startValue, int endValue, bool working)
@@ -168,4 +168,11 @@ string Scenario::SaveString() const {
 		if (i != bands.size() - 1) stream << endl;
 	}
 	return stream.str();
+}
+
+DVNFileData* Scenario::Copy() const
+{
+	Scenario* scen = new Scenario(*this);
+	scen->oldSaveString = "";
+	return scen;
 }

@@ -99,12 +99,13 @@ void SideNotebook::Unsave(bool created, SideMenuCtrl* target)
 
 void SideNotebook::Duplicate(SideMenuCtrl* page)
 {
-	DVNFileData* source = new DVNFileData(*page->GetSource());
+	DVNFileData* source = page->GetSource()->Copy();
 	NameSetter nameSetter(base, "Enter copy name", pageNameValidator, source->GetName());
 	nameSetter.ShowModal();
 	if (nameSetter.ok) {
 		source->Rename(nameSetter.name);
 		NewPage(source);
+		Unsave(true);
 	}
 }
 
@@ -141,6 +142,7 @@ void SideNotebook::Close(SideMenuCtrl* page)
 	}
 	pagesSizer->Remove(i);
 	Layout();
+	delete page->GetSource();
 	page->Destroy();
 }
 

@@ -19,7 +19,7 @@ private:
 	void OnRename(wxCommandEvent& e);
 public:
 	ScenariosPanel(wxWindow* parent, const char style = 0);
-	StatusCode NewPage(Scenario* data);
+	StatusCode NewPage(DVNFileData* data) override;
 
 	friend class LoadsPanelContent;
 };

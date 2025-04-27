@@ -29,5 +29,7 @@ public:
 
 	virtual string SaveString() const;
 	void Save();
+	
+	virtual DVNFileData* Copy() const = 0;
 };
 
