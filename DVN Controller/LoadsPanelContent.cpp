@@ -16,7 +16,7 @@ void LoadsPanelContent::SetSource(DVNFileData* source)
 	vector<SideMenuCtrl*>& pages = scenPanel->GetPages();
 	for (char i = 0; i < pages.size(); i++)
 	{
-		pages[i]->SetSource(load->GetScenarios()[i]);
+		pages[i]->SetSource(&load->GetScenarios()[i]);
 	}
 	scenPanel->UpdateContent();
 }

@@ -13,7 +13,6 @@ private:
 	void OnContextMenu(wxContextMenuEvent& e);
 public:
 	SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source);
-	~SideMenuCtrl();
 
 	DVNFileData* GetSource();
 	void SetSource(DVNFileData* source);

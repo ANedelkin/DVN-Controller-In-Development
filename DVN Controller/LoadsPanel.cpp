@@ -14,6 +14,11 @@ LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", Load::V
 	contextMenu->Append(rename);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnRename, this, rename->GetId());
 
+	wxMenuItem* duplicate = new wxMenuItem(contextMenu, wxID_ANY, "Duplicate");
+	duplicate->SetBitmap(wxArtProvider::GetBitmap(wxART_COPY));
+	contextMenu->Append(duplicate);
+	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnDuplicate, this, duplicate->GetId());
+
 	wxMenuItem* deleteItem = new wxMenuItem(contextMenu, wxID_DELETE, "Delete");
 	deleteItem->SetBitmap(wxArtProvider::GetBitmap(wxART_DELETE));
 	contextMenu->Append(deleteItem);
@@ -47,8 +52,10 @@ bool LoadsPanel::Save(SideMenuCtrl* page)
 	bool f = true;
 	if (curData->folder == "")
 		f = SaveAs(page);
-	if(f)
+	if (f) {
 		SideNotebook::Save(page);
+		page->MarkSaved();
+	}
 
 	return f;
 }
@@ -70,10 +77,18 @@ bool LoadsPanel::SaveAs(SideMenuCtrl* page)
 		curData->Rename(name);
 		page->SetLabel(name);
 		curData->folder = folder;
+		Save(page);
 	}
 	else return false;
 	
 	return true;
+}
+
+void LoadsPanel::OnDuplicate(wxCommandEvent& e)
+{
+	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
+	Duplicate(target);
+	target->Refresh();
 }
 
 void LoadsPanel::OnDelete(wxCommandEvent& e)

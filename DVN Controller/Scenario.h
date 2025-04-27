@@ -44,4 +44,6 @@ public:
 	string BandSaveString(char i) const;
 
 	string SaveString() const override;
+
+	DVNFileData* Copy() const override;
 };

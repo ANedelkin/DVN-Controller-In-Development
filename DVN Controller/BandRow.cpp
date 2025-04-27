@@ -38,9 +38,23 @@ void BandRow::OnStatusChanged(wxCommandEvent& e)
     e.Skip();
 }
 
-void BandRow::OnFocus(wxFocusEvent& e) {
+void BandRow::OnTextCtrlFocus(wxFocusEvent& e) {
     focused = FindFocus();
+    ScrollTo();
     e.Skip();
+}
+
+void BandRow::OnFocus(wxFocusEvent& e)
+{
+    ScrollTo();
+    e.Skip();
+}
+
+void BandRow::ScrollTo()
+{
+    wxCommandEvent eOut(EVT_SCROLL_TO);
+    eOut.SetEventObject(this);
+    GetParent()->GetEventHandler()->ProcessEvent(eOut);
 }
 
 BandRow::BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const char style) 
@@ -80,9 +94,10 @@ void BandRow::InitForeground() {
         statBtn->Disable();
     }
     else {
-        name->SetClientData((void*)BAND_NAME);
-        startValue->SetClientData((void*)START);
-        endValue->SetClientData((void*)END);
+        name->SetClientData((void*)Name);
+        startValue->SetClientData((void*)Start);
+        endValue->SetClientData((void*)End);
+        statBtn->SetClientData((void*)StatBtn);
     }
 
     SetUpSizers();
@@ -93,9 +108,9 @@ void BandRow::BindEventHandlers()
     Bind(wxEVT_SIZE, &BandRow::OnResize, this);
 
     if (!(style & READ_ONLY)) {
-        name->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
-        startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
-        endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
+        name->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
+        startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
+        endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
 
         name->Bind(wxEVT_KEY_DOWN, &BandRow::OnKey, this);
         startValue->Bind(wxEVT_KEY_DOWN, &BandRow::OnKey, this);
@@ -106,6 +121,8 @@ void BandRow::BindEventHandlers()
         endValue->Bind(wxEVT_CONTEXT_MENU, &BandRow::EmptyHandler, this);
 
         statBtn->Bind(wxEVT_BUTTON, &BandRow::OnStatusChanged, this);
+        statBtn->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
+        unfocused->Bind(wxEVT_SET_FOCUS, &BandRow::OnFocus, this);
     }
 }
 
@@ -155,17 +172,17 @@ string BandRow::Rename() {
 
 string BandRow::UpdateFreq(int freqToChange)
 {
-    assert(freqToChange == START || freqToChange == END);
+    assert(freqToChange == Start || freqToChange == End);
     string stat;
-    wxTextCtrl* ctrl = (int)freqToChange == START ? startValue : endValue;
-    int i = (int)freqToChange == START ? 0 : 1;
+    wxTextCtrl* ctrl = (int)freqToChange == Start ? startValue : endValue;
+    int i = (int)freqToChange == Start ? 0 : 1;
     int newValue;
     stat = Validation::TryParse(ctrl->GetValue(), &newValue) ? ToString(Success) : ToString(FreqNotPositiveNumber);
     if (!stat.empty()) {
         if (ShowError(base, stat, DIALOG) == wxID_CANCEL) {
             ctrl->SetValue(to_string(scenario->GetFreq(bandNum, i)));
             return ToString(Success);
-        };
+        }
     }
     else {
         if (newValue == scenario->GetFreq(bandNum, i)) return ToString(Success);
@@ -198,7 +215,7 @@ bool BandRow::ProcessKey(int key)
     int tabDir = wxGetKeyState(WXK_SHIFT);
     if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE)) {
         bool updateSuccess;
-        if ((int)focused->GetClientData() == BAND_NAME)
+        if ((int)focused->GetClientData() == Name)
             updateSuccess = Rename().empty();
         else
             updateSuccess = UpdateFreq((int)focused->GetClientData()).empty();

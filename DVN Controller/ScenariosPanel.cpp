@@ -14,6 +14,11 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style)
 		contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnRename, this, rename->GetId());
 
 		if (style & DELETABLE) {
+			wxMenuItem* duplicate = new wxMenuItem(contextMenu, wxID_ANY, "Duplicate");
+			duplicate->SetBitmap(wxArtProvider::GetBitmap(wxART_COPY));
+			contextMenu->Append(duplicate);
+			contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnDuplicate, this, duplicate->GetId());
+
 			wxMenuItem* deleteItem = new wxMenuItem(contextMenu, wxID_DELETE, "Delete");
 			deleteItem->SetBitmap(wxArtProvider::GetBitmap(wxART_DELETE));
 			contextMenu->Append(deleteItem);
@@ -38,15 +43,17 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style)
 		assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");
 		Load* source = dynamic_cast<Load*>(parent->GetSource());
 		assert(source != nullptr && "Source is not a Load or derived");
-		for (Scenario* child : source->GetScenarios())
-			NewPage(child);
+		for (Scenario& child : source->GetScenarios())
+			NewPage(&child);
 	}
 	content->UnInit();
 }
 
-StatusCode ScenariosPanel::NewPage(Scenario* data)
+StatusCode ScenariosPanel::NewPage(DVNFileData* data)
 {
-	return SideNotebook::NewPage(data);
+	Scenario* scen = dynamic_cast<Scenario*>(data);
+	assert(scen != nullptr && "data is not a Scenario or derived!");
+	return SideNotebook::NewPage(scen);
 }
 
 void ScenariosPanel::OnRename(wxCommandEvent& e) {
@@ -90,6 +97,13 @@ void ScenariosPanel::OnSave(wxCommandEvent& e) {
 		scenario.DVNFileData::Rename(nameSetter.name);
 		Save(target);
 	}
+	target->Refresh();
+}
+
+void ScenariosPanel::OnDuplicate(wxCommandEvent& e)
+{
+	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
+	Duplicate(target);
 	target->Refresh();
 }
 

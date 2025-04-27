@@ -5,10 +5,10 @@
 
 //Random defines:
 
-#define NAME_MAX_LENGTH 27
+#define NAME_MAX_LENGTH	27
 
-#define NAME_INPUT_LEN 200
-#define FREQ_INPUT_LEN 100
+#define NAME_INPUT_LEN	200
+#define FREQ_INPUT_LEN	100
 
 
 //Styles:
@@ -33,18 +33,11 @@ extern wxWindow* focused;
 extern vector<string> Split(const string& str, char delimiter);
 
 
-//BandRow column tags
-
-#define SCEN_NAME		0
-#define BAND_NAME		1
-#define START			2
-#define END				3
-
-
 //Colours
 
 #define DARK_GREEN wxColour(0, 127, 14)
 
 
 //Events
+wxDECLARE_EVENT(EVT_SCROLL_TO, wxCommandEvent);
 wxDECLARE_EVENT(EVT_UNSAVE, wxCommandEvent);

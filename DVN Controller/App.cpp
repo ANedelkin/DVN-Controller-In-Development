@@ -10,6 +10,7 @@ public:
     }
     int FilterEvent(wxEvent& e) {
 		const wxEventType t = e.GetEventType();
+
 		if (t == wxEVT_LEFT_DOWN || t == wxEVT_RIGHT_DOWN || t == wxEVT_CLOSE_WINDOW) {
 			wxWindow* target = dynamic_cast<wxWindow*>(e.GetEventObject());
 			if (focused && (focused != target || t == wxEVT_CLOSE_WINDOW && base && base == target)) {
@@ -19,16 +20,18 @@ public:
 				assert(row != nullptr && "Focused's parent is not BandRow or derived.");
 				string stat = ToString(Success);
 				int type = (int)focused->GetClientData();
-				if (type == BAND_NAME)
+				if (type == BandRow::Name)
 					stat = row->Rename();
-				else
+				else if(type == BandRow::Start|| type == BandRow::End)
 					stat = row->UpdateFreq(type);
 
 				if (stat.empty()) { //Success
 					focused = nullptr;
 
-					int type = (int)(target->GetClientData());
-					if (t == wxEVT_CLOSE_WINDOW || wxGetMouseState().LeftIsDown() && (type == BAND_NAME || type == START || type == END)) return Event_Skip;
+					int type = (int)target->GetClientData();
+					if (t == wxEVT_CLOSE_WINDOW || wxGetMouseState().LeftIsDown() && 
+												  (type == BandRow::Name || type == BandRow::Start || type == BandRow::End || type == BandRow::StatBtn)) 
+						return Event_Skip;
 					row->Unfocus();
 				}
 				else //Failure, like me

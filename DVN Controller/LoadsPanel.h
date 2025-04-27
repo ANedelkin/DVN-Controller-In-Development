@@ -10,6 +10,7 @@ class LoadsPanel : public SideNotebook
 private:
 	bool Save(SideMenuCtrl* page) override;
 	bool SaveAs(SideMenuCtrl* page);
+	void OnDuplicate(wxCommandEvent& e);
 	void OnDelete(wxCommandEvent& e);
 	void OnClose(wxCommandEvent& e);
 	void OnRename(wxCommandEvent& e);

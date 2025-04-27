@@ -9,6 +9,8 @@ class BandsPanel : public SideNotebookContent
 private:
 	array<BandRow*, GetBandsCount()> bandRows;
 	wxScrolled<wxPanel>* scrollWrapper;
+
+	void OnScrollTo(wxCommandEvent& e);
 public:
 	wxPanel* table;
 	wxPanel* content;
