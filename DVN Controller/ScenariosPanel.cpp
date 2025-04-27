@@ -70,8 +70,8 @@ void ScenariosPanel::OnRename(wxCommandEvent& e) {
 void ScenariosPanel::OnLoad(wxCommandEvent& e)
 {
 	ScenSelectDialog dialog(base);
+	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	if (dialog.ShowModal() == wxID_OK) {
-		SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 		Scenario* selection = dialog.GetSelection();
 		*(Scenario*)target->GetSource() = *selection;
 		target->SetLabel(target->GetSource()->GetName());
@@ -84,8 +84,8 @@ void ScenariosPanel::OnLoad(wxCommandEvent& e)
 		}
 		else
 			Unsave(false, target);
-		target->Refresh();
 	}
+	target->Refresh();
 }
 
 void ScenariosPanel::OnSave(wxCommandEvent& e) {
