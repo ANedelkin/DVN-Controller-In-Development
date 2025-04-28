@@ -75,6 +75,7 @@ void MainFrame::CreateToolBar()
 	newBtn->Bind(wxEVT_BUTTON, &MainFrame::OnNew, this);
 	openBtn->Bind(wxEVT_BUTTON, &MainFrame::OnOpen, this);
 	saveBtn->Bind(wxEVT_BUTTON, &MainFrame::OnSave, this);
+	addBtn->Bind(wxEVT_BUTTON, &MainFrame::OnAdd, this);
 	saveAsBtn->Bind(wxEVT_BUTTON, &MainFrame::OnSaveAs, this);
 	loadToBtn->Bind(wxEVT_BUTTON, &MainFrame::OnLoadToJmr, this);
 	loadFromBtn->Bind(wxEVT_BUTTON, &MainFrame::OnLoadFromJmr, this);
@@ -189,6 +190,34 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 				Load* load = Load::ToLoad(name, fn.GetPath().ToStdString(), data);
 				if (load->ok)
 					loadsPanel->NewPage(load);
+				else
+					ShowError(this, ToString(InvalidFile, name.c_str()));
+			}
+			else ShowError(this, ToString(FileNonexistent, name.c_str()));
+		}
+	}
+}
+
+void MainFrame::OnAdd(wxCommandEvent& e)
+{
+	wxFileDialog dialog(this, "Select Scenario/s", "", "", "Scenario files (*.dvns)|*.dvns", wxFD_MULTIPLE);
+	wxArrayString paths;
+
+	if (dialog.ShowModal() == wxID_OK) {
+		dialog.GetPaths(paths);
+		for (const auto& path : paths)
+		{
+			ifstream stream(path.ToStdString());
+			wxFileName fn(path);
+			const string name = fn.GetName().ToStdString();
+			if (stream.is_open()) {
+				stringstream data;
+				data << stream.rdbuf();
+				Scenario* scenario = Scenario::ToScenario(name, data);
+				if (scenario->ok) {
+					scenariosPanel->NewPage(scenario);
+					scenariosPanel->SaveCurrent();
+				}
 				else
 					ShowError(this, ToString(InvalidFile, name.c_str()));
 			}
