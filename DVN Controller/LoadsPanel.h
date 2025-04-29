@@ -18,5 +18,6 @@ public:
 	void SaveCurrentAs();
 	LoadsPanel(wxWindow* parent);
 	StatusCode NewPage(Load* data);
+	bool CheckForUnsaved() override;
 };
 

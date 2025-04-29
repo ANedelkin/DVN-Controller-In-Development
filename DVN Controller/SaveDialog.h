@@ -14,9 +14,11 @@ public:
         ID_CANCEL
     };
 
-    SaveDialog(wxWindow* parent, const string& fileName, char style = 0) 
+    SaveDialog(wxWindow* parent, const string& messageTxt, char style = 0) 
              : wxDialog(parent, wxID_ANY, "Unsaved file")
     {
+        SetSize(FromDIP(wxSize(420, -1)));
+
         wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
         
         wxPanel* content = new wxPanel(this);
@@ -25,10 +27,10 @@ public:
         wxStaticText* message = new wxStaticText(
             content, 
             wxID_ANY, 
-            "\"" + fileName + "\"" + " is unsaved, how would you like to proceed?"
+            messageTxt
         );
         message->SetWindowStyle(wxALIGN_CENTER);
-        message->SetFont(wxFont(FromDIP(15), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI"));
+        message->SetFont(wxFont(FromDIP(12), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI"));
         message->SetForegroundColour(wxColour(65, 103, 179));
         message->Wrap(GetSize().GetWidth());
         contentSizer->Add(message, 1, wxALIGN_CENTER | wxALL, FromDIP(10));
@@ -51,8 +53,8 @@ public:
 
         if (style & SAVING_MANY) {
 
-            wxButton* saveAllButton = new wxButton(content, ID_SAVE_ALL, "Save all unsaved files");
-            wxButton* skipAllButton = new wxButton(content, ID_SKIP_ALL, "Don't save any unsaved files");
+            wxButton* saveAllButton = new wxButton(content, ID_SAVE_ALL, "Save all");
+            wxButton* skipAllButton = new wxButton(content, ID_SKIP_ALL, "Don't save any");
             
             contentSizer->Add(saveAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
             contentSizer->Add(skipAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
