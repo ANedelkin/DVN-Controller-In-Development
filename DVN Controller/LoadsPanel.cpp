@@ -68,6 +68,7 @@ bool LoadsPanel::CheckForUnsaved()
 				return true;
 			case SaveDialog::ID_SKIP:
 				Close(pages[i]);
+				break;
 			case SaveDialog::ID_CANCEL:
 			case wxID_CANCEL:
 				return false;
