@@ -14,8 +14,6 @@ private:
     Scenario* scenario;
     char bandNum;
 
-    wxButton* background;
-
     wxStaticText* num;
     ColourfulBtn* statBtn;
 

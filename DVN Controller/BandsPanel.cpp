@@ -72,7 +72,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
     labelsSizer->Add(activeLabel, 0, wxALIGN_CENTER);
     labelsSizer->AddSpacer(FromDIP(10));
 
-    labels->SetSizerAndFit(labelsSizer);
+    labels->SetSizer(labelsSizer);
 
     this->source = scenario;
 
@@ -81,7 +81,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
         contentSizer->Add(bandRows[i], 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(10));
     }
 
-    content->SetSizerAndFit(contentSizer);
+    content->SetSizer(contentSizer);
 
     scrollSizer->Add(content, 1, wxEXPAND | wxRIGHT, FromDIP(15));
 

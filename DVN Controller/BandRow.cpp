@@ -3,16 +3,16 @@
 #include "BandRow.h"
 
 void BandRow::OnResize(wxSizeEvent& e) {
-    if (toBeInited) {
-        background->SetSize(GetSize());
-        name->Raise();
-        startValue->Raise();
-        endValue->Raise();
-        statBtn->Raise();
-        num->Raise();
-        e.Skip();
-        toBeInited = false;
-    }
+    //if (toBeInited) {
+    //    background->SetSize(GetSize());
+    //    name->Raise();
+    //    startValue->Raise();
+    //    endValue->Raise();
+    //    statBtn->Raise();
+    //    num->Raise();
+    //    e.Skip();
+    //    toBeInited = false;
+    //}
 }
 void BandRow::EmptyHandler(wxEvent& e)
 {
@@ -23,7 +23,6 @@ void BandRow::OnKey(wxKeyEvent& e) {
 }
 void BandRow::OnStatusChanged(wxCommandEvent& e)
 {
-    Refresh();
     if (scenario->IsActive(bandNum)) {
         scenario->TurnOff(bandNum);
         statBtn->SetForegroundColour(*wxRED);
@@ -58,16 +57,14 @@ void BandRow::ScrollTo()
 }
 
 BandRow::BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const char style) 
-        : wxPanel(parent, wxID_ANY), 
+        : wxPanel(parent, wxID_ANY),
           style(style) 
 {
+    SetWindowStyle(wxBORDER_THEME);
     this->scenario = scenario;
     this->bandNum = bandNum;
 
     unfocused = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(0, 0));
-    background = new wxButton(this, wxID_ANY, wxEmptyString);
-    background->SetBackgroundColour(wxColour(255, 255, 255));
-    background->Disable();
 
     InitForeground();
     BindEventHandlers();
@@ -105,7 +102,7 @@ void BandRow::InitForeground() {
 
 void BandRow::BindEventHandlers()
 {
-    Bind(wxEVT_SIZE, &BandRow::OnResize, this);
+    //Bind(wxEVT_SIZE, &BandRow::OnResize, this);
 
     if (!(style & READ_ONLY)) {
         name->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
