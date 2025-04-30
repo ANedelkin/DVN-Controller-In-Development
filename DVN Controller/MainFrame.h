@@ -49,6 +49,7 @@ private:
 	void OnTabChanged(wxNotebookEvent& e);
 	void OnNew(wxCommandEvent& e);
 	void OnOpen(wxCommandEvent& e);
+	void OnAdd(wxCommandEvent& e);
 	void OnSave(wxCommandEvent& e);
 	void OnSaveAs(wxCommandEvent& e);
 	void OnLoadFromJmr(wxCommandEvent& e);

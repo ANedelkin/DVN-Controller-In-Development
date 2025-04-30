@@ -49,6 +49,6 @@ public:
 
 	void SaveCurrent();
 	SideMenuCtrl* GetCurrent();
-	bool CheckForUnsaved();
+	virtual bool CheckForUnsaved();
 };
 

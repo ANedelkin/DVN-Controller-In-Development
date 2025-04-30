@@ -46,6 +46,39 @@ StatusCode LoadsPanel::NewPage(Load* data)
 	return SideNotebook::NewPage(data);
 }
 
+bool LoadsPanel::CheckForUnsaved()
+{
+	for (char i = 0; i < pages.size(); i++)
+	{
+		if (pages[i]->GetSource()->folder != "" && !ifstream(pages[i]->GetSource()->GetPath())) {
+			switch (SaveDialog(this, "\"" + pages[i]->GetSource()->GetName() + "\"" + " was changed from outside the program and needs a new path or will be deleted!", SAVING_MANY).ShowModal()) {
+			case SaveDialog::ID_SAVE:
+				if (!SaveAs(pages[i])) return false;
+				pages[i]->MarkSaved();
+				break;
+			case SaveDialog::ID_SAVE_ALL:
+				for (char j = i; j < pages.size(); j++) {
+					if (!SaveAs(pages[j])) return false;
+					pages[i]->MarkSaved();
+				}
+				return true;
+			case SaveDialog::ID_SKIP_ALL:
+				for (char j = i; j < pages.size(); j++)
+					Close(pages[i]);
+				return true;
+			case SaveDialog::ID_SKIP:
+				Close(pages[i]);
+				break;
+			case SaveDialog::ID_CANCEL:
+			case wxID_CANCEL:
+				return false;
+			}
+
+		}
+	}
+	return SideNotebook::CheckForUnsaved();
+}
+
 bool LoadsPanel::Save(SideMenuCtrl* page)
 {
 	DVNFileData* curData = page->GetSource();
@@ -108,7 +141,7 @@ void LoadsPanel::OnDelete(wxCommandEvent& e)
 void LoadsPanel::OnClose(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	if (!target->GetSource()->upToDate) {
-		switch (SaveDialog(base, target->GetSource()->GetName()).ShowModal()) {
+		switch (SaveDialog(base, "\"" + target->GetSource()->GetName() + "\"" + " is unsaved, how would you like to proceed?").ShowModal()) {
 		case SaveDialog::ID_SAVE:
 			if (Save(target))
 				Close(target);
