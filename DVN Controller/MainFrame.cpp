@@ -177,6 +177,7 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 	wxFileDialog dialog(this, "Select Load/s", "", "", "Load files (*.dvnl)|*.dvnl", wxFD_MULTIPLE);
 	wxArrayString paths;
 
+	Freeze();
 	if (dialog.ShowModal() == wxID_OK) {
 		dialog.GetPaths(paths);
 		for (const auto& path : paths)
@@ -196,6 +197,7 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 			else ShowError(this, ToString(FileNonexistent, name.c_str()));
 		}
 	}
+	Thaw();
 }
 
 void MainFrame::OnAdd(wxCommandEvent& e)

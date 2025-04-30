@@ -23,7 +23,6 @@ void BandRow::OnKey(wxKeyEvent& e) {
 }
 void BandRow::OnStatusChanged(wxCommandEvent& e)
 {
-    Refresh();
     if (scenario->IsActive(bandNum)) {
         scenario->TurnOff(bandNum);
         statBtn->SetForegroundColour(*wxRED);
