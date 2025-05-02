@@ -59,8 +59,9 @@ void JammersWindow::LoadJammers()
 	_ft_device_list_info_node* devices = new _ft_device_list_info_node[devsCount];
 	FT_GetDeviceInfoList(devices, &devsCount);
 	for (DWORD i = 0; i < devsCount; i++) {
-		if (devices[i].Type != FT_DEVICE_UNKNOWN && strcmp(devices[i].Description, "BJ130P") == 0) {
-			char str[16] = "BJ130P ";
+		if (devices[i].Type != FT_DEVICE_UNKNOWN && strcmp(devices[i].Description, JAMMER_NAME) == 0) {
+			char str[16] = JAMMER_NAME;
+			str[strlen(JAMMER_NAME)] = ' ';
 			strcat(str, devices[i].SerialNumber);
 			this->SetFocus();
 			list->AppendString(str);

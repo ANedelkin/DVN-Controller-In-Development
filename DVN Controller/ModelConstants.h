@@ -1,5 +1,8 @@
 #pragma once
 
+#define JAMMER_NAME "BJ130P"
+#define VERSION "1.0"
+
 #define SCENARIOS_COUNT 6
 
 #define BANDS_COUNT 30

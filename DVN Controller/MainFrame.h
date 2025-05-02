@@ -11,6 +11,7 @@
 #include "ScenariosPanel.h"
 #include "LoadsPanel.h"
 #include "JammersWindow.h"
+#include "AboutWindow.h"
 
 class MainFrame : public wxFrame
 {
@@ -54,7 +55,8 @@ private:
 	void OnSaveAs(wxCommandEvent& e);
 	void OnLoadFromJmr(wxCommandEvent& e);
 	void OnLoadToJmr(wxCommandEvent& e);
+	void OnAbout(wxCommandEvent& e);
 	void OnClose(wxCloseEvent& e);
 public:
-	MainFrame(const string& title);
+	MainFrame();
 };

@@ -1,6 +1,6 @@
 #include "MainFrame.h"
 
-MainFrame::MainFrame(const string& title) : wxFrame(nullptr, wxID_ANY, title) {
+MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Controller") {
 	wxIcon icon(ICON);
 	SetIcon(icon);
 
@@ -79,6 +79,7 @@ void MainFrame::CreateToolBar()
 	saveAsBtn->Bind(wxEVT_BUTTON, &MainFrame::OnSaveAs, this);
 	loadToBtn->Bind(wxEVT_BUTTON, &MainFrame::OnLoadToJmr, this);
 	loadFromBtn->Bind(wxEVT_BUTTON, &MainFrame::OnLoadFromJmr, this);
+	aboutBtn->Bind(wxEVT_BUTTON, &MainFrame::OnAbout, this);
 
 	Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
 }
@@ -259,6 +260,11 @@ void MainFrame::OnLoadToJmr(wxCommandEvent& e)
 {
 	JammersWindow jammersWindow(this);
 	jammersWindow.ShowModal();
+}
+
+void MainFrame::OnAbout(wxCommandEvent& e)
+{
+	AboutDialog(this).ShowModal();
 }
 
 void MainFrame::OnClose(wxCloseEvent& e)

@@ -179,6 +179,9 @@
     <ClInclude Include="SideNotebookContent.h">
       <Filter>Header Files\Controls</Filter>
     </ClInclude>
+    <ClInclude Include="AboutWindow.h">
+      <Filter>Header Files\Frames</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\x64\Release\DVN Controller.exe">
