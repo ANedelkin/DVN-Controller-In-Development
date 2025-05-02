@@ -51,12 +51,12 @@ bool LoadsPanel::CheckForUnsaved()
 	for (char i = 0; i < pages.size(); i++)
 	{
 		if (pages[i]->GetSource()->folder != "" && !ifstream(pages[i]->GetSource()->GetPath())) {
-			switch (SaveDialog(this, "\"" + pages[i]->GetSource()->GetName() + "\"" + " was changed from outside the program and needs a new path or will be deleted!", SAVING_MANY).ShowModal()) {
+			switch (SaveDialog(this, "\"" + pages[i]->GetSource()->GetName() + "\"" + " was changed from outside the program and needs a new path or will be deleted!").ShowModal()) {
 			case SaveDialog::ID_SAVE:
 				if (!SaveAs(pages[i])) return false;
 				pages[i]->MarkSaved();
 				break;
-			case SaveDialog::ID_SAVE_ALL:
+			/*case SaveDialog::ID_SAVE_ALL:
 				for (char j = i; j < pages.size(); j++) {
 					if (!SaveAs(pages[j])) return false;
 					pages[i]->MarkSaved();
@@ -65,9 +65,10 @@ bool LoadsPanel::CheckForUnsaved()
 			case SaveDialog::ID_SKIP_ALL:
 				for (char j = i; j < pages.size(); j++)
 					Close(pages[i]);
-				return true;
+				return true;*/
 			case SaveDialog::ID_SKIP:
 				Close(pages[i]);
+				i--;
 				break;
 			case SaveDialog::ID_CANCEL:
 			case wxID_CANCEL:
@@ -83,6 +84,20 @@ bool LoadsPanel::Save(SideMenuCtrl* page)
 {
 	DVNFileData* curData = page->GetSource();
 	bool f = true;
+	if (!(exists(curData->folder) && is_directory(curData->folder))) {
+		switch (SaveDialog(this, "\"" + page->GetSource()->GetName() + "\"" + " was changed from outside the program and needs a new path or will be deleted!").ShowModal()) {
+		case SaveDialog::ID_SAVE:
+			if (!SaveAs(page)) return false;
+			page->MarkSaved();
+			return true;
+		case SaveDialog::ID_SKIP:
+			Close(page);
+			return false;
+		case SaveDialog::ID_CANCEL:
+		case wxID_CANCEL:
+			return false;
+		}
+	}
 	if (curData->folder == "")
 		f = SaveAs(page);
 	if (f) {

@@ -30,7 +30,7 @@ public:
             messageTxt
         );
         message->SetWindowStyle(wxALIGN_CENTER);
-        message->SetFont(wxFont(FromDIP(12), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI"));
+        message->SetFont(wxFont(FromDIP(15), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI"));
         message->SetForegroundColour(wxColour(65, 103, 179));
         message->Wrap(GetSize().GetWidth());
         contentSizer->Add(message, 1, wxALIGN_CENTER | wxALL, FromDIP(10));
