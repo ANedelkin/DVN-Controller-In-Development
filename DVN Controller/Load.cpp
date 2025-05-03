@@ -32,6 +32,11 @@ string Load::SaveString() const {
 	return stream.str();
 }
 
+bool Load::AlteredFromOutside()
+{
+	return folder != "" && !(exists(folder) && is_directory(folder));
+}
+
 Load* Load::ToLoad(const string& name, const string& folder, stringstream& data) {
 	Load* load = new Load(name, folder);
 	if (!Load::ValidateName(name).empty())

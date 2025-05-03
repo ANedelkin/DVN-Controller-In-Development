@@ -20,6 +20,8 @@ public:
 
 	string SaveString() const override;
 
+	bool AlteredFromOutside();
+
 	static Load* ToLoad(const string& name, const string& folder, stringstream& data);
 
 	DVNFileData* Copy() const override;

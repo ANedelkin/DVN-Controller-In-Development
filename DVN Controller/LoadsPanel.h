@@ -8,6 +8,7 @@
 class LoadsPanel : public SideNotebook
 {
 private:
+	bool RecreateSource(SideMenuCtrl* page);
 	bool Save(SideMenuCtrl* page) override;
 	bool SaveAs(SideMenuCtrl* page);
 	void OnDuplicate(wxCommandEvent& e);
