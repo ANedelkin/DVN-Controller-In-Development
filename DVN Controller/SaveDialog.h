@@ -2,6 +2,8 @@
 
 #include "Global.h"
 
+#define SAVING_MANY 0b00000010
+
 class SaveDialog : public wxDialog
 {
 public:

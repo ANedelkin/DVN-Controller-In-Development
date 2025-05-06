@@ -5,7 +5,6 @@
 
 #define SCENARIOS_COUNT 6
 
-#define BANDS_COUNT 30
 #define BAND_RANGES_COUNT 6
 
 constexpr int BAND_RANGES[BAND_RANGES_COUNT][4] = {
@@ -17,11 +16,18 @@ constexpr int BAND_RANGES[BAND_RANGES_COUNT][4] = {
 	{4000, 6000, -1, 3},
 };
 
-constexpr char GetBandsCount() {
+consteval char GetBandsCount() {
 	char count = 0;
 	for (char i = 0; i < BAND_RANGES_COUNT; i++)
 	{
 		count += BAND_RANGES[i][3];
 	}
 	return count;
+}
+
+consteval char cstrlen(const char* str) {
+	char n = 0;
+	while (str[n])
+		n++;
+	return n;
 }

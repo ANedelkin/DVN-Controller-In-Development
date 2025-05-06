@@ -70,6 +70,7 @@ bool LoadsPanel::RecreateSource(SideMenuCtrl* page)
 	case wxID_CANCEL:
 		return false;
 	}
+	return false;
 }
 
 bool LoadsPanel::Save(SideMenuCtrl* page)

@@ -6,6 +6,14 @@
 #include "SideNotebookContent.h"
 #include "SaveDialog.h"
 
+//Styles:
+
+#define CLOSEABLE       0b00000001
+#define DELETABLE       0b00000010
+#define LOADABLE        0b00000100
+#define READ_ONLY       0b00001000
+#define CONTENT         0b00010000
+
 class ScenSelectDialog;
 
 class SideNotebook : public wxPanel

@@ -37,7 +37,7 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style)
 		}
 	}
 
-	SetContent(new BandsPanel(this, Scenario::placeHolder, style));
+	SetContent(new BandsPanel(this, Scenario::placeHolder, style & READ_ONLY));
 	if (style & CONTENT) {
 		SideNotebookContent* parent = dynamic_cast<SideNotebookContent*>(GetParent());
 		assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");

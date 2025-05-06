@@ -1,6 +1,8 @@
 #pragma once
 #include "Global.h"
 
+#define DIALOG 0b00000001
+
 namespace Status {
     enum StatusCode {
         Success,

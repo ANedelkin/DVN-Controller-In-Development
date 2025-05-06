@@ -4,6 +4,7 @@
 #include "DVNFileData.h"
 #include "ModelConstants.h"
 #include "Validation.h"
+#include "Split.h"
 
 using namespace Status;
 

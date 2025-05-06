@@ -1,4 +1,3 @@
-#pragma once
 #include "Global.h"
 
 class AboutDialog : public wxDialog {
@@ -12,5 +11,15 @@ public:
             FromDIP(wxPoint(20, 20)));
         sizer->Add(aboutText, 0, wxALL, 10);
         SetSizerAndFit(sizer);
+
+        aboutText->Bind(wxEVT_KEY_DOWN, &AboutDialog::OnKeyDown, this);
+    }
+
+private:
+    void OnKeyDown(wxKeyEvent& e) {
+        if (e.GetKeyCode() == WXK_ESCAPE)
+            Close();
+        else
+            e.Skip();
     }
 };

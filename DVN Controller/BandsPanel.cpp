@@ -35,7 +35,7 @@ void BandsPanel::OnScrollTo(wxCommandEvent& e)
     }
 }
 
-BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) : SideNotebookContent(parent, scenario) {
+BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly) : SideNotebookContent(parent, scenario) {
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
 
     wxStaticBox* bandsBox = new wxStaticBox(this, wxID_ANY, "Bands");
@@ -77,7 +77,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
     this->source = scenario;
 
     for (char i = 0; i < GetBandsCount(); i++) {
-        bandRows[i] = new BandRow(content, scenario, i, style);
+        bandRows[i] = new BandRow(content, scenario, i, readOnly);
         contentSizer->Add(bandRows[i], 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(10));
     }
 

@@ -105,6 +105,9 @@
     <ClCompile Include="SideNotebookContent.cpp">
       <Filter>Source Files\Controls</Filter>
     </ClCompile>
+    <ClCompile Include="Split.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Load.h">
@@ -181,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="AboutWindow.h">
       <Filter>Header Files\Frames</Filter>
+    </ClInclude>
+    <ClInclude Include="Split.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
