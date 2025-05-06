@@ -1,8 +1,9 @@
 #pragma once
 #include "Global.h"
-
+#include "LayoutConstants.h"
 #include "SideNotebookContent.h"
 #include "BandRow.h"
+#include "Events.h"
 
 class BandsPanel : public SideNotebookContent
 {

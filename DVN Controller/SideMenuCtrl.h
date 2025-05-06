@@ -2,6 +2,8 @@
 #include "Global.h"
 #include "NameSetter.h"
 #include "DVNFileData.h"
+#include "LayoutConstants.h"
+#include "Events.h"
 
 class SideMenuCtrl : public wxButton {
 private:

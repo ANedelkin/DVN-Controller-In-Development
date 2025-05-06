@@ -3,6 +3,9 @@
 #include "Global.h"
 #include "Scenario.h"
 #include "ColourfulButton.h"
+#include "LayoutConstants.h"
+#include "Colours.h"
+#include "Events.h"
 
 #define FREQ_INPUT_LEN 100
 
