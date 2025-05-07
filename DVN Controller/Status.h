@@ -1,5 +1,11 @@
 #pragma once
-#include "Global.h"
+
+#include <wx/msgdlg.h>
+#define _CRT_SECURE_NO_WARNINGS
+#include <map>
+#include <string>
+
+using namespace std;
 
 #define DIALOG 0b00000001
 

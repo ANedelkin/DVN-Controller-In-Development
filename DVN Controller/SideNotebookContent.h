@@ -1,7 +1,6 @@
 #pragma once
-#include "Global.h"
+
 #include "DVNFileData.h"
-#include "Events.h"
 
 class SideNotebookContent : public wxPanel
 {

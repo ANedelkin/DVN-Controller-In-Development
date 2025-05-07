@@ -1,4 +1,11 @@
 #pragma once
+
+#include <wx/window.h>
+#include <wx/font.h>
+#include <wx/menu.h>
+#include <wx/button.h>
+#include <wx/dcclient.h>
+
 #include "Global.h"
 #include "NameSetter.h"
 #include "DVNFileData.h"

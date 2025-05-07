@@ -1,9 +1,10 @@
 #pragma once
-#include "Global.h"
-#include "LayoutConstants.h"
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <array>
+
 #include "SideNotebookContent.h"
 #include "BandRow.h"
-#include "Events.h"
 
 class BandsPanel : public SideNotebookContent
 {

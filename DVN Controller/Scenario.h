@@ -1,9 +1,12 @@
 #pragma once
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <array>
+
 #include "Global.h"
 #include "BandInfo.h"
 #include "DVNFileData.h"
 #include "ModelConstants.h"
-#include "Validation.h"
 #include "Split.h"
 
 using namespace Status;

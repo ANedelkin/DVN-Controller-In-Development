@@ -1,10 +1,17 @@
 #pragma once
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <fstream>
+#include <filesystem>
+
 #include "Global.h"
 #include "DVNFileData.h"
 
 #include "SideMenuCtrl.h"
 #include "SideNotebookContent.h"
 #include "SaveDialog.h"
+
+using namespace filesystem;
 
 //Styles:
 

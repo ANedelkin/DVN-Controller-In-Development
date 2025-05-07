@@ -1,5 +1,4 @@
 #include "BandsPanel.h"
-#include "Load.h"
 
 void BandsPanel::OnScrollTo(wxCommandEvent& e)
 {
@@ -98,7 +97,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly
     panelSizer->Add(bandsBox);
     SetSizerAndFit(panelSizer);
 
-    Bind(EVT_SCROLL_TO, &BandsPanel::OnScrollTo, this);
+    //Bind(EVT_SCROLL_TO, &BandsPanel::OnScrollTo, this);
 }
 
 void BandsPanel::SetSource(DVNFileData* source)

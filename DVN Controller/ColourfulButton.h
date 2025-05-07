@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Global.h"
+#include <wx/button.h>
+#include <wx/stattext.h>
+#include <wx/sizer.h>
 
 class ColourfulBtn : public wxButton
 {

@@ -1,8 +1,13 @@
 #pragma once
 
+#define _CRT_SECURE_NO_WARNINGS
+#include <filesystem>
+#include <fstream>
+
 #include "Global.h"
 #include "Validation.h"
 
+using namespace filesystem;
 using namespace Status;
 
 class DVNFileData

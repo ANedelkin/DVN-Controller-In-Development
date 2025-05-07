@@ -1,6 +1,10 @@
 #pragma once
 
-#include "Global.h"
+#include <wx/wx.h>
+#define _CRT_SECURE_NO_WARNINGS
+#include <string>
+
+using namespace std;
 
 #define SAVING_MANY 0b00000010
 

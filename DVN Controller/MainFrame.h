@@ -1,4 +1,8 @@
 #pragma once
+
+#include <wx/notebook.h>
+#include <wx/statline.h>
+
 #include "Global.h"
 
 #include "Icon.xpm"

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <wx/wx.h>
+#include <wx/window.h>
+
 #include "Global.h"
 #include "Scenario.h"
 #include "ColourfulButton.h"

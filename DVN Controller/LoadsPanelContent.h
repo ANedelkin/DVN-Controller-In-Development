@@ -1,4 +1,5 @@
 #pragma once
+
 #include "SideNotebookContent.h"
 #include "ScenariosPanel.h"
 

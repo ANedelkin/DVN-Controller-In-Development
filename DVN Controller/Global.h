@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Includes.h"
+#include <wx/window.h>
 
 extern wxWindow* base;
 extern wxWindow* focused;

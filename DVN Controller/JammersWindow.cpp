@@ -54,11 +54,11 @@ void JammersWindow::OnRefreshClicked(wxCommandEvent& e)
 void JammersWindow::LoadJammers()
 {
 	list->Clear();
-	DWORD devsCount;
-	FT_CreateDeviceInfoList(&devsCount);
-	_ft_device_list_info_node* devices = new _ft_device_list_info_node[devsCount];
-	FT_GetDeviceInfoList(devices, &devsCount);
-	for (DWORD i = 0; i < devsCount; i++) {
+	LPDWORD devsCount;
+	FT_CreateDeviceInfoList(devsCount);
+	_ft_device_list_info_node* devices = new _ft_device_list_info_node[*devsCount];
+	FT_GetDeviceInfoList(devices, devsCount);
+	for (DWORD i = 0; i < *devsCount; i++) {
 		if (devices[i].Type != FT_DEVICE_UNKNOWN && strcmp(devices[i].Description, JAMMER_NAME) == 0) {
 			char str[cstrlen(JAMMER_NAME) + 17] = JAMMER_NAME;
 			str[strlen(JAMMER_NAME)] = ' ';
@@ -73,6 +73,7 @@ void JammersWindow::LoadJammers()
 		if (list->GetCount() == 1) list->SetSelection(0);
 		select->Enable();
 	}
+	delete[] devices;
 }
 
 void JammersWindow::Select()
