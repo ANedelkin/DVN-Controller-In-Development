@@ -32,18 +32,17 @@ private:
 	wxPanel* emptyPanel;
 	wxStaticText* emptyText;
 
-	wxButton* newBtn;
-	wxButton* openBtn;
-	wxButton* saveBtn;
-	wxButton* saveAsBtn;
-	wxButton* addBtn;
-	wxPanel* toolBar;
-	wxStaticLine* separator;
-	wxButton* loadToBtn;
-	wxButton* loadFromBtn;
-	wxButton* aboutBtn;
+	wxToolBar* toolBar;
+	wxToolBarToolBase* newTool;
+	wxToolBarToolBase* openTool;
+	wxToolBarToolBase* saveTool;
+	wxToolBarToolBase* saveAsTool;
+	wxToolBarToolBase* addTool;
+	wxToolBarToolBase* loadToTool;
+	wxToolBarToolBase* loadFromTool;
+	wxToolBarToolBase* aboutTool;
 
-	void CreateToolBar();
+	void SetUpToolBar();
 
 	void LoadScenarios();
 	void UpdateScenarios();
