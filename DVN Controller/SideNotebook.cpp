@@ -181,7 +181,6 @@ bool SideNotebook::CheckForUnsaved()
 				if (!Save(pages[i])) return false;
 				break;
 			case SaveDialog::ID_CANCEL:
-			case wxID_CANCEL:
 				return false;
 			case SaveDialog::ID_SAVE_ALL:
 				for (char j = i; j < pages.size(); j++) {

@@ -67,7 +67,6 @@ bool LoadsPanel::RecreateSource(SideMenuCtrl* page)
 		Close(page);
 		return false;
 	case SaveDialog::ID_CANCEL:
-	case wxID_CANCEL:
 		return false;
 	}
 	return false;
