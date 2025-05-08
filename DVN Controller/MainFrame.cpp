@@ -44,14 +44,14 @@ void MainFrame::SetUpToolBar()
 {
 	toolBar = CreateToolBar(wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT | wxTB_NO_TOOLTIPS);
 	
-	newTool = new wxToolBarToolBase(toolBar, wxID_NEW, "New", wxArtProvider::GetBitmapBundle(wxART_NEW));
-	openTool = new wxToolBarToolBase(toolBar, wxID_OPEN, "Open", wxArtProvider::GetBitmapBundle(wxART_FILE_OPEN));
-	saveTool = new wxToolBarToolBase(toolBar, wxID_SAVE, "Save", wxArtProvider::GetBitmapBundle(wxART_FILE_SAVE));
-	saveAsTool = new wxToolBarToolBase(toolBar, wxID_SAVEAS, "Save As", wxArtProvider::GetBitmapBundle(wxART_FILE_SAVE_AS));
-	addTool = new wxToolBarToolBase(toolBar, wxID_ADD, "Add Existing", wxArtProvider::GetBitmapBundle(wxART_FILE_OPEN));
-	loadToTool = new wxToolBarToolBase(toolBar, wxID_UP, "Load To Jammer", wxArtProvider::GetBitmapBundle(wxART_GO_UP));
-	loadFromTool = new wxToolBarToolBase(toolBar, wxID_DOWN, "Load From Jammer", wxArtProvider::GetBitmapBundle(wxART_GO_DOWN));
-	aboutTool = new wxToolBarToolBase(toolBar, wxID_UP, "Load To Jammer", wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_TOOLBAR));
+	newTool = new wxToolBarToolBase(toolBar, wxID_NEW, "New", wxBitmap(newXPM));
+	openTool = new wxToolBarToolBase(toolBar, wxID_OPEN, "Open", wxBitmap(openXPM));
+	saveTool = new wxToolBarToolBase(toolBar, wxID_SAVE, "Save", wxBitmap(saveXPM));
+	saveAsTool = new wxToolBarToolBase(toolBar, wxID_SAVEAS, "Save As", wxBitmap(saveAsXPM));
+	addTool = new wxToolBarToolBase(toolBar, wxID_ADD, "Add Existing", wxBitmap(openXPM));
+	loadToTool = new wxToolBarToolBase(toolBar, wxID_UP, "Load To Jammer", wxBitmap(arrowUpXPM));
+	loadFromTool = new wxToolBarToolBase(toolBar, wxID_DOWN, "Load From Jammer", wxBitmap(arrowDownXPM));
+	aboutTool = new wxToolBarToolBase(toolBar, wxID_ABOUT, "About", wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_TOOLBAR));
 
 	toolBar->AddTool(newTool);
 	toolBar->AddTool(openTool);

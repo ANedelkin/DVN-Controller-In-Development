@@ -6,6 +6,12 @@
 #include "Global.h"
 
 #include "Icon.xpm"
+#include "newXPM.xpm"
+#include "openXPM.xpm"
+#include "saveXPM.xpm"
+#include "saveAsXPM.xpm"
+#include "arrowUpXPM.xpm"
+#include "arrowDownXPM.xpm"
 
 #include "Load.h"
 #include "Scenario.h"
