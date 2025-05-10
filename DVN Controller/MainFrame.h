@@ -38,15 +38,8 @@ private:
 	wxPanel* emptyPanel;
 	wxStaticText* emptyText;
 
-	wxToolBar* toolBar;
-	wxToolBarToolBase* newTool;
-	wxToolBarToolBase* openTool;
-	wxToolBarToolBase* saveTool;
-	wxToolBarToolBase* saveAsTool;
-	wxToolBarToolBase* addTool;
-	wxToolBarToolBase* loadToTool;
-	wxToolBarToolBase* loadFromTool;
-	wxToolBarToolBase* aboutTool;
+	wxToolBar* loadsToolBar;
+	wxToolBar* scenariosToolBar;
 
 	void SetUpToolBar();
 
@@ -56,6 +49,7 @@ private:
 	void NewScenario();
 	void NewLoad();
 
+	void EmptyHandler(wxEraseEvent& e);
 	void OnTabChanged(wxNotebookEvent& e);
 	void OnNew(wxCommandEvent& e);
 	void OnOpen(wxCommandEvent& e);

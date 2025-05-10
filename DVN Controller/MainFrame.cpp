@@ -42,37 +42,46 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 
 void MainFrame::SetUpToolBar()
 {
-	toolBar = CreateToolBar(wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT | wxTB_NO_TOOLTIPS);
+	scenariosToolBar = CreateToolBar(wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT | wxTB_NO_TOOLTIPS);
+
+	scenariosToolBar->AddTool(wxID_NEW, "New", wxBitmap(newXPM));
+	scenariosToolBar->AddTool(wxID_SAVE, "Save", wxBitmap(saveXPM));
+	scenariosToolBar->AddTool(wxID_ADD, "Add Existing", wxBitmap(openXPM));
+	scenariosToolBar->AddStretchableSpace();
+	scenariosToolBar->AddTool(wxID_ABOUT, "About", wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_TOOLBAR));
+
+	Bind(wxEVT_TOOL, &MainFrame::OnNew, this, wxID_NEW);
+	Bind(wxEVT_TOOL, &MainFrame::OnAdd, this, wxID_ADD);
+	Bind(wxEVT_TOOL, &MainFrame::OnSave, this, wxID_SAVE);
+	Bind(wxEVT_TOOL, &MainFrame::OnAbout, this, wxID_ABOUT);
+
+	scenariosToolBar->Hide();
+	scenariosToolBar->Bind(wxEVT_ERASE_BACKGROUND, [](wxEraseEvent& e) {});
+
+	SetToolBar(nullptr);
+
+	loadsToolBar = CreateToolBar(wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT | wxTB_NO_TOOLTIPS);
+
+	loadsToolBar->AddTool(wxID_NEW, "New", wxBitmap(newXPM));
+	loadsToolBar->AddTool(wxID_OPEN, "Open", wxBitmap(openXPM));
+	loadsToolBar->AddTool(wxID_SAVE, "Save", wxBitmap(saveXPM));
+	loadsToolBar->AddTool(wxID_SAVEAS, "Save As", wxBitmap(saveAsXPM));
+	loadsToolBar->AddSeparator();
+	loadsToolBar->AddTool(wxID_UP, "Load To Jammer", wxBitmap(arrowUpXPM));
+	loadsToolBar->AddTool(wxID_DOWN, "Load From Jammer", wxBitmap(arrowDownXPM));
+	loadsToolBar->AddStretchableSpace();
+	loadsToolBar->AddTool(wxID_ABOUT, "About", wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_TOOLBAR));
+
+	Bind(wxEVT_TOOL, &MainFrame::OnNew, this, wxID_NEW);
+	Bind(wxEVT_TOOL, &MainFrame::OnOpen, this, wxID_OPEN);
+	Bind(wxEVT_TOOL, &MainFrame::OnSave, this, wxID_SAVE);
+	Bind(wxEVT_TOOL, &MainFrame::OnSaveAs, this, wxID_SAVEAS);
+	Bind(wxEVT_TOOL, &MainFrame::OnLoadToJmr, this, wxID_UP);
+	Bind(wxEVT_TOOL, &MainFrame::OnLoadFromJmr, this, wxID_DOWN);
+	Bind(wxEVT_TOOL, &MainFrame::OnAbout, this, wxID_ABOUT);
 	
-	newTool = new wxToolBarToolBase(toolBar, wxID_NEW, "New", wxBitmap(newXPM));
-	openTool = new wxToolBarToolBase(toolBar, wxID_OPEN, "Open", wxBitmap(openXPM));
-	saveTool = new wxToolBarToolBase(toolBar, wxID_SAVE, "Save", wxBitmap(saveXPM));
-	saveAsTool = new wxToolBarToolBase(toolBar, wxID_SAVEAS, "Save As", wxBitmap(saveAsXPM));
-	addTool = new wxToolBarToolBase(toolBar, wxID_ADD, "Add Existing", wxBitmap(openXPM));
-	loadToTool = new wxToolBarToolBase(toolBar, wxID_UP, "Load To Jammer", wxBitmap(arrowUpXPM));
-	loadFromTool = new wxToolBarToolBase(toolBar, wxID_DOWN, "Load From Jammer", wxBitmap(arrowDownXPM));
-	aboutTool = new wxToolBarToolBase(toolBar, wxID_ABOUT, "About", wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_TOOLBAR));
-
-	toolBar->AddTool(newTool);
-	toolBar->AddTool(openTool);
-	toolBar->AddTool(saveTool);
-	toolBar->AddTool(saveAsTool);
-	toolBar->AddSeparator();
-	toolBar->AddTool(loadToTool);
-	toolBar->AddTool(loadFromTool);
-	toolBar->AddStretchableSpace();
-	toolBar->AddTool(aboutTool);
-
-	toolBar->Bind(wxEVT_TOOL, &MainFrame::OnNew, this, wxID_NEW);
-	toolBar->Bind(wxEVT_TOOL, &MainFrame::OnOpen, this, wxID_OPEN);
-	toolBar->Bind(wxEVT_TOOL, &MainFrame::OnSave, this, wxID_SAVE);
-	toolBar->Bind(wxEVT_TOOL, &MainFrame::OnAdd, this, wxID_ADD);
-	toolBar->Bind(wxEVT_TOOL, &MainFrame::OnSaveAs, this, wxID_SAVEAS);
-	toolBar->Bind(wxEVT_TOOL, &MainFrame::OnLoadToJmr, this, wxID_UP);
-	toolBar->Bind(wxEVT_TOOL, &MainFrame::OnLoadFromJmr, this, wxID_DOWN);
-	toolBar->Bind(wxEVT_TOOL, &MainFrame::OnAbout, this, wxID_ABOUT);
-
-	toolBar->Realize();
+	loadsToolBar->Realize();
+	loadsToolBar->Bind(wxEVT_ERASE_BACKGROUND, &MainFrame::EmptyHandler, this);
 }
 
 void MainFrame::LoadScenarios()
@@ -125,28 +134,24 @@ void MainFrame::NewLoad()
 	if (nameSetter.ok && !loadsPanel->NewPage(new Load(nameSetter.name))) loadsPanel->Unsave(true);
 }
 
+void MainFrame::EmptyHandler(wxEraseEvent& e)
+{
+	wxLogMessage("a");
+}
+
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 	if (e.GetSelection() == Loads) {
-		toolBar->RemoveTool(wxID_ADD);
-		toolBar->InsertTool(1, openTool);
-		toolBar->InsertTool(3, saveAsTool);
-		toolBar->InsertSeparator(4);
-		toolBar->InsertTool(5, loadToTool);
-		toolBar->InsertTool(6, loadFromTool);
+		loadsToolBar->Show();
+		SetToolBar(loadsToolBar);
+		loadsToolBar->Realize();
+		scenariosToolBar->Hide();
 	}
 	else {
-		toolBar->DeleteToolByPos(4);
-		toolBar->InsertTool(2, addTool);
-		toolBar->RemoveTool(wxID_OPEN);
-		toolBar->RemoveTool(wxID_SAVEAS);
-		toolBar->RemoveTool(wxID_UP);
-		toolBar->RemoveTool(wxID_DOWN);
-		if (scenariosPanel->GetPages().size())
-			UpdateScenarios();
-		else
-			LoadScenarios();
+		scenariosToolBar->Show();
+		SetToolBar(scenariosToolBar);
+		scenariosToolBar->Realize();
+		loadsToolBar->Hide();
 	}
-	toolBar->Realize();
 }
 
 void MainFrame::OnNew(wxCommandEvent& e) {
