@@ -15,7 +15,7 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-	SetUpToolBar();
+	SetUpToolBars();
 
 	notebook = new wxNotebook(mainPanel, wxID_ANY);
 
@@ -40,13 +40,13 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
 }
 
-void MainFrame::SetUpToolBar()
+void MainFrame::SetUpToolBars()
 {
 	scenariosToolBar = CreateToolBar(wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT | wxTB_NO_TOOLTIPS);
 
 	scenariosToolBar->AddTool(wxID_NEW, "New", wxBitmap(newXPM));
-	scenariosToolBar->AddTool(wxID_SAVE, "Save", wxBitmap(saveXPM));
 	scenariosToolBar->AddTool(wxID_ADD, "Add Existing", wxBitmap(openXPM));
+	scenariosToolBar->AddTool(wxID_SAVE, "Save", wxBitmap(saveXPM));
 	scenariosToolBar->AddStretchableSpace();
 	scenariosToolBar->AddTool(wxID_ABOUT, "About", wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_TOOLBAR));
 
@@ -54,9 +54,6 @@ void MainFrame::SetUpToolBar()
 	Bind(wxEVT_TOOL, &MainFrame::OnAdd, this, wxID_ADD);
 	Bind(wxEVT_TOOL, &MainFrame::OnSave, this, wxID_SAVE);
 	Bind(wxEVT_TOOL, &MainFrame::OnAbout, this, wxID_ABOUT);
-
-	scenariosToolBar->Hide();
-	scenariosToolBar->Bind(wxEVT_ERASE_BACKGROUND, [](wxEraseEvent& e) {});
 
 	SetToolBar(nullptr);
 
@@ -80,8 +77,10 @@ void MainFrame::SetUpToolBar()
 	Bind(wxEVT_TOOL, &MainFrame::OnLoadFromJmr, this, wxID_DOWN);
 	Bind(wxEVT_TOOL, &MainFrame::OnAbout, this, wxID_ABOUT);
 	
+	loadsToolBar->Show();
+	SetToolBar(loadsToolBar);
+	scenariosToolBar->Hide();
 	loadsToolBar->Realize();
-	loadsToolBar->Bind(wxEVT_ERASE_BACKGROUND, &MainFrame::EmptyHandler, this);
 }
 
 void MainFrame::LoadScenarios()
@@ -134,23 +133,18 @@ void MainFrame::NewLoad()
 	if (nameSetter.ok && !loadsPanel->NewPage(new Load(nameSetter.name))) loadsPanel->Unsave(true);
 }
 
-void MainFrame::EmptyHandler(wxEraseEvent& e)
-{
-	wxLogMessage("a");
-}
-
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 	if (e.GetSelection() == Loads) {
 		loadsToolBar->Show();
 		SetToolBar(loadsToolBar);
-		loadsToolBar->Realize();
 		scenariosToolBar->Hide();
+		loadsToolBar->Realize();
 	}
 	else {
 		scenariosToolBar->Show();
 		SetToolBar(scenariosToolBar);
-		scenariosToolBar->Realize();
 		loadsToolBar->Hide();
+		scenariosToolBar->Realize();
 	}
 }
 

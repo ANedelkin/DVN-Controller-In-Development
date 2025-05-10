@@ -41,7 +41,7 @@ private:
 	wxToolBar* loadsToolBar;
 	wxToolBar* scenariosToolBar;
 
-	void SetUpToolBar();
+	void SetUpToolBars();
 
 	void LoadScenarios();
 	void UpdateScenarios();
@@ -49,7 +49,6 @@ private:
 	void NewScenario();
 	void NewLoad();
 
-	void EmptyHandler(wxEraseEvent& e);
 	void OnTabChanged(wxNotebookEvent& e);
 	void OnNew(wxCommandEvent& e);
 	void OnOpen(wxCommandEvent& e);
