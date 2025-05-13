@@ -42,6 +42,8 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly
     
     table = new wxPanel(bandsBox);
     wxPanel* labels = new wxPanel(table);
+    labels->Bind(wxEVT_SET_FOCUS, [labels](wxFocusEvent& e) { labels->Navigate(wxGetKeyState(WXK_SHIFT) ? wxNavigationKeyEvent::IsBackward : wxNavigationKeyEvent::IsForward); });
+    
     scrollWrapper = new wxScrolled<wxPanel>(table);
     content = new wxPanel(scrollWrapper);
 
@@ -97,7 +99,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly
     panelSizer->Add(bandsBox);
     SetSizerAndFit(panelSizer);
 
-    //Bind(EVT_SCROLL_TO, &BandsPanel::OnScrollTo, this);
+    Bind(EVT_SCROLL_TO, &BandsPanel::OnScrollTo, this);
 }
 
 void BandsPanel::SetSource(DVNFileData* source)
