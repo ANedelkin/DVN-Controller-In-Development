@@ -6,6 +6,12 @@
 #include "Global.h"
 
 #include "Icon.xpm"
+#include "newXPM.xpm"
+#include "openXPM.xpm"
+#include "saveXPM.xpm"
+#include "saveAsXPM.xpm"
+#include "arrowUpXPM.xpm"
+#include "arrowDownXPM.xpm"
 
 #include "Load.h"
 #include "Scenario.h"
@@ -32,18 +38,10 @@ private:
 	wxPanel* emptyPanel;
 	wxStaticText* emptyText;
 
-	wxButton* newBtn;
-	wxButton* openBtn;
-	wxButton* saveBtn;
-	wxButton* saveAsBtn;
-	wxButton* addBtn;
-	wxPanel* toolBar;
-	wxStaticLine* separator;
-	wxButton* loadToBtn;
-	wxButton* loadFromBtn;
-	wxButton* aboutBtn;
+	wxToolBar* loadsToolBar;
+	wxToolBar* scenariosToolBar;
 
-	void CreateToolBar();
+	void SetUpToolBars();
 
 	void LoadScenarios();
 	void UpdateScenarios();

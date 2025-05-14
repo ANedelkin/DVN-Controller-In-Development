@@ -15,7 +15,7 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-	CreateToolBar();
+	SetUpToolBars();
 
 	notebook = new wxNotebook(mainPanel, wxID_ANY);
 
@@ -28,7 +28,7 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	notebook->AddPage(loadsPanel, "Loads");	
 	notebook->AddPage(scenariosPanel, "Scenarios");
 	
-	mainSizer->Add(toolBar, 0, wxEXPAND);
+	//mainSizer->Add(toolBar, 0, wxEXPAND);
 	mainSizer->Add(notebook, 0, wxEXPAND);
 
 	mainPanel->SetSizer(mainSizer);
@@ -37,54 +37,62 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	SetSizer(topSizer);
 
 	notebook->Bind(wxEVT_NOTEBOOK_PAGE_CHANGED, &MainFrame::OnTabChanged, this);
+	Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
 }
 
-void MainFrame::CreateToolBar()
+void MainFrame::SetUpToolBars()
 {
-	toolBar = new wxPanel(mainPanel, wxID_ANY);
-	wxBoxSizer* toolBarSizer = new wxBoxSizer(wxHORIZONTAL);
+	scenariosToolBar = CreateToolBar(wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT | wxTB_NO_TOOLTIPS);
 
-	#define CTRL_HEIGHT 30
+	scenariosToolBar->AddTool(wxID_NEW, "New", wxBitmap(newXPM));
+	scenariosToolBar->AddTool(wxID_ADD, "Add Existing", wxBitmap(openXPM));
+	scenariosToolBar->AddTool(wxID_SAVE, "Save", wxBitmap(saveXPM));
+	scenariosToolBar->AddStretchableSpace();
+	scenariosToolBar->AddTool(wxID_ABOUT, "About", wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_TOOLBAR));
 
-	newBtn = new wxButton(toolBar, wxID_ANY, "New");
-	openBtn = new wxButton(toolBar, wxID_ANY, "Open");
-	saveBtn = new wxButton(toolBar, wxID_ANY, "Save");
-	saveAsBtn = new wxButton(toolBar, wxID_ANY, "Save As");
-	addBtn = new wxButton(toolBar, wxID_ANY, "Add existing");
-	addBtn->Hide();
+	Bind(wxEVT_TOOL, &MainFrame::OnNew, this, wxID_NEW);
+	Bind(wxEVT_TOOL, &MainFrame::OnAdd, this, wxID_ADD);
+	Bind(wxEVT_TOOL, &MainFrame::OnSave, this, wxID_SAVE);
+	Bind(wxEVT_TOOL, &MainFrame::OnAbout, this, wxID_ABOUT);
 
-	separator = new wxStaticLine(toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVERTICAL);
+	scenariosToolBar->Realize();
+	SetToolBar(nullptr);
 
-	loadToBtn = new wxButton(toolBar, wxID_UP, "Load to jammer");
-	loadFromBtn = new wxButton(toolBar, wxID_DOWN, "Load from jammer");
+	loadsToolBar = CreateToolBar(wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT | wxTB_NO_TOOLTIPS);
 
-	aboutBtn = new wxButton(toolBar, wxID_ANY, "About");
+	loadsToolBar->AddTool(wxID_NEW, "New", wxBitmap(newXPM));
+	loadsToolBar->AddTool(wxID_OPEN, "Open", wxBitmap(openXPM));
+	loadsToolBar->AddTool(wxID_SAVE, "Save", wxBitmap(saveXPM));
+	loadsToolBar->AddTool(wxID_SAVEAS, "Save As", wxBitmap(saveAsXPM));
+	loadsToolBar->AddSeparator();
+	loadsToolBar->AddTool(wxID_UP, "Load To Jammer", wxBitmap(arrowUpXPM));
+	loadsToolBar->AddTool(wxID_DOWN, "Load From Jammer", wxBitmap(arrowDownXPM));
+	loadsToolBar->AddStretchableSpace();
+	loadsToolBar->AddTool(wxID_ABOUT, "About", wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_TOOLBAR));
 
-	#define PADDING FromDIP(5)
+	Bind(wxEVT_TOOL, &MainFrame::OnOpen, this, wxID_OPEN);
+	Bind(wxEVT_TOOL, &MainFrame::OnSaveAs, this, wxID_SAVEAS);
+	Bind(wxEVT_TOOL, &MainFrame::OnLoadToJmr, this, wxID_UP);
+	Bind(wxEVT_TOOL, &MainFrame::OnLoadFromJmr, this, wxID_DOWN);
+	Bind(wxEVT_TOOL, &MainFrame::OnAbout, this, wxID_ABOUT);
+	
+	loadsToolBar->Show();
+	SetToolBar(loadsToolBar);
+	scenariosToolBar->Hide();
+	loadsToolBar->Realize();
 
-	toolBarSizer->Add(newBtn, 0, wxEXPAND | wxALL, PADDING);
-	toolBarSizer->Add(openBtn, 0, wxEXPAND | wxALL, PADDING);
-	toolBarSizer->Add(saveBtn, 0, wxEXPAND | wxALL, PADDING);
-	toolBarSizer->Add(saveAsBtn, 0, wxEXPAND | wxALL, PADDING);
-	toolBarSizer->Add(addBtn, 0, wxEXPAND | wxALL, PADDING);
-	toolBarSizer->Add(separator, 0, wxEXPAND | wxALL, PADDING);
-	toolBarSizer->Add(loadToBtn, 0, wxEXPAND | wxALL, PADDING);
-	toolBarSizer->Add(loadFromBtn, 0, wxEXPAND | wxALL, PADDING);
-	toolBarSizer->AddStretchSpacer();
-	toolBarSizer->Add(aboutBtn, 0, wxEXPAND | wxALL, PADDING);
+	wxAcceleratorEntry entries[8];
+	entries[0].Set(wxACCEL_CTRL, (int)'N', wxID_NEW);
+	entries[1].Set(wxACCEL_CTRL, (int)'O', wxID_OPEN);
+	entries[2].Set(wxACCEL_CTRL, (int)'A', wxID_ADD);
+	entries[3].Set(wxACCEL_CTRL, (int)'S', wxID_SAVE);
+	entries[4].Set(wxACCEL_CTRL | wxACCEL_SHIFT, (int)'S', wxID_SAVEAS);
+	entries[5].Set(wxACCEL_CTRL, (int)'T', wxID_UP);
+	entries[6].Set(wxACCEL_CTRL, (int)'F', wxID_DOWN);
+	entries[7].Set(wxACCEL_CTRL, (int)'I', wxID_ABOUT);
 
-	toolBar->SetSizerAndFit(toolBarSizer);
-
-	newBtn->Bind(wxEVT_BUTTON, &MainFrame::OnNew, this);
-	openBtn->Bind(wxEVT_BUTTON, &MainFrame::OnOpen, this);
-	saveBtn->Bind(wxEVT_BUTTON, &MainFrame::OnSave, this);
-	addBtn->Bind(wxEVT_BUTTON, &MainFrame::OnAdd, this);
-	saveAsBtn->Bind(wxEVT_BUTTON, &MainFrame::OnSaveAs, this);
-	loadToBtn->Bind(wxEVT_BUTTON, &MainFrame::OnLoadToJmr, this);
-	loadFromBtn->Bind(wxEVT_BUTTON, &MainFrame::OnLoadFromJmr, this);
-	aboutBtn->Bind(wxEVT_BUTTON, &MainFrame::OnAbout, this);
-
-	Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
+	wxAcceleratorTable accelTable(8, entries);
+	SetAcceleratorTable(accelTable);
 }
 
 void MainFrame::LoadScenarios()
@@ -139,27 +147,21 @@ void MainFrame::NewLoad()
 
 void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 	if (e.GetSelection() == Loads) {
-		addBtn->Hide();
-		openBtn->Show();
-		saveAsBtn->Show();
-		separator->Show();
-		loadToBtn->Show();
-		loadFromBtn->Show();
-		Layout();
+		loadsToolBar->Show();
+		SetToolBar(loadsToolBar);
+		scenariosToolBar->Hide();
+		loadsToolBar->Realize();
 	}
 	else {
-		addBtn->Show();
-		openBtn->Hide();
-		saveAsBtn->Hide();
-		separator->Hide();
-		loadToBtn->Hide();
-		loadFromBtn->Hide();
+		scenariosToolBar->Show();
+		SetToolBar(scenariosToolBar);
+		loadsToolBar->Hide();
+		scenariosToolBar->Realize();
 		if (scenariosPanel->GetPages().size())
 			UpdateScenarios();
 		else
 			LoadScenarios();
 	}
-	Layout();
 }
 
 void MainFrame::OnNew(wxCommandEvent& e) {

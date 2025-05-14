@@ -205,7 +205,6 @@
     <None Include="..\x64\Release\DVN Controller.exe">
       <Filter>Output</Filter>
     </None>
-    <None Include="Icon.xpm" />
     <None Include="..\Release\DVN Controller.exe">
       <Filter>Output</Filter>
     </None>
@@ -214,6 +213,27 @@
     </None>
     <None Include="..\SetUp.exe">
       <Filter>Output</Filter>
+    </None>
+    <None Include="Icon.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="arrowDownXPM.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="arrowUpXPM.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="newXPM.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="openXPM.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="saveAsXPM.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="saveXPM.xpm">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

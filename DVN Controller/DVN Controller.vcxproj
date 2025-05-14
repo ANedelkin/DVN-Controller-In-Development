@@ -217,7 +217,13 @@
     <None Include="..\Release\DVN Controller.exe" />
     <None Include="..\SetUp.exe" />
     <None Include="..\x64\Release\DVN Controller.exe" />
+    <None Include="arrowDownXPM.xpm" />
+    <None Include="arrowUpXPM.xpm" />
     <None Include="Icon.xpm" />
+    <None Include="newXPM.xpm" />
+    <None Include="openXPM.xpm" />
+    <None Include="saveAsXPM.xpm" />
+    <None Include="saveXPM.xpm" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DVN Controller.rc" />
