@@ -1,5 +1,7 @@
 #pragma once
-#include "Global.h"
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <array>
 
 #include "SideNotebookContent.h"
 #include "BandRow.h"
@@ -16,7 +18,7 @@ public:
 	wxPanel* content;
 	wxBoxSizer* tableSizer;
 
-	BandsPanel(wxWindow* parent, Scenario* scenario, const char style = 0);
+	BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly = false);
 
 	void SetSource(DVNFileData* source) override;
 	void Init() override;

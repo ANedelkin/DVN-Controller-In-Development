@@ -23,8 +23,8 @@ void SideNotebookContent::UnInit()
 
 void SideNotebookContent::MarkUnsaved()
 {
-	wxCommandEvent e(EVT_UNSAVE);
-	GetParent()->GetEventHandler()->ProcessEvent(e);
+	/*wxCommandEvent e(EVT_UNSAVE);
+	GetParent()->GetEventHandler()->ProcessEvent(e);*/
 }
 
 

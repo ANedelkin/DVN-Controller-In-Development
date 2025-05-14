@@ -23,7 +23,6 @@ void BandRow::OnKey(wxKeyEvent& e) {
 }
 void BandRow::OnStatusChanged(wxCommandEvent& e)
 {
-    Refresh();
     if (scenario->IsActive(bandNum)) {
         scenario->TurnOff(bandNum);
         statBtn->SetForegroundColour(*wxRED);
@@ -57,9 +56,9 @@ void BandRow::ScrollTo()
     GetParent()->GetEventHandler()->ProcessEvent(eOut);
 }
 
-BandRow::BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const char style) 
+BandRow::BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, bool readOnly) 
         : wxPanel(parent, wxID_ANY), 
-          style(style) 
+          readOnly(readOnly) 
 {
     this->scenario = scenario;
     this->bandNum = bandNum;
@@ -87,7 +86,7 @@ void BandRow::InitForeground() {
     statBtn = new ColourfulBtn(this, active ? "ON" : "OFF");
     statBtn->SetForegroundColour(wxColour(active ? DARK_GREEN : *wxRED));
 
-    if (style & READ_ONLY) {
+    if (readOnly) {
         name->Disable();
         startValue->Disable();
         endValue->Disable();
@@ -107,7 +106,7 @@ void BandRow::BindEventHandlers()
 {
     Bind(wxEVT_SIZE, &BandRow::OnResize, this);
 
-    if (!(style & READ_ONLY)) {
+    if (!readOnly) {
         name->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
         startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
         endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);

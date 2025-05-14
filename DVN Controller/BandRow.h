@@ -1,15 +1,23 @@
 #pragma once
 
+#include <wx/wx.h>
+#include <wx/window.h>
+
 #include "Global.h"
 #include "Scenario.h"
 #include "ColourfulButton.h"
+#include "LayoutConstants.h"
+#include "Colours.h"
+#include "Events.h"
+
+#define FREQ_INPUT_LEN 100
 
 class BandRow : public wxPanel
 {
 private:
     wxWindow* unfocused;
     bool toBeInited = true;
-    const char style;
+    const bool readOnly;
 
     Scenario* scenario;
     char bandNum;
@@ -47,7 +55,7 @@ public:
         StatBtn,
     };
 
-    BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const  char style = 0);
+    BandRow(wxWindow* parent, Scenario* scenario, const char bandNum, const bool readOnly = false);
 
     void ChangeScenario(Scenario* scenario);
 

@@ -1,11 +1,17 @@
 #pragma once
 
+#include <wx/artprov.h>
+#define _CRT_SECURE_NO_WARNINGS
+#include <filesystem>
+
 #include "Global.h"
 #include "Scenario.h"
 #include "Load.h"
 #include "BandsPanel.h"
 #include "SideNotebook.h"
 #include "ScenSelectDialog.h"
+
+using namespace filesystem;
 
 class ScenariosPanel : public SideNotebook
 {

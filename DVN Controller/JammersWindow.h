@@ -1,6 +1,10 @@
 #pragma once
 
-#include "Global.h"
+#include <wx/button.h>
+#include <wx/listbox.h>
+#include <wx/sizer.h>
+
+#include "ModelConstants.h"
 #include "Status.h"
 #include "ftd2xx.h"
 

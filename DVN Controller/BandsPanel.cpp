@@ -1,5 +1,4 @@
 #include "BandsPanel.h"
-#include "Load.h"
 
 void BandsPanel::OnScrollTo(wxCommandEvent& e)
 {
@@ -35,7 +34,7 @@ void BandsPanel::OnScrollTo(wxCommandEvent& e)
     }
 }
 
-BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) : SideNotebookContent(parent, scenario) {
+BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly) : SideNotebookContent(parent, scenario) {
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
 
     wxStaticBox* bandsBox = new wxStaticBox(this, wxID_ANY, "Bands");
@@ -43,6 +42,8 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
     
     table = new wxPanel(bandsBox);
     wxPanel* labels = new wxPanel(table);
+    labels->Bind(wxEVT_SET_FOCUS, [labels](wxFocusEvent& e) { labels->Navigate(wxGetKeyState(WXK_SHIFT) ? wxNavigationKeyEvent::IsBackward : wxNavigationKeyEvent::IsForward); });
+    
     scrollWrapper = new wxScrolled<wxPanel>(table);
     content = new wxPanel(scrollWrapper);
 
@@ -72,16 +73,16 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
     labelsSizer->Add(activeLabel, 0, wxALIGN_CENTER);
     labelsSizer->AddSpacer(FromDIP(10));
 
-    labels->SetSizerAndFit(labelsSizer);
+    labels->SetSizer(labelsSizer);
 
     this->source = scenario;
 
     for (char i = 0; i < GetBandsCount(); i++) {
-        bandRows[i] = new BandRow(content, scenario, i, style);
+        bandRows[i] = new BandRow(content, scenario, i, readOnly);
         contentSizer->Add(bandRows[i], 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(10));
     }
 
-    content->SetSizerAndFit(contentSizer);
+    content->SetSizer(contentSizer);
 
     scrollSizer->Add(content, 1, wxEXPAND | wxRIGHT, FromDIP(15));
 
@@ -90,7 +91,7 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const char style) :
     tableSizer->Add(labels, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(10));
     tableSizer->Add(scrollWrapper, 1, wxEXPAND);
 
-    table->SetSizerAndFit(tableSizer);
+    table->SetSizer(tableSizer);
 
     mainSizer->Add(table, 0, wxTOP | wxBOTTOM | wxEXPAND, FromDIP(10));
     bandsBox->SetSizerAndFit(mainSizer);

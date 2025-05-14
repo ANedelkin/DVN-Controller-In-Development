@@ -1,17 +1,23 @@
 #pragma once
 
-#include "Global.h"
+#include <wx/wx.h>
+#define _CRT_SECURE_NO_WARNINGS
+#include <string>
+
+using namespace std;
+
+#define SAVING_MANY 0b00000010
 
 class SaveDialog : public wxDialog
 {
 public:
     enum
     {
+        ID_CANCEL = wxID_CANCEL,
         ID_SAVE = wxID_HIGHEST + 1,
         ID_SKIP,
         ID_SAVE_ALL,
         ID_SKIP_ALL,
-        ID_CANCEL
     };
 
     SaveDialog(wxWindow* parent, const string& messageTxt, char style = 0) 
@@ -30,7 +36,7 @@ public:
             messageTxt
         );
         message->SetWindowStyle(wxALIGN_CENTER);
-        message->SetFont(wxFont(FromDIP(12), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI"));
+        message->SetFont(wxFont(15, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI"));
         message->SetForegroundColour(wxColour(65, 103, 179));
         message->Wrap(GetSize().GetWidth());
         contentSizer->Add(message, 1, wxALIGN_CENTER | wxALL, FromDIP(10));

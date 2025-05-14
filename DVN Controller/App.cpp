@@ -4,7 +4,7 @@
 class App : public wxApp {
 public:
     bool OnInit() {
-        MainFrame* mainFrame = new MainFrame("Title");
+        MainFrame* mainFrame = new MainFrame();
         mainFrame->Show();
         return true;
     }

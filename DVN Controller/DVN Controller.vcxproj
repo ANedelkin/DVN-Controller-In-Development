@@ -161,6 +161,7 @@
     <ClCompile Include="BandsPanel.cpp" />
     <ClCompile Include="ColourfulButton.cpp" />
     <ClCompile Include="DVNFileData.cpp" />
+    <ClCompile Include="Events.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="JammersWindow.cpp" />
     <ClCompile Include="Load.cpp" />
@@ -176,19 +177,24 @@
     <ClCompile Include="SideMenuCtrl.cpp" />
     <ClCompile Include="SideNotebook.cpp" />
     <ClCompile Include="SideNotebookContent.cpp" />
+    <ClCompile Include="Split.cpp" />
     <ClCompile Include="Status.cpp" />
     <ClCompile Include="Validation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AboutWindow.h" />
     <ClInclude Include="BandInfo.h" />
     <ClInclude Include="BandRow.h" />
     <ClInclude Include="BandsPanel.h" />
     <ClInclude Include="ColourfulButton.h" />
+    <ClInclude Include="Colours.h" />
     <ClInclude Include="DVNFileData.h" />
+    <ClInclude Include="Events.h" />
     <ClInclude Include="ftd2xx.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="JammersWindow.h" />
+    <ClInclude Include="LayoutConstants.h" />
     <ClInclude Include="Load.h" />
     <ClInclude Include="LoadsPanel.h" />
     <ClInclude Include="LoadsPanelContent.h" />
@@ -202,6 +208,7 @@
     <ClInclude Include="SideMenuCtrl.h" />
     <ClInclude Include="SideNotebook.h" />
     <ClInclude Include="SideNotebookContent.h" />
+    <ClInclude Include="Split.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="Validation.h" />
   </ItemGroup>
@@ -210,7 +217,13 @@
     <None Include="..\Release\DVN Controller.exe" />
     <None Include="..\SetUp.exe" />
     <None Include="..\x64\Release\DVN Controller.exe" />
+    <None Include="arrowDownXPM.xpm" />
+    <None Include="arrowUpXPM.xpm" />
     <None Include="Icon.xpm" />
+    <None Include="newXPM.xpm" />
+    <None Include="openXPM.xpm" />
+    <None Include="saveAsXPM.xpm" />
+    <None Include="saveXPM.xpm" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DVN Controller.rc" />

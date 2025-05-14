@@ -50,39 +50,35 @@ bool LoadsPanel::CheckForUnsaved()
 {
 	for (char i = 0; i < pages.size(); i++)
 	{
-		if (pages[i]->GetSource()->folder != "" && !ifstream(pages[i]->GetSource()->GetPath())) {
-			switch (SaveDialog(this, "\"" + pages[i]->GetSource()->GetName() + "\"" + " was changed from outside the program and needs a new path or will be deleted!", SAVING_MANY).ShowModal()) {
-			case SaveDialog::ID_SAVE:
-				if (!SaveAs(pages[i])) return false;
-				pages[i]->MarkSaved();
-				break;
-			case SaveDialog::ID_SAVE_ALL:
-				for (char j = i; j < pages.size(); j++) {
-					if (!SaveAs(pages[j])) return false;
-					pages[i]->MarkSaved();
-				}
-				return true;
-			case SaveDialog::ID_SKIP_ALL:
-				for (char j = i; j < pages.size(); j++)
-					Close(pages[i]);
-				return true;
-			case SaveDialog::ID_SKIP:
-				Close(pages[i]);
-				break;
-			case SaveDialog::ID_CANCEL:
-			case wxID_CANCEL:
-				return false;
-			}
-
-		}
+		if (((Load*)pages[i]->GetSource())->AlteredFromOutside())
+			return RecreateSource(pages[i]);
 	}
 	return SideNotebook::CheckForUnsaved();
 }
 
+bool LoadsPanel::RecreateSource(SideMenuCtrl* page)
+{
+	switch (SaveDialog(this, "\"" + page->GetSource()->GetName() + "\"" + " was changed from outside the program. If you don't save it somewhere else, it will be lost.").ShowModal()) {
+	case SaveDialog::ID_SAVE:
+		if (!SaveAs(page)) return false;
+		page->MarkSaved();
+		return true;
+	case SaveDialog::ID_SKIP:
+		Close(page);
+		return false;
+	case SaveDialog::ID_CANCEL:
+		return false;
+	}
+	return false;
+}
+
 bool LoadsPanel::Save(SideMenuCtrl* page)
 {
-	DVNFileData* curData = page->GetSource();
+	Load* curData = dynamic_cast<Load*>(page->GetSource());
+	assert(curData != nullptr && "Page's data is not load or derived.");
 	bool f = true;
+	if (curData->AlteredFromOutside())
+		return RecreateSource(page);
 	if (curData->folder == "")
 		f = SaveAs(page);
 	if (f) {

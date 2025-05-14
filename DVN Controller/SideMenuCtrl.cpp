@@ -1,8 +1,22 @@
 #include "SideMenuCtrl.h"
 
 void SideMenuCtrl::OnContextMenu(wxContextMenuEvent& e) {
+	PopUpContextMenu(wxWindow::ScreenToClient(e.GetPosition()));
+}
+
+void SideMenuCtrl::OnKey(wxKeyEvent& e)
+{
+	if (e.GetUnicodeKey() == 'M') {
+		wxWindow* target = (wxWindow*)e.GetEventObject();
+		PopUpContextMenu(wxPoint(0, target->GetSize().GetHeight()));
+	}
+	else e.Skip();
+}
+
+void SideMenuCtrl::PopUpContextMenu(const wxPoint& position)
+{
 	if (contextMenu) {
-		PopupMenu(contextMenu, wxWindow::ScreenToClient(e.GetPosition()));
+		PopupMenu(contextMenu, position);
 	}
 }
 
@@ -14,6 +28,7 @@ SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* so
 	SetBackgroundColour(wxColour(255, 255, 255));
 
 	Bind(wxEVT_CONTEXT_MENU, &SideMenuCtrl::OnContextMenu, this);
+	Bind(wxEVT_KEY_UP, &SideMenuCtrl::OnKey, this);
 }
 
 DVNFileData* SideMenuCtrl::GetSource() { return source; }

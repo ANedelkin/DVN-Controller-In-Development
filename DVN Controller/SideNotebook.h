@@ -1,10 +1,25 @@
 #pragma once
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <fstream>
+#include <filesystem>
+
 #include "Global.h"
 #include "DVNFileData.h"
 
 #include "SideMenuCtrl.h"
 #include "SideNotebookContent.h"
 #include "SaveDialog.h"
+
+using namespace filesystem;
+
+//Styles:
+
+#define CLOSEABLE       0b00000001
+#define DELETABLE       0b00000010
+#define LOADABLE        0b00000100
+#define READ_ONLY       0b00001000
+#define CONTENT         0b00010000
 
 class ScenSelectDialog;
 
