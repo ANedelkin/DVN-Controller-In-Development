@@ -44,10 +44,8 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly
     wxPanel* labels = new wxPanel(table);
     labels->Bind(wxEVT_SET_FOCUS, [labels](wxFocusEvent& e) { labels->Navigate(wxGetKeyState(WXK_SHIFT) ? wxNavigationKeyEvent::IsBackward : wxNavigationKeyEvent::IsForward); });
     
-    scrollWrapper = new wxScrolled<wxPanel>(table);
+    scrollWrapper = new ScrolledPanel(table);
     content = new wxPanel(scrollWrapper);
-
-    scrollWrapper->SetScrollRate(0, FromDIP(5));
 
     wxBoxSizer* labelsSizer = new wxBoxSizer(wxHORIZONTAL);
     tableSizer = new wxBoxSizer(wxVERTICAL);

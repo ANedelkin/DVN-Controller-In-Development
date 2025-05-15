@@ -15,7 +15,7 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, string(*pageNam
 	pagesBox->SetSizerAndFit(pagesBoxSizer);
 	pagesBox->SetMinSize(FromDIP(wxSize(NAME_INPUT_LEN + 30, -1)));
 
-	scrollWrapper = new wxScrolledWindow(pagesBox);
+	scrollWrapper = new ScrolledPanel(pagesBox);
 	wxBoxSizer* scrollSizer = new wxBoxSizer(wxVERTICAL);
 	scrollWrapper->SetSizerAndFit(scrollSizer);
 	scrollWrapper->SetScrollRate(0, FromDIP(5));

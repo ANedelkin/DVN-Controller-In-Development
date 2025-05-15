@@ -19,8 +19,9 @@ private:
 	wxPanel* mainPanel;
 	wxMenu* contextMenu = nullptr;
 
-	void OnContextMenu(wxContextMenuEvent& e);
 	void OnKey(wxKeyEvent& e);
+	void OnFocus(wxFocusEvent& e);
+	void OnContextMenu(wxContextMenuEvent& e);
 	void PopUpContextMenu(const wxPoint& position);
 public:
 	SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* source);

@@ -5,12 +5,13 @@
 
 #include "SideNotebookContent.h"
 #include "BandRow.h"
+#include "ScrolledPanel.h"
 
 class BandsPanel : public SideNotebookContent
 {
 private:
 	array<BandRow*, GetBandsCount()> bandRows;
-	wxScrolled<wxPanel>* scrollWrapper;
+	ScrolledPanel* scrollWrapper;
 
 	void OnScrollTo(wxCommandEvent& e);
 public:

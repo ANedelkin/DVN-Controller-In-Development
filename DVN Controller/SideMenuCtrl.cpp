@@ -13,6 +13,14 @@ void SideMenuCtrl::OnKey(wxKeyEvent& e)
 	else e.Skip();
 }
 
+void SideMenuCtrl::OnFocus(wxFocusEvent& e)
+{
+	wxCommandEvent eOut(EVT_SCROLL_TO);
+	eOut.SetEventObject(this);
+	GetParent()->GetEventHandler()->ProcessEvent(eOut);
+	e.Skip();
+}
+
 void SideMenuCtrl::PopUpContextMenu(const wxPoint& position)
 {
 	if (contextMenu) {
@@ -29,6 +37,7 @@ SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* so
 
 	Bind(wxEVT_CONTEXT_MENU, &SideMenuCtrl::OnContextMenu, this);
 	Bind(wxEVT_KEY_UP, &SideMenuCtrl::OnKey, this);
+	Bind(wxEVT_SET_FOCUS, &SideMenuCtrl::OnFocus, this);
 }
 
 DVNFileData* SideMenuCtrl::GetSource() { return source; }
