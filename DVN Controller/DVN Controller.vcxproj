@@ -205,6 +205,7 @@
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="ScenariosPanel.h" />
     <ClInclude Include="ScenSelectDialog.h" />
+    <ClInclude Include="ScrolledPanel.h" />
     <ClInclude Include="SideMenuCtrl.h" />
     <ClInclude Include="SideNotebook.h" />
     <ClInclude Include="SideNotebookContent.h" />

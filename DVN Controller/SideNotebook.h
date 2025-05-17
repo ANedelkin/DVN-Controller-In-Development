@@ -10,6 +10,7 @@
 #include "SideMenuCtrl.h"
 #include "SideNotebookContent.h"
 #include "SaveDialog.h"
+#include "ScrolledPanel.h"
 
 using namespace filesystem;
 
@@ -32,7 +33,7 @@ protected:
 
 	wxBoxSizer* mainSizer;
 
-	wxScrolledWindow* scrollWrapper;
+	ScrolledPanel* scrollWrapper;
 	wxStaticBox* pagesBox;
 	wxStaticBoxSizer* pagesBoxSizer;
 	wxPanel* pagesList;
@@ -52,6 +53,8 @@ protected:
 	virtual bool Save(SideMenuCtrl* page);
 
 	void OnSelect(wxCommandEvent& e);
+	void OnPagesBoxTabbed(wxKeyEvent& e);
+	void OnPagesBoxFocused(wxFocusEvent& e);
 public:
 	SideNotebook(wxWindow* parent, string sideMenuTxt, string(*pageNameValidator)(const string& name));
 	
