@@ -180,6 +180,7 @@ void MainFrame::OnNew(wxCommandEvent& e) {
 
 void MainFrame::OnOpen(wxCommandEvent& e)
 {
+	if (notebook->GetSelection() != Loads) return;
 	wxFileDialog dialog(this, "Select Load/s", "", "", "Load files (*.dvnl)|*.dvnl", wxFD_MULTIPLE);
 	wxArrayString paths;
 
@@ -208,6 +209,7 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 
 void MainFrame::OnAdd(wxCommandEvent& e)
 {
+	if (notebook->GetSelection() != Scenarios) return;
 	wxFileDialog dialog(this, "Select Scenario/s", "", "", "Scenario files (*.dvns)|*.dvns", wxFD_MULTIPLE);
 	wxArrayString paths;
 
@@ -221,7 +223,7 @@ void MainFrame::OnAdd(wxCommandEvent& e)
 			if (stream.is_open()) {
 				stringstream data;
 				data << stream.rdbuf();
-				Scenario* scenario = Scenario::ToScenario(name, data);
+				Scenario* scenario = Scenario::ToScenario(name, data, true);
 				if (scenario->ok) {
 					scenariosPanel->NewPage(scenario);
 					scenariosPanel->SaveCurrent();
@@ -252,17 +254,20 @@ void MainFrame::OnSave(wxCommandEvent& e)
 
 void MainFrame::OnSaveAs(wxCommandEvent& e)
 {
+	if (notebook->GetSelection() != Loads) return;
 	loadsPanel->SaveCurrentAs();
 }
 
 void MainFrame::OnLoadFromJmr(wxCommandEvent& e)
 {
+	if (notebook->GetSelection() != Loads) return;
 	JammersWindow jammersWindow(this);
 	jammersWindow.ShowModal();
 }
 
 void MainFrame::OnLoadToJmr(wxCommandEvent& e)
 {
+	if (notebook->GetSelection() != Loads) return;
 	JammersWindow jammersWindow(this);
 	jammersWindow.ShowModal();
 }
