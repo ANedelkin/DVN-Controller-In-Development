@@ -17,6 +17,7 @@ private:
 
 	void OnScrollTo(wxCommandEvent& e);
 	void OnBandListEndReached(wxFocusEvent& e);
+	void OnKey(wxKeyEvent& e);
 public:
 	wxPanel* table;
 	wxPanel* content;
