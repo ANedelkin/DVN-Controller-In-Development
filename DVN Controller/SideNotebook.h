@@ -53,6 +53,8 @@ protected:
 	virtual bool Save(SideMenuCtrl* page);
 
 	void OnSelect(wxCommandEvent& e);
+	void OnPagesBoxTabbed(wxKeyEvent& e);
+	void OnPagesBoxFocused(wxFocusEvent& e);
 public:
 	SideNotebook(wxWindow* parent, string sideMenuTxt, string(*pageNameValidator)(const string& name));
 	

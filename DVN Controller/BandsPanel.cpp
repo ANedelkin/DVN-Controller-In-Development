@@ -34,6 +34,11 @@ void BandsPanel::OnScrollTo(wxCommandEvent& e)
     }
 }
 
+void BandsPanel::OnBandListEndReached(wxFocusEvent& e)
+{
+    bandsListEnd->Navigate(wxNavigationKeyEvent::IsBackward);
+}
+
 BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly) : SideNotebookContent(parent, scenario) {
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -79,6 +84,9 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly
         bandRows[i] = new BandRow(content, scenario, i, readOnly);
         contentSizer->Add(bandRows[i], 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(10));
     }
+
+    bandsListEnd = new wxWindow(content, wxID_ANY, wxDefaultPosition, wxSize(0, 0));
+    bandsListEnd->Bind(wxEVT_SET_FOCUS, &BandsPanel::OnBandListEndReached, this);
 
     content->SetSizer(contentSizer);
 
