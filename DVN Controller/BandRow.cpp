@@ -222,16 +222,16 @@ bool BandRow::ProcessKey(int key)
             updateSuccess = UpdateFreq((int)focused->GetClientData()).empty();
 
         if (updateSuccess) {
+            wxWindow* cur = focused;
+            focused = nullptr;
             if (key == WXK_TAB) {
                 if (tabDir)
-                    focused->Navigate(wxNavigationKeyEvent::IsBackward);
+                    cur->Navigate(wxNavigationKeyEvent::IsBackward);
                 else
-                    focused->Navigate();
+                    cur->Navigate();
             }
-            else {
+            else
                 Unfocus();
-                focused = nullptr;
-            }
             return false;
         }
         else return true;
