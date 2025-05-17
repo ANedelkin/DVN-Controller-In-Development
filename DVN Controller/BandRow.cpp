@@ -111,9 +111,9 @@ void BandRow::BindEventHandlers()
         startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
         endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
 
-        name->Bind(wxEVT_KEY_DOWN, &BandRow::OnKey, this);
-        startValue->Bind(wxEVT_KEY_DOWN, &BandRow::OnKey, this);
-        endValue->Bind(wxEVT_KEY_DOWN, &BandRow::OnKey, this);
+        name->Bind(wxEVT_CHAR_HOOK, &BandRow::OnKey, this);
+        startValue->Bind(wxEVT_CHAR_HOOK, &BandRow::OnKey, this);
+        endValue->Bind(wxEVT_CHAR_HOOK, &BandRow::OnKey, this);
 
         name->Bind(wxEVT_CONTEXT_MENU, &BandRow::EmptyHandler, this);
         startValue->Bind(wxEVT_CONTEXT_MENU, &BandRow::EmptyHandler, this);
@@ -211,6 +211,8 @@ void BandRow::MarkUnsaved()
 
 bool BandRow::ProcessKey(int key)
 {
+    if (key != WXK_CONTROL && wxGetKeyState(WXK_CONTROL) && key != 'A' && key != 'C' && key != 'X' && key != 'V' && key != WXK_RIGHT && key != WXK_LEFT)
+        return true;
     int tabDir = wxGetKeyState(WXK_SHIFT);
     if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE)) {
         bool updateSuccess;
