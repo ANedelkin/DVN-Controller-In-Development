@@ -44,7 +44,7 @@ protected:
 
 	void UpdateContent();
 	void SetContent(SideNotebookContent* content);
-	void ChangeSelection(SideMenuCtrl* scenCtrl);
+	virtual void ChangeSelection(SideMenuCtrl* scenCtrl);
 	virtual StatusCode NewPage(DVNFileData* data);
 
 	void Duplicate(SideMenuCtrl* page);
