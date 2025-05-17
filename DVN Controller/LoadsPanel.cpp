@@ -46,6 +46,12 @@ StatusCode LoadsPanel::NewPage(Load* data)
 	return SideNotebook::NewPage(data);
 }
 
+void LoadsPanel::ChangeSelection(SideMenuCtrl* page)
+{
+	SideNotebook::ChangeSelection(page);
+	((LoadsPanelContent*)content)->Select(0);
+}
+
 bool LoadsPanel::CheckForUnsaved()
 {
 	for (char i = 0; i < pages.size(); i++)
