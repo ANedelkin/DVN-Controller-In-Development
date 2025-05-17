@@ -44,7 +44,7 @@ namespace Status {
         {ScenarioAlreadyExistsAs, "Scenario \"%s\"'s old name is \"%s\"! Save it before you can use this name."},
         {FreqNotPositiveNumber, "The frequency has to be a positive whole number!"},
         {NameTooLong, "The name can't be longer than %d symbols!"},
-        {InvalidFile, "The file \"%s\" contains invalid data and can't be opened!"},
+        {InvalidFile, "The file \"%s\" is invalid and can't be opened!"},
         {ErrorMessageTooLong, "The error message the program tried to generate was too long!"},
     };
 
