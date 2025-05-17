@@ -211,7 +211,7 @@ void BandRow::MarkUnsaved()
 
 bool BandRow::ProcessKey(int key)
 {
-    if (key != WXK_CONTROL && wxGetKeyState(WXK_CONTROL) && key != 'A' && key != 'C' && key != 'X' && key != 'V' && key != WXK_RIGHT && key != WXK_LEFT)
+    if (key != WXK_CONTROL && wxGetKeyState(WXK_CONTROL) && key != 'A' && key != 'C' && key != 'X' && key != 'V' && key != 'Z' && key != WXK_RIGHT && key != WXK_LEFT)
         return true;
     int tabDir = wxGetKeyState(WXK_SHIFT);
     if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE)) {
