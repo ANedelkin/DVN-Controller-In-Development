@@ -8,6 +8,11 @@ LoadsPanelContent::LoadsPanelContent(wxWindow* parent) : SideNotebookContent(par
 	SetSizerAndFit(sizer);
 }
 
+void LoadsPanelContent::Select(int i)
+{
+	scenPanel->Select(i);
+}
+
 void LoadsPanelContent::SetSource(DVNFileData* source)
 {
 	Load* load = dynamic_cast<Load*>(source);

@@ -39,6 +39,14 @@ void BandsPanel::OnBandListEndReached(wxFocusEvent& e)
     bandsListEnd->Navigate(wxNavigationKeyEvent::IsBackward);
 }
 
+void BandsPanel::OnKey(wxKeyEvent& e)
+{
+    if (e.GetKeyCode() == WXK_TAB) 
+        Navigate(wxNavigationKeyEvent::IsBackward);
+    else
+        e.Skip();
+}
+
 BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly) : SideNotebookContent(parent, scenario) {
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -106,6 +114,8 @@ BandsPanel::BandsPanel(wxWindow* parent, Scenario* scenario, const bool readOnly
     SetSizerAndFit(panelSizer);
 
     Bind(EVT_SCROLL_TO, &BandsPanel::OnScrollTo, this);
+    if (readOnly)
+        Bind(wxEVT_CHAR_HOOK, &BandsPanel::OnKey, this);
 }
 
 void BandsPanel::SetSource(DVNFileData* source)

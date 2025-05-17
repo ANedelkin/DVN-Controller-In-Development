@@ -33,6 +33,8 @@ ScenSelectDialog::ScenSelectDialog(wxWindow* parent) : wxDialog(parent, wxID_ANY
 	mainPanel->SetSizerAndFit(mainSizer);
 
 	LoadScenarios();
+
+	//scenariosPanel->SetFocus();
 }
 
 void ScenSelectDialog::LoadScenarios()

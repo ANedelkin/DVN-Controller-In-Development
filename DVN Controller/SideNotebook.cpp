@@ -70,7 +70,7 @@ void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 		cur->SetBackgroundColour(wxColour(255, 255, 255));
 	page->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
 	cur = page;
-
+	
 	DVNFileData* s = cur->GetSource();
 	content->SetSource(s);
 }
@@ -80,6 +80,7 @@ void SideNotebook::OnSelect(wxCommandEvent& e)
 	SideMenuCtrl* page = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
 	if (page != cur)
 		ChangeSelection(page);
+	content->SetFocus();
 	e.Skip();
 }
 
@@ -103,7 +104,7 @@ void SideNotebook::OnPagesBoxTabbed(wxKeyEvent& e)
 		e.Skip();
 }
 
-void SideNotebook::OnPagesBoxFocused(wxFocusEvent& e)
+void SideNotebook::OnPagesBoxFocused(wxFocusEvent& e) //Unused maybe
 {
 	cur->SetFocus();
 }

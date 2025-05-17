@@ -100,11 +100,11 @@ string Scenario::ValidateNameUnique(const string& name)
 	return ToString(Success);
 }
 
-Scenario* Scenario::ToScenario(const string& name, stringstream& stream)
+Scenario* Scenario::ToScenario(const string& name, stringstream& stream, bool unique)
 {
 	Scenario* scenario = new Scenario(name);
 	string bandString;
-	if (!Scenario::ValidateName(name).empty())
+	if (!( unique ? Scenario::ValidateNameUnique(name) : Scenario::ValidateName(name) ).empty())
 		goto NotOkay;
 	for (int i = 0; i < GetBandsCount(); i++) {
 		if (getline(stream, bandString)) {
