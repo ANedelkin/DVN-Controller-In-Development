@@ -230,9 +230,9 @@ bool BandRow::ProcessKey(int key)
                 Unfocus();
                 focused = nullptr;
             }
-            return true;
+            return false;
         }
-        else return false;
+        else return true;
     }
     else return false;
 }
