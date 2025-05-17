@@ -15,7 +15,7 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, string(*pageNam
 	pagesBox->SetSizerAndFit(pagesBoxSizer);
 	pagesBox->SetMinSize(FromDIP(wxSize(NAME_INPUT_LEN + 30, -1)));
 
-	scrollWrapper = new wxScrolledWindow(pagesBox);
+	scrollWrapper = new ScrolledPanel(pagesBox);
 	wxBoxSizer* scrollSizer = new wxBoxSizer(wxVERTICAL);
 	scrollWrapper->SetSizerAndFit(scrollSizer);
 	scrollWrapper->SetScrollRate(0, FromDIP(5));
@@ -29,11 +29,15 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, string(*pageNam
 	mainSizer->Add(pagesBox, 0, wxEXPAND);
 
 	this->SetSizerAndFit(mainSizer);
+
+	pagesBox->Bind(wxEVT_CHAR_HOOK, &SideNotebook::OnPagesBoxTabbed, this);
+	pagesBox->Bind(wxEVT_SET_FOCUS, &SideNotebook::OnPagesBoxFocused, this);
 }
 
 void SideNotebook::SetContent(SideNotebookContent* content) {
 	this->content = content;
 	mainSizer->Add(this->content, 1, wxEXPAND | wxLEFT, FromDIP(5));
+	pagesBox->MoveBeforeInTabOrder(content);
 }
 
 StatusCode SideNotebook::NewPage(DVNFileData* data)
@@ -77,6 +81,31 @@ void SideNotebook::OnSelect(wxCommandEvent& e)
 	if (page != cur)
 		ChangeSelection(page);
 	e.Skip();
+}
+
+void SideNotebook::OnPagesBoxTabbed(wxKeyEvent& e)
+{
+
+	if (e.GetKeyCode() == WXK_TAB)
+		if (wxGetKeyState(WXK_SHIFT)) {
+			SetFocus();
+			Navigate(wxNavigationKeyEvent::IsBackward);
+		}
+		else if (wxGetKeyState(WXK_CONTROL))
+			e.Skip();
+		else
+			content->SetFocus();
+	else if (e.GetKeyCode() == WXK_DOWN && wxWindow::FindFocus() == pages[pages.size() - 1])
+		pages[0]->SetFocus();
+	else if (e.GetKeyCode() == WXK_UP && wxWindow::FindFocus() == pages[0])
+		pages[pages.size() - 1]->SetFocus();
+	else
+		e.Skip();
+}
+
+void SideNotebook::OnPagesBoxFocused(wxFocusEvent& e)
+{
+	cur->SetFocus();
 }
 
 void SideNotebook::OnUnsave(wxCommandEvent& e)
