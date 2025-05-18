@@ -95,7 +95,7 @@ void ScenariosPanel::OnSave(wxCommandEvent& e) {
 	nameSetter.ShowModal();
 	if (nameSetter.ok) {
 		scenario.DVNFileData::Rename(nameSetter.name);
-		Save(target);
+		scenario.Save();
 	}
 	target->Refresh();
 }
