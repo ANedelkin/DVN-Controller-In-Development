@@ -10,7 +10,8 @@ void SideMenuCtrl::OnKey(wxKeyEvent& e)
 		wxWindow* target = (wxWindow*)e.GetEventObject();
 		PopUpContextMenu(wxPoint(0, target->GetSize().GetHeight()));
 	}
-	else e.Skip();
+	else
+		e.Skip();
 }
 
 void SideMenuCtrl::OnFocus(wxFocusEvent& e)
@@ -36,7 +37,7 @@ SideMenuCtrl::SideMenuCtrl(wxWindow* parent, wxPanel* mainPanel, DVNFileData* so
 	SetBackgroundColour(wxColour(255, 255, 255));
 
 	Bind(wxEVT_CONTEXT_MENU, &SideMenuCtrl::OnContextMenu, this);
-	Bind(wxEVT_KEY_UP, &SideMenuCtrl::OnKey, this);
+	Bind(wxEVT_CHAR_HOOK, &SideMenuCtrl::OnKey, this);
 	Bind(wxEVT_SET_FOCUS, &SideMenuCtrl::OnFocus, this);
 }
 

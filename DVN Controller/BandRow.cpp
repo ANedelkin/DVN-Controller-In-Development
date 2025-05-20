@@ -211,7 +211,8 @@ void BandRow::MarkUnsaved()
 
 bool BandRow::ProcessKey(int key)
 {
-    if (key != WXK_CONTROL && wxGetKeyState(WXK_CONTROL) && key != 'A' && key != 'C' && key != 'X' && key != 'V' && key != 'Z' && key != WXK_RIGHT && key != WXK_LEFT)
+    if (key != WXK_CONTROL && wxGetKeyState(WXK_CONTROL) && key != 'A' && key != 'C' && key != 'X' && key != 'V' && key != 'Z' && 
+                                                            key != WXK_RIGHT && key != WXK_LEFT && key != WXK_BACK && key != WXK_DELETE)
         return true;
     int tabDir = wxGetKeyState(WXK_SHIFT);
     if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE)) {
@@ -232,9 +233,8 @@ bool BandRow::ProcessKey(int key)
             }
             else
                 Unfocus();
-            return false;
         }
-        else return true;
+        return true;
     }
     else return false;
 }

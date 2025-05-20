@@ -48,7 +48,7 @@ void MainFrame::SetUpToolBars()
 	scenariosToolBar->AddTool(wxID_ADD, "Add Existing", wxBitmap(openXPM));
 	scenariosToolBar->AddTool(wxID_SAVE, "Save", wxBitmap(saveXPM));
 	scenariosToolBar->AddStretchableSpace();
-	scenariosToolBar->AddTool(wxID_ABOUT, "About", wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_TOOLBAR));
+	scenariosToolBar->AddTool(wxID_ABOUT, "About", wxBitmap(infoXPM));
 
 	Bind(wxEVT_TOOL, &MainFrame::OnNew, this, wxID_NEW);
 	Bind(wxEVT_TOOL, &MainFrame::OnAdd, this, wxID_ADD);
@@ -68,7 +68,7 @@ void MainFrame::SetUpToolBars()
 	loadsToolBar->AddTool(wxID_UP, "Load To Jammer", wxBitmap(arrowUpXPM));
 	loadsToolBar->AddTool(wxID_DOWN, "Load From Jammer", wxBitmap(arrowDownXPM));
 	loadsToolBar->AddStretchableSpace();
-	loadsToolBar->AddTool(wxID_ABOUT, "About", wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_TOOLBAR));
+	loadsToolBar->AddTool(wxID_ABOUT, "About", wxBitmap(infoXPM));
 
 	Bind(wxEVT_TOOL, &MainFrame::OnOpen, this, wxID_OPEN);
 	Bind(wxEVT_TOOL, &MainFrame::OnSaveAs, this, wxID_SAVEAS);

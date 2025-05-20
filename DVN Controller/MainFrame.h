@@ -12,6 +12,7 @@
 #include "saveAsXPM.xpm"
 #include "arrowUpXPM.xpm"
 #include "arrowDownXPM.xpm"
+#include "infoXPM.xpm"
 
 #include "Load.h"
 #include "Scenario.h"
