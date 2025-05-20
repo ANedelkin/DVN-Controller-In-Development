@@ -9,6 +9,11 @@
 #include "SideNotebook.h"
 #include "LoadsPanelContent.h"
 
+#include "penXPM.xpm"
+#include "closeXPM.xpm"
+#include "copyXPM.xpm"
+#include "trashCanXPM.xpm"
+
 using namespace filesystem;
 
 class LoadsPanel : public SideNotebook

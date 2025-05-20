@@ -10,22 +10,22 @@ LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", Load::V
 	contextMenu = new wxMenu();
 
 	wxMenuItem* rename = new wxMenuItem(contextMenu, wxID_ANY, "Rename");
-	rename->SetBitmap(wxArtProvider::GetBitmap(wxART_EDIT));
+	rename->SetBitmap(wxBitmap(penXPM));
 	contextMenu->Append(rename);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnRename, this, rename->GetId());
 
 	wxMenuItem* duplicate = new wxMenuItem(contextMenu, wxID_ANY, "Duplicate");
-	duplicate->SetBitmap(wxArtProvider::GetBitmap(wxART_COPY));
+	duplicate->SetBitmap(wxBitmap(copyXPM));
 	contextMenu->Append(duplicate);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnDuplicate, this, duplicate->GetId());
 
 	wxMenuItem* deleteItem = new wxMenuItem(contextMenu, wxID_DELETE, "Delete");
-	deleteItem->SetBitmap(wxArtProvider::GetBitmap(wxART_DELETE));
+	deleteItem->SetBitmap(wxBitmap(trashCanXPM));
 	contextMenu->Append(deleteItem);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnDelete, this, deleteItem->GetId());
 
 	wxMenuItem* closeItem = new wxMenuItem(contextMenu, wxID_CLOSE, "Close");
-	closeItem->SetBitmap(wxArtProvider::GetBitmap(wxART_CLOSE));
+	closeItem->SetBitmap(wxBitmap(closeXPM));
 	contextMenu->Append(closeItem);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnClose, this, closeItem->GetId());
 

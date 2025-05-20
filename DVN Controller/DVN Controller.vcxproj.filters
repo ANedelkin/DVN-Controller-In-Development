@@ -238,6 +238,21 @@
     <None Include="saveXPM.xpm">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="closeXPM.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="penXPM.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="copyXPM.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="trashCanXPM.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="infoXPM.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DVN Controller.rc">
