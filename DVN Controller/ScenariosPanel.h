@@ -11,6 +11,12 @@
 #include "SideNotebook.h"
 #include "ScenSelectDialog.h"
 
+#include "penXPM.xpm"
+#include "copyXPM.xpm"
+#include "trashCanXPM.xpm"
+#include "saveXPM16.xpm"
+#include "openXPM16.xpm"
+
 using namespace filesystem;
 
 class ScenariosPanel : public SideNotebook

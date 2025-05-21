@@ -226,9 +226,11 @@
     <None Include="infoXPM.xpm" />
     <None Include="newXPM.xpm" />
     <None Include="openXPM.xpm" />
+    <None Include="openXPM16.xpm" />
     <None Include="penXPM.xpm" />
     <None Include="saveAsXPM.xpm" />
     <None Include="saveXPM.xpm" />
+    <None Include="saveXPM16.xpm" />
     <None Include="trashCanXPM.xpm" />
   </ItemGroup>
   <ItemGroup>

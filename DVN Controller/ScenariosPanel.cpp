@@ -9,29 +9,29 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style)
 	if (!(style & READ_ONLY)) {
 		contextMenu = new wxMenu();
 		wxMenuItem* rename = new wxMenuItem(contextMenu, wxID_ANY, "Rename");
-		rename->SetBitmap(wxArtProvider::GetBitmap(wxART_EDIT));
+		rename->SetBitmap(wxBitmap(penXPM));
 		contextMenu->Append(rename);
 		contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnRename, this, rename->GetId());
 
 		if (style & DELETABLE) {
 			wxMenuItem* duplicate = new wxMenuItem(contextMenu, wxID_ANY, "Duplicate");
-			duplicate->SetBitmap(wxArtProvider::GetBitmap(wxART_COPY));
+			duplicate->SetBitmap(wxBitmap(copyXPM));
 			contextMenu->Append(duplicate);
 			contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnDuplicate, this, duplicate->GetId());
 
 			wxMenuItem* deleteItem = new wxMenuItem(contextMenu, wxID_DELETE, "Delete");
-			deleteItem->SetBitmap(wxArtProvider::GetBitmap(wxART_DELETE));
+			deleteItem->SetBitmap(wxBitmap(trashCanXPM));
 			contextMenu->Append(deleteItem);
 			contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnDelete, this, deleteItem->GetId());
 		}
 		if (style & LOADABLE) {
 			wxMenuItem* save = new wxMenuItem(contextMenu, wxID_ANY, "Save as template");
-			save->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_SAVE));
+			save->SetBitmap(wxBitmap(saveXPM16));
 			contextMenu->Append(save);
 			contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnSave, this, save->GetId());
 
 			wxMenuItem* load = new wxMenuItem(contextMenu, wxID_ANY, "Load from template");
-			load->SetBitmap(wxArtProvider::GetBitmap(wxART_FILE_OPEN));
+			load->SetBitmap(wxBitmap(openXPM16));
 			contextMenu->Append(load);
 			contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnLoad, this, load->GetId());
 		}

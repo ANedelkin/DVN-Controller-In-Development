@@ -253,6 +253,12 @@
     <None Include="infoXPM.xpm">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="saveXPM16.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="openXPM16.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DVN Controller.rc">
