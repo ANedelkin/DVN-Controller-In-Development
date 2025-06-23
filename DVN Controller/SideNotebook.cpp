@@ -80,7 +80,7 @@ void SideNotebook::OnSelect(wxCommandEvent& e)
 	SideMenuCtrl* page = dynamic_cast<SideMenuCtrl*>(e.GetEventObject());
 	if (page != cur)
 		ChangeSelection(page);
-	content->SetFocus();
+	//content->SetFocus();
 	e.Skip();
 }
 
