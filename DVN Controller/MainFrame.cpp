@@ -32,7 +32,7 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	mainSizer->Add(notebook, 0, wxEXPAND);
 
 	mainPanel->SetSizer(mainSizer);
-
+		
 	topSizer->Add(mainPanel, 1, wxEXPAND);
 	SetSizer(topSizer);
 
@@ -44,11 +44,11 @@ void MainFrame::SetUpToolBars()
 {
 	scenariosToolBar = CreateToolBar(wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT | wxTB_NO_TOOLTIPS);
 
-	scenariosToolBar->AddTool(wxID_NEW, "New", wxBitmap(newXPM));
-	scenariosToolBar->AddTool(wxID_ADD, "Add Existing", wxBitmap(openXPM));
-	scenariosToolBar->AddTool(wxID_SAVE, "Save", wxBitmap(saveXPM));
+	scenariosToolBar->AddTool(wxID_NEW, "New", wxBitmapBundle::FromSVG(newSVG, TOOLBAR_ICON_SIZE));
+	scenariosToolBar->AddTool(wxID_ADD, "Add Existing", wxBitmapBundle::FromSVG(openSVG, TOOLBAR_ICON_SIZE));
+	scenariosToolBar->AddTool(wxID_SAVE, "Save", wxBitmapBundle::FromSVG(saveSVG, TOOLBAR_ICON_SIZE));
 	scenariosToolBar->AddStretchableSpace();
-	scenariosToolBar->AddTool(wxID_ABOUT, "About", wxBitmap(infoXPM));
+	scenariosToolBar->AddTool(wxID_ABOUT, "About", wxBitmapBundle::FromSVG(aboutSVG, TOOLBAR_ICON_SIZE));
 
 	Bind(wxEVT_TOOL, &MainFrame::OnNew, this, wxID_NEW);
 	Bind(wxEVT_TOOL, &MainFrame::OnAdd, this, wxID_ADD);
@@ -60,15 +60,15 @@ void MainFrame::SetUpToolBars()
 
 	loadsToolBar = CreateToolBar(wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT | wxTB_NO_TOOLTIPS);
 
-	loadsToolBar->AddTool(wxID_NEW, "New", wxBitmap(newXPM));
-	loadsToolBar->AddTool(wxID_OPEN, "Open", wxBitmap(openXPM));
-	loadsToolBar->AddTool(wxID_SAVE, "Save", wxBitmap(saveXPM));
-	loadsToolBar->AddTool(wxID_SAVEAS, "Save As", wxBitmap(saveAsXPM));
+	loadsToolBar->AddTool(wxID_NEW, "New", wxBitmapBundle::FromSVG(newSVG, TOOLBAR_ICON_SIZE));
+	loadsToolBar->AddTool(wxID_OPEN, "Open", wxBitmapBundle::FromSVG(openSVG, TOOLBAR_ICON_SIZE));
+	loadsToolBar->AddTool(wxID_SAVE, "Save", wxBitmapBundle::FromSVG(saveSVG, TOOLBAR_ICON_SIZE));
+	loadsToolBar->AddTool(wxID_SAVEAS, "Save As", wxBitmapBundle::FromSVG(saveAsSVG, TOOLBAR_ICON_SIZE));
 	loadsToolBar->AddSeparator();
-	loadsToolBar->AddTool(wxID_UP, "Load To Jammer", wxBitmap(arrowUpXPM));
-	loadsToolBar->AddTool(wxID_DOWN, "Load From Jammer", wxBitmap(arrowDownXPM));
+	loadsToolBar->AddTool(wxID_UP, "Load To Jammer", wxBitmapBundle::FromSVG(upSVG, TOOLBAR_ICON_SIZE));
+	loadsToolBar->AddTool(wxID_DOWN, "Load From Jammer", wxBitmapBundle::FromSVG(downSVG, TOOLBAR_ICON_SIZE));
 	loadsToolBar->AddStretchableSpace();
-	loadsToolBar->AddTool(wxID_ABOUT, "About", wxBitmap(infoXPM));
+	loadsToolBar->AddTool(wxID_ABOUT, "About", wxBitmapBundle::FromSVG(aboutSVG, TOOLBAR_ICON_SIZE));
 
 	Bind(wxEVT_TOOL, &MainFrame::OnOpen, this, wxID_OPEN);
 	Bind(wxEVT_TOOL, &MainFrame::OnSaveAs, this, wxID_SAVEAS);

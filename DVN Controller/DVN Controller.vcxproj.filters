@@ -111,6 +111,9 @@
     <ClCompile Include="Events.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Icons.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Load.h">
@@ -158,9 +161,6 @@
     <ClInclude Include="Global.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Includes.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="ModelConstants.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
@@ -203,6 +203,9 @@
     <ClInclude Include="ScrolledPanel.h">
       <Filter>Header Files\Controls</Filter>
     </ClInclude>
+    <ClInclude Include="Icons.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\x64\Release\DVN Controller.exe">
@@ -218,45 +221,6 @@
       <Filter>Output</Filter>
     </None>
     <None Include="Icon.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="arrowDownXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="arrowUpXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="newXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="openXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="saveAsXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="saveXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="closeXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="penXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="copyXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="trashCanXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="infoXPM.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="saveXPM16.xpm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="openXPM16.xpm">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

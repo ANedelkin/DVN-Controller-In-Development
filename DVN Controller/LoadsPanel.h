@@ -9,7 +9,7 @@
 #include "SideNotebook.h"
 #include "LoadsPanelContent.h"
 
-#include "closeXPM.xpm"
+#include "Icons.h"
 
 using namespace filesystem;
 

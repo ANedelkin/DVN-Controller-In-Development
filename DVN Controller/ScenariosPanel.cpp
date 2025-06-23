@@ -9,29 +9,29 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style)
 	if (!(style & READ_ONLY)) {
 		contextMenu = new wxMenu();
 		wxMenuItem* rename = new wxMenuItem(contextMenu, wxID_ANY, "Rename");
-		rename->SetBitmap(wxBitmap(penXPM));
+		rename->SetBitmap(wxBitmapBundle::FromSVG(penSVG, CONTEXT_MENU_ICON_SIZE));
 		contextMenu->Append(rename);
 		contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnRename, this, rename->GetId());
 
 		if (style & DELETABLE) {
 			wxMenuItem* duplicate = new wxMenuItem(contextMenu, wxID_ANY, "Duplicate");
-			duplicate->SetBitmap(wxBitmap(copyXPM));
+			duplicate->SetBitmap(wxBitmapBundle::FromSVG(copySVG, CONTEXT_MENU_ICON_SIZE));
 			contextMenu->Append(duplicate);
 			contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnDuplicate, this, duplicate->GetId());
 
 			wxMenuItem* deleteItem = new wxMenuItem(contextMenu, wxID_DELETE, "Delete");
-			deleteItem->SetBitmap(wxBitmap(trashCanXPM));
+			deleteItem->SetBitmap(wxBitmapBundle::FromSVG(deleteSVG, CONTEXT_MENU_ICON_SIZE));
 			contextMenu->Append(deleteItem);
 			contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnDelete, this, deleteItem->GetId());
 		}
 		if (style & LOADABLE) {
 			wxMenuItem* save = new wxMenuItem(contextMenu, wxID_ANY, "Save as template");
-			save->SetBitmap(wxBitmap(saveXPM16));
+			save->SetBitmap(wxBitmapBundle::FromSVG(saveCMSVG, CONTEXT_MENU_ICON_SIZE));
 			contextMenu->Append(save);
 			contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnSave, this, save->GetId());
 
 			wxMenuItem* load = new wxMenuItem(contextMenu, wxID_ANY, "Load from template");
-			load->SetBitmap(wxBitmap(openXPM16));
+			load->SetBitmap(wxBitmapBundle::FromSVG(openCMSVG, CONTEXT_MENU_ICON_SIZE));
 			contextMenu->Append(load);
 			contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnLoad, this, load->GetId());
 		}

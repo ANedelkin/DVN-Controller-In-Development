@@ -10,22 +10,22 @@ LoadsPanel::LoadsPanel(wxWindow* parent) : SideNotebook(parent, "Loads", Load::V
 	contextMenu = new wxMenu();
 
 	wxMenuItem* rename = new wxMenuItem(contextMenu, wxID_ANY, "Rename");
-	rename->SetBitmap(wxBitmap(penXPM));
+	rename->SetBitmap(wxBitmapBundle::FromSVG(penSVG, CONTEXT_MENU_ICON_SIZE));
 	contextMenu->Append(rename);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnRename, this, rename->GetId());
 
 	wxMenuItem* duplicate = new wxMenuItem(contextMenu, wxID_ANY, "Duplicate");
-	duplicate->SetBitmap(wxBitmap(copyXPM));
+	duplicate->SetBitmap(wxBitmapBundle::FromSVG(copySVG, CONTEXT_MENU_ICON_SIZE));
 	contextMenu->Append(duplicate);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnDuplicate, this, duplicate->GetId());
 
 	wxMenuItem* deleteItem = new wxMenuItem(contextMenu, wxID_DELETE, "Delete");
-	deleteItem->SetBitmap(wxBitmap(trashCanXPM));
+	deleteItem->SetBitmap(wxBitmapBundle::FromSVG(deleteSVG, CONTEXT_MENU_ICON_SIZE));
 	contextMenu->Append(deleteItem);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnDelete, this, deleteItem->GetId());
 
 	wxMenuItem* closeItem = new wxMenuItem(contextMenu, wxID_CLOSE, "Close");
-	closeItem->SetBitmap(wxBitmap(closeXPM));
+	closeItem->SetBitmap(wxBitmapBundle::FromSVG(closeSVG, CONTEXT_MENU_ICON_SIZE));
 	contextMenu->Append(closeItem);
 	contextMenu->Bind(wxEVT_MENU, &LoadsPanel::OnClose, this, closeItem->GetId());
 

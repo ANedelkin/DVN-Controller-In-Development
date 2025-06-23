@@ -2,6 +2,8 @@
 
 #include "DVNFileData.h"
 
+#define CONTEXT_MENU_ICON_SIZE wxSize(16, 16)
+
 class SideNotebookContent : public wxPanel
 {
 protected:
