@@ -164,6 +164,7 @@
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="Icons.cpp" />
+    <ClCompile Include="JammersManager.cpp" />
     <ClCompile Include="JammersWindow.cpp" />
     <ClCompile Include="Load.cpp" />
     <ClCompile Include="LoadsPanel.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="ftd2xx.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="Icons.h" />
+    <ClInclude Include="JammersManager.h" />
     <ClInclude Include="JammersWindow.h" />
     <ClInclude Include="LayoutConstants.h" />
     <ClInclude Include="Load.h" />

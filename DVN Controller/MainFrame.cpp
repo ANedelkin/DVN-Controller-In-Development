@@ -268,8 +268,10 @@ void MainFrame::OnLoadFromJmr(wxCommandEvent& e)
 void MainFrame::OnLoadToJmr(wxCommandEvent& e)
 {
 	if (notebook->GetSelection() != Loads) return;
+	if (!loadsPanel->GetCurrent()) return;
 	JammersWindow jammersWindow(this);
 	jammersWindow.ShowModal();
+	JammersManager::SendLoad(jammersWindow.GetSerNum(), (Load*)loadsPanel->GetCurrent()->GetSource());
 }
 
 void MainFrame::OnAbout(wxCommandEvent& e)
