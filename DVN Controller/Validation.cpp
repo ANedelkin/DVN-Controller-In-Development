@@ -11,12 +11,17 @@ string Validation::ValidateNameBasic(const string& name)
     return ToString(Success);
 }
 
-bool Validation::TryParse(const wxString& str, int* result)
+bool Validation::TryParse(const char* str, int* result)
 {
     char* endptr = nullptr;
-    *result = strtol(str.c_str(), &endptr, 10);
+    *result = strtol(str, &endptr, 10);
     if (*result > numeric_limits<int>::max() || *result < 0 || *endptr != '\0') return false;
     return true;
+}
+
+bool Validation::TryParse(const wxString& str, int* result)
+{
+    return Validation::TryParse((const char*)str.mb_str(), result);
 }
 
 bool Validation::HasNonStdChars(const string& str)
