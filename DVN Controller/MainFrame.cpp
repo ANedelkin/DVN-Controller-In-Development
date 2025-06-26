@@ -134,7 +134,7 @@ void MainFrame::NewScenario()
 	NameSetter nameSetter(this, "Enter scenario name", Scenario::ValidateNameUnique);
 	nameSetter.ShowModal();
 	if (nameSetter.ok && !scenariosPanel->NewPage(new Scenario(nameSetter.name))) {
-		scenariosPanel->Unsave(true);
+		scenariosPanel->SaveCurrent();
 	}
 }
 
