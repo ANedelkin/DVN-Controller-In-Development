@@ -54,26 +54,14 @@ void JammersWindow::OnRefreshClicked(wxCommandEvent& e)
 void JammersWindow::LoadJammers()
 {
 	list->Clear();
-	DWORD devsCount;
-	FT_CreateDeviceInfoList(&devsCount);
-	_ft_device_list_info_node* devices = new _ft_device_list_info_node[devsCount];
-	FT_GetDeviceInfoList(devices, &devsCount);
-	for (DWORD i = 0; i < devsCount; i++) {
-		if (devices[i].Type != FT_DEVICE_UNKNOWN && strcmp(devices[i].Description, JAMMER_NAME) == 0) {
-			char str[cstrlen(JAMMER_NAME) + 17] = JAMMER_NAME;
-			str[strlen(JAMMER_NAME)] = ' ';
-			strcat(str, devices[i].SerialNumber);
-			this->SetFocus();
-			list->AppendString(str);
-		}
+	for (string jammer : JammersManager::GetJammers()) {
+		list->AppendString(jammer);
 	}
-	for (char i = 0; i < 3; i++) list->AppendString(to_string(i) + "xxxxxxx"); //Placeholder data for demo
 	if (list->GetCount() == 0) select->Disable();
 	else {
 		if (list->GetCount() == 1) list->SetSelection(0);
 		select->Enable();
 	}
-	delete[] devices;
 }
 
 void JammersWindow::Select()
@@ -85,6 +73,7 @@ void JammersWindow::Select()
 		int len = jammerName.Length();
 		const wxString temp = jammerName.SubString(len - 8, len);
 		strcpy(serNum, temp);
+
 		Close();
 	}
 }

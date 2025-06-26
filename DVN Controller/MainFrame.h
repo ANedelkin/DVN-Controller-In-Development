@@ -6,13 +6,7 @@
 #include "Global.h"
 
 #include "Icon.xpm"
-#include "newXPM.xpm"
-#include "openXPM.xpm"
-#include "saveXPM.xpm"
-#include "saveAsXPM.xpm"
-#include "arrowUpXPM.xpm"
-#include "arrowDownXPM.xpm"
-#include "infoXPM.xpm"
+#include "Icons.h"
 
 #include "Load.h"
 #include "Scenario.h"
@@ -23,6 +17,9 @@
 #include "LoadsPanel.h"
 #include "JammersWindow.h"
 #include "AboutWindow.h"
+#include "JammersManager.h"
+
+#define TOOLBAR_ICON_SIZE wxSize(32, 32)
 
 class MainFrame : public wxFrame
 {

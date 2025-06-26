@@ -6,7 +6,7 @@
 
 #include "ModelConstants.h"
 #include "Status.h"
-#include "ftd2xx.h"
+#include "JammersManager.h"
 
 class JammersWindow : public wxDialog
 {

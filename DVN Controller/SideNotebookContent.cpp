@@ -21,7 +21,7 @@ void SideNotebookContent::UnInit()
 	isInited = false;
 }
 
-void SideNotebookContent::MarkUnsaved()
+void SideNotebookContent::MarkUnsaved() //Unused???
 {
 	/*wxCommandEvent e(EVT_UNSAVE);
 	GetParent()->GetEventHandler()->ProcessEvent(e);*/

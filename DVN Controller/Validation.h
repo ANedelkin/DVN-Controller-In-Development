@@ -6,6 +6,7 @@
 namespace Validation
 {
 	extern string ValidateNameBasic(const string& name);
+	extern bool TryParse(const char* str, int* result);
 	extern bool TryParse(const wxString& str, int* result);
 	extern bool HasNonStdChars(const string& str);
 };

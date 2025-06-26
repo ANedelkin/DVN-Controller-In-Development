@@ -1,4 +1,3 @@
-#include "Includes.h"
 #include "MainFrame.h"
 
 class App : public wxApp {
