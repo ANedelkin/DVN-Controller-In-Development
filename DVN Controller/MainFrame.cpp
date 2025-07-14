@@ -271,7 +271,8 @@ void MainFrame::OnLoadToJmr(wxCommandEvent& e)
 	if (!loadsPanel->GetCurrent()) return;
 	JammersWindow jammersWindow(this);
 	jammersWindow.ShowModal();
-	JammersManager::SendLoad(jammersWindow.GetSerNum(), (Load*)loadsPanel->GetCurrent()->GetSource());
+	LoadTransferProgressFrame progressFrame(this, (Load*)loadsPanel->GetCurrent()->GetSource(), jammersWindow.GetSerNum());
+	progressFrame.ShowModal();
 }
 
 void MainFrame::OnAbout(wxCommandEvent& e)

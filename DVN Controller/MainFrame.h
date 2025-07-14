@@ -18,6 +18,7 @@
 #include "JammersWindow.h"
 #include "AboutWindow.h"
 #include "JammersManager.h"
+#include "LoadTransferProgressFrame.h"
 
 #define TOOLBAR_ICON_SIZE wxSize(32, 32)
 
