@@ -52,9 +52,7 @@ public:
 
     void Increment() {
         CallAfter([=]() {
-            Log(scenText->GetLabel().ToStdString() + " " + to_string(gauge->GetValue()));
-
-            Freeze();
+            //Log(scenText->GetLabel().ToStdString() + " " + to_string(gauge->GetValue()));
 
             curScen++;
 
@@ -63,9 +61,7 @@ public:
             if(curScen <= SCENARIOS_COUNT)
                 scenText->SetLabel(wxString::Format("Scenario: %d/%d", curScen, SCENARIOS_COUNT));
 
-            Thaw();
-
-            Log(scenText->GetLabel().ToStdString() + " " + to_string(gauge->GetValue()));
+            //Log(scenText->GetLabel().ToStdString() + " " + to_string(gauge->GetValue()));
         });
     }
 

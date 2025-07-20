@@ -127,7 +127,7 @@ void SideNotebook::Unsave(bool created, SideMenuCtrl* target)
 		target->Unsave();
 }
 
-void SideNotebook::Duplicate(SideMenuCtrl* page)
+bool SideNotebook::Duplicate(SideMenuCtrl* page)
 {
 	DVNFileData* source = page->GetSource()->Copy();
 	NameSetter nameSetter(base, "Enter copy name", pageNameValidator, source->GetName());
@@ -135,8 +135,9 @@ void SideNotebook::Duplicate(SideMenuCtrl* page)
 	if (nameSetter.ok) {
 		source->Rename(nameSetter.name);
 		NewPage(source);
-		Unsave(true);
+		return true;
 	}
+	return false;
 }
 
 bool SideNotebook::Rename(SideMenuCtrl* page, bool renameFile)

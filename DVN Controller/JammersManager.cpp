@@ -45,6 +45,9 @@ bool JammersManager::SendLoad(string serialNumber, Load* load, LoadTransferProgr
 	char buff[15];
 	unsigned long byteCounter = 0;
 	wxStopWatch stopWatch;
+	//wxStopWatch totalStopWatch;
+
+	//totalStopWatch.Start();
 	
 	for (char i = 0; i < SCENARIOS_COUNT; i++)
 	{
@@ -64,14 +67,17 @@ bool JammersManager::SendLoad(string serialNumber, Load* load, LoadTransferProgr
 					bytesRead += n;
 				}
 				if (n && buff[bytesRead - 1] == '\r') {
-					if (buff[0] == 'O')
+					if (buff[0] == 'O') {
+						//Log(to_string(stopWatch.Time()));
 						break;
+					}
 					else {
 						//Invalid data
+						FT_Close(device);
 						return false;
 					}
 				}
-				else if (stopWatch.Time() > 1000) {
+				else if (stopWatch.Time() > 100) {
 					//Timeout
 					FT_Close(device);
 					return false;
@@ -81,6 +87,9 @@ bool JammersManager::SendLoad(string serialNumber, Load* load, LoadTransferProgr
 		}
 		frame->Increment();
 	}
+	//totalStopWatch.Pause();
+	//int totalEllapsed = totalStopWatch.Time();
+	//Log(to_string(totalEllapsed));
 	FT_Close(device);
 	return true;
 }

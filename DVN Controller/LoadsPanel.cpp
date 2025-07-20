@@ -122,7 +122,8 @@ bool LoadsPanel::SaveAs(SideMenuCtrl* page)
 void LoadsPanel::OnDuplicate(wxCommandEvent& e)
 {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	Duplicate(target);
+	if(Duplicate(target))
+		Unsave(true);
 	target->Refresh();
 }
 
