@@ -17,7 +17,7 @@ private:
 	static FT_HANDLE OpenConnection(string serialNumber);
 public:
 	static vector<string> GetJammers();
-	static bool SendLoad(string serialNumber, Load* load, LoadTransferProgressFrame*);
-	static Load* GetLoad(string serialNumber);
+	static bool SendLoad(string serialNumber, Load* load, function<bool(int, const wxString&)>);
+	static bool GetLoad(string serialNumber, Load* output, vector<tuple<char, char>>* brokenBands, function<bool(int, const wxString&)>);
 };
 

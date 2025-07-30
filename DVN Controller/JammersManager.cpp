@@ -1,5 +1,18 @@
 #include "JammersManager.h"
 #include "LoadTransferProgressFrame.h"
+#include "Log.h"
+
+#define BAND_WRITE_CMD_FORMAT	"W%c%02d%04d%04d%c\r"
+#define BAND_WRITE_CMD_LEN		14
+#define BAND_WRITE_BUFF_LEN		15
+
+#define BAND_READ_CMD_FORMAT	"R%c%02d\r"
+#define BAND_READ_CMD_LEN		5
+#define BAND_READ_BUFF_LEN		10
+
+#define BAND_STAT_POS			8
+#define BAND_FREQ2_POS			4
+#define BAND_FREQ1_POS			0
 
 FT_HANDLE JammersManager::OpenConnection(string serialNumber)
 {
@@ -36,13 +49,13 @@ vector<string> JammersManager::GetJammers()
 	return jammers;
 }
 
-bool JammersManager::SendLoad(string serialNumber, Load* load, LoadTransferProgressFrame* frame)
+bool JammersManager::SendLoad(string serialNumber, Load* load, function<bool(int, const wxString&)> update)
 {
 
 	FT_STATUS stat;
 	FT_HANDLE device = OpenConnection(serialNumber);
 	const auto& scenarios = load->GetScenarios();
-	char buff[15];
+	char buff[BAND_WRITE_BUFF_LEN];
 	unsigned long byteCounter = 0;
 	wxStopWatch stopWatch;
 	//wxStopWatch totalStopWatch;
@@ -53,13 +66,14 @@ bool JammersManager::SendLoad(string serialNumber, Load* load, LoadTransferProgr
 	{
 		for (char j = 0; j < GetBandsCount(); j++)
 		{
-			sprintf(buff, "W%c%02d%04d%04d%c\r", '0' + i, j, scenarios[i].GetFreq(j, 0), scenarios[i].GetFreq(j, 1), scenarios[i].IsActive(j) ? 'Y' : 'N');
-			stat = FT_Write(device, buff, 14, &byteCounter);
+			sprintf(buff, BAND_WRITE_CMD_FORMAT, '1' + i, j + 1, scenarios[i].GetFreq(j, 0), scenarios[i].GetFreq(j, 1), scenarios[i].IsActive(j) ? 'Y' : 'N');
+			stat = FT_Write(device, buff, BAND_WRITE_CMD_LEN, &byteCounter);
 
 			char bytesRead = 0;
 			stopWatch.Start();
 			while (true)
 			{
+				update(i, wxString::Format("Scenario: %d/%d", i + 1, SCENARIOS_COUNT));
 				DWORD n = 0;
 				stat = FT_GetQueueStatus(device, &n);
 				if (n) {
@@ -85,7 +99,6 @@ bool JammersManager::SendLoad(string serialNumber, Load* load, LoadTransferProgr
 			}
 			stopWatch.Pause();
 		}
-		frame->Increment();
 	}
 	//totalStopWatch.Pause();
 	//int totalEllapsed = totalStopWatch.Time();
@@ -94,49 +107,62 @@ bool JammersManager::SendLoad(string serialNumber, Load* load, LoadTransferProgr
 	return true;
 }
 
-Load* JammersManager::GetLoad(string serialNumber)
+bool JammersManager::GetLoad(string serialNumber, Load* output, vector<tuple<char, char>>* brokenBands, function<bool(int, const wxString&)> update)
 {
 	FT_HANDLE device = OpenConnection(serialNumber);
-	Load* load = new Load();
-	char buff[14];
-	LPDWORD byteCounter = 0;
+	array<Scenario, SCENARIOS_COUNT>& scenarios = output->GetScenarios();
+	char buff[BAND_READ_BUFF_LEN];
+	unsigned long byteCounter = 0;
 	wxStopWatch stopWatch;
 
 	for (char i = 0; i < SCENARIOS_COUNT; i++)
 	{
 		for (char j = 0; j < GetBandsCount(); j++)
 		{
-			sprintf(buff, "R%c%02d\r", '0' + i, j);
-			FT_Write(device, buff, 5, byteCounter);
+			sprintf(buff, BAND_READ_CMD_FORMAT, '1' + i, j + 1);
+			FT_Write(device, buff, BAND_READ_CMD_LEN, &byteCounter);
 			stopWatch.Start();
 
 			char bytesRead = 0;
 			while (true)
 			{
+				update(i, wxString::Format("Scenario: %d/%d", i + 1, SCENARIOS_COUNT));
 				DWORD n = 0;
-				FT_STATUS stat = FT_GetQueueStatus(device, &n);
-				bytesRead += n;
-				FT_Read(device, buff, n, byteCounter);
-				if (buff[bytesRead - 1] == '\r') {
-					if (buff[13] == 'Y')
-						load->GetScenarios()[i].TurnOn(j);
+				FT_GetQueueStatus(device, &n);
+				if (n) {
+					FT_Read(device, buff + bytesRead, n, &byteCounter);
+					bytesRead += n;
+				}
+				if (n && buff[bytesRead - 1] == '\r') {
+					if (buff[BAND_STAT_POS] == 'Y')
+						scenarios[i].TurnOn(j);
 					else
-						load->GetScenarios()[i].TurnOff(j);
-					buff[13] = '\0';
+						scenarios[i].TurnOff(j);
+					buff[BAND_STAT_POS] = '\0';
 					int parseResult;
-					Validation::TryParse(buff + 8, &parseResult);
-					load->GetScenarios()[i].SetFreq(j, 1, parseResult);
-					buff[8] = '\0';
-					Validation::TryParse(buff + 4, &parseResult);
-					load->GetScenarios()[i].SetFreq(j, 0, parseResult);
+					if (!Validation::TryParse(buff + BAND_FREQ2_POS, &parseResult)) return false;
+					if (!scenarios[i].SetFreq(j, 1, parseResult).empty()) {
+						brokenBands->push_back(make_tuple(i, j));
+						break;
+					}
+					buff[BAND_FREQ2_POS] = '\0';
+					if (!Validation::TryParse(buff + BAND_FREQ1_POS, &parseResult)) return false;
+					if (!scenarios[i].SetFreq(j, 0, parseResult).empty()) {
+						brokenBands->push_back(make_tuple(i, j));
+						break;
+					}
 					break;
 				}
-				else if (stopWatch.Time() > 15) {
+				else if (stopWatch.Time() > 100) {
 					//Timeout
-					break;
+					FT_Close(device);
+					return false;
 				}
 			}
 			stopWatch.Pause();
 		}
 	}
+
+	FT_Close(device);
+	return true;
 }

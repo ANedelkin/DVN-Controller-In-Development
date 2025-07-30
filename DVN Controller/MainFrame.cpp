@@ -263,6 +263,27 @@ void MainFrame::OnLoadFromJmr(wxCommandEvent& e)
 	if (notebook->GetSelection() != Loads) return;
 	JammersWindow jammersWindow(this);
 	jammersWindow.ShowModal();
+	wxProgressDialog progressDialog("Getting load", wxString::Format("Scenario: %d/%d", 0, SCENARIOS_COUNT), SCENARIOS_COUNT, this);
+	Load* load = new Load();
+	vector<tuple<char, char>> brokenBands;
+
+	if (JammersManager::GetLoad(jammersWindow.GetSerNum(), load, &brokenBands, [&progressDialog](int progress, wxString msg)
+		{ return progressDialog.Update(progress, msg); })) {
+
+		if (brokenBands.size()) {
+			ShowError(this, ToString(ConnectionError));
+			return;
+		}
+
+		loadsPanel->NewPage(load);
+		loadsPanel->Unsave(true);
+		return;
+	}
+	else {
+		ShowError(this, ToString(ConnectionError));
+		delete load;
+	}
+
 }
 
 void MainFrame::OnLoadToJmr(wxCommandEvent& e)
@@ -271,8 +292,9 @@ void MainFrame::OnLoadToJmr(wxCommandEvent& e)
 	if (!loadsPanel->GetCurrent()) return;
 	JammersWindow jammersWindow(this);
 	jammersWindow.ShowModal();
-	LoadTransferProgressFrame progressFrame(this, (Load*)loadsPanel->GetCurrent()->GetSource(), jammersWindow.GetSerNum());
-	progressFrame.ShowModal();
+	wxProgressDialog progressDialog("Sending load", wxString::Format("Scenario: %d/%d", 0, SCENARIOS_COUNT), SCENARIOS_COUNT, this);
+	JammersManager::SendLoad(jammersWindow.GetSerNum(), (Load*)loadsPanel->GetCurrent()->GetSource(), [&progressDialog](int progress, wxString msg) 
+							 { return progressDialog.Update(progress, msg); } );
 }
 
 void MainFrame::OnAbout(wxCommandEvent& e)

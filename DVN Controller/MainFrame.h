@@ -2,6 +2,7 @@
 
 #include <wx/notebook.h>
 #include <wx/statline.h>
+#include <wx/progdlg.h>
 
 #include "Global.h"
 

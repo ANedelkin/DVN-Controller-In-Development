@@ -28,6 +28,8 @@ namespace Status {
         NameTooLong,
         InvalidFile,
         ErrorMessageTooLong,
+        ConnectionError,
+        InvalidData
     };
     static map<StatusCode, const char*> errorMessages = {
         {StartValueOutOfBounds , "This frequency can't be below %d!"},
@@ -46,6 +48,7 @@ namespace Status {
         {NameTooLong, "The name can't be longer than %d symbols!"},
         {InvalidFile, "The file \"%s\" is invalid and can't be opened!"},
         {ErrorMessageTooLong, "The error message the program tried to generate was too long!"},
+		{ConnectionError, "A connection error occured!"},
     };
 
     extern string ToString(StatusCode code, ...);
