@@ -4,7 +4,7 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	wxIcon icon(ICON);
 	SetIcon(icon);
 
-	wxSize size = FromDIP(wxSize(1122, 710));
+	wxSize size = FromDIP(wxSize(1090, 710));
 
 	SetMinSize(size);
 	SetSize(size);
