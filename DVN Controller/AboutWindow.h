@@ -1,3 +1,7 @@
+#include "ModelConstants.h"
+
+#define VERSION "1.0"
+
 class AboutDialog : public wxDialog {
 public:
     AboutDialog(wxWindow* parent) : wxDialog(parent, wxID_ANY, "About the program") {

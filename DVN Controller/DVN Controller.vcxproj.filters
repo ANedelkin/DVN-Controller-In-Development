@@ -117,6 +117,12 @@
     <ClCompile Include="JammersManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LoadTransferProgressFrame.cpp">
+      <Filter>Source Files\Frames</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Load.h">
@@ -210,6 +216,15 @@
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="JammersManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadTransferProgressFrame.h">
+      <Filter>Header Files\Frames</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cstrlen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

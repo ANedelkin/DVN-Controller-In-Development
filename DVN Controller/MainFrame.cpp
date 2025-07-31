@@ -4,7 +4,7 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	wxIcon icon(ICON);
 	SetIcon(icon);
 
-	wxSize size = FromDIP(wxSize(1122, 710));
+	wxSize size = FromDIP(wxSize(1090, 710));
 
 	SetMinSize(size);
 	SetSize(size);
@@ -18,6 +18,12 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	SetUpToolBars();
 
 	notebook = new wxNotebook(mainPanel, wxID_ANY);
+	notebook->Bind(wxEVT_SET_FOCUS, [this](wxFocusEvent& e) {
+										if (notebook->GetSelection() == Loads)
+											loadsPanel->SetFocus();
+										else
+											scenariosPanel->SetFocus();
+									});
 
 	scenariosPanel = new ScenariosPanel(notebook, DELETABLE);
 	scenariosPanel->Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, scenariosPanel);
@@ -262,7 +268,26 @@ void MainFrame::OnLoadFromJmr(wxCommandEvent& e)
 {
 	if (notebook->GetSelection() != Loads) return;
 	JammersWindow jammersWindow(this);
-	jammersWindow.ShowModal();
+	if (jammersWindow.ShowModal() == wxID_CANCEL) return;
+	wxProgressDialog progressDialog("Getting load", wxString::Format("Scenario: %d/%d", 0, SCENARIOS_COUNT), SCENARIOS_COUNT, this);
+	Load* load = new Load();
+	vector<tuple<char, char>> brokenBands;
+
+	if (JammersManager::GetLoad(jammersWindow.GetSerNum(), load, &brokenBands, [&progressDialog](int progress, wxString msg)
+		{ return progressDialog.Update(progress, msg); })) {
+
+		if (brokenBands.size())
+			ShowError(this, ToString(InvalidData));
+
+		loadsPanel->NewPage(load);
+		loadsPanel->Unsave(true);
+		return;
+	}
+	else {
+		ShowError(this, ToString(ConnectionError));
+		delete load;
+	}
+
 }
 
 void MainFrame::OnLoadToJmr(wxCommandEvent& e)
@@ -270,8 +295,10 @@ void MainFrame::OnLoadToJmr(wxCommandEvent& e)
 	if (notebook->GetSelection() != Loads) return;
 	if (!loadsPanel->GetCurrent()) return;
 	JammersWindow jammersWindow(this);
-	jammersWindow.ShowModal();
-	JammersManager::SendLoad(jammersWindow.GetSerNum(), (Load*)loadsPanel->GetCurrent()->GetSource());
+	if (jammersWindow.ShowModal() == wxID_CANCEL) return;
+	wxProgressDialog progressDialog("Sending load", wxString::Format("Scenario: %d/%d", 0, SCENARIOS_COUNT), SCENARIOS_COUNT, this);
+	JammersManager::SendLoad(jammersWindow.GetSerNum(), (Load*)loadsPanel->GetCurrent()->GetSource(), [&progressDialog](int progress, wxString msg) 
+							 { return progressDialog.Update(progress, msg); } );
 }
 
 void MainFrame::OnAbout(wxCommandEvent& e)

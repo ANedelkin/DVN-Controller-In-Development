@@ -169,6 +169,8 @@
     <ClCompile Include="Load.cpp" />
     <ClCompile Include="LoadsPanel.cpp" />
     <ClCompile Include="LoadsPanelContent.cpp" />
+    <ClCompile Include="LoadTransferProgressFrame.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="NameSetter.cpp" />
@@ -190,6 +192,7 @@
     <ClInclude Include="BandsPanel.h" />
     <ClInclude Include="ColourfulButton.h" />
     <ClInclude Include="Colours.h" />
+    <ClInclude Include="cstrlen.h" />
     <ClInclude Include="DVNFileData.h" />
     <ClInclude Include="Events.h" />
     <ClInclude Include="ftd2xx.h" />
@@ -201,6 +204,8 @@
     <ClInclude Include="Load.h" />
     <ClInclude Include="LoadsPanel.h" />
     <ClInclude Include="LoadsPanelContent.h" />
+    <ClInclude Include="LoadTransferProgressFrame.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="ModelConstants.h" />
     <ClInclude Include="NameSetter.h" />

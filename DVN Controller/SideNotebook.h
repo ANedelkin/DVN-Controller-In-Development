@@ -47,7 +47,7 @@ protected:
 	virtual void ChangeSelection(SideMenuCtrl* scenCtrl);
 	virtual StatusCode NewPage(DVNFileData* data);
 
-	void Duplicate(SideMenuCtrl* page);
+	bool Duplicate(SideMenuCtrl* page);
 	bool Rename(SideMenuCtrl* page, bool renameFile = true);
 	void Close(SideMenuCtrl* page);
 	virtual bool Save(SideMenuCtrl* page);

@@ -22,13 +22,15 @@ void ColourfulBtn::Disable()
 
 void ColourfulBtn::SetLabel(const wxString& label) {
 	wxButton::SetLabel(label);
-	if (!IsEnabled()) txt->SetLabel(label);
-	Layout();
+	if (txt) {
+		txt->SetLabel(label);
+		Layout();
+	}
 }
 
 bool ColourfulBtn::SetForegroundColour(const wxColour& colour)
 {
-	if (IsEnabled()) wxButton::SetForegroundColour(colour);
-	else txt->SetForegroundColour(colour);
+	if (txt) txt->SetForegroundColour(colour);
+	else wxButton::SetForegroundColour(colour);
 	return true;
 }

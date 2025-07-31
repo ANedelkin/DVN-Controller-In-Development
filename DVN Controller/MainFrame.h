@@ -2,6 +2,7 @@
 
 #include <wx/notebook.h>
 #include <wx/statline.h>
+#include <wx/progdlg.h>
 
 #include "Global.h"
 
@@ -18,6 +19,7 @@
 #include "JammersWindow.h"
 #include "AboutWindow.h"
 #include "JammersManager.h"
+#include "LoadTransferProgressFrame.h"
 
 #define TOOLBAR_ICON_SIZE wxSize(32, 32)
 
