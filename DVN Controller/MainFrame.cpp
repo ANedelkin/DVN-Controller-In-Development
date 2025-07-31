@@ -18,6 +18,12 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	SetUpToolBars();
 
 	notebook = new wxNotebook(mainPanel, wxID_ANY);
+	notebook->Bind(wxEVT_SET_FOCUS, [this](wxFocusEvent& e) {
+										if (notebook->GetSelection() == Loads)
+											loadsPanel->SetFocus();
+										else
+											scenariosPanel->SetFocus();
+									});
 
 	scenariosPanel = new ScenariosPanel(notebook, DELETABLE);
 	scenariosPanel->Bind(EVT_UNSAVE, &SideNotebook::OnUnsave, scenariosPanel);
