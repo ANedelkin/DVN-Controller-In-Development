@@ -16,7 +16,7 @@ JammersWindow::JammersWindow(wxWindow* parent) : wxDialog(parent, wxID_ANY, "Sel
 	mainSizer->Add(refresh, 0, wxEXPAND | wxALL, FromDIP(10));
 	mainSizer->Add(cancel, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(10));
 
-	Bind(wxEVT_KEY_DOWN, &JammersWindow::OnEnterPressed, this);  
+	//Bind(wxEVT_KEY_DOWN, &JammersWindow::OnEnterPressed, this);  
 	select->Bind(wxEVT_BUTTON, &JammersWindow::OnSelectClicked, this);
 	refresh->Bind(wxEVT_BUTTON, &JammersWindow::OnRefreshClicked, this);
 
@@ -74,6 +74,6 @@ void JammersWindow::Select()
 		const wxString temp = jammerName.SubString(len - 8, len);
 		strcpy(serNum, temp);
 
-		Close();
+		EndModal(wxID_OK);
 	}
 }

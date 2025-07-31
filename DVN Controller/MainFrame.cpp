@@ -268,7 +268,7 @@ void MainFrame::OnLoadFromJmr(wxCommandEvent& e)
 {
 	if (notebook->GetSelection() != Loads) return;
 	JammersWindow jammersWindow(this);
-	jammersWindow.ShowModal();
+	if (jammersWindow.ShowModal() == wxID_CANCEL) return;
 	wxProgressDialog progressDialog("Getting load", wxString::Format("Scenario: %d/%d", 0, SCENARIOS_COUNT), SCENARIOS_COUNT, this);
 	Load* load = new Load();
 	vector<tuple<char, char>> brokenBands;
@@ -295,7 +295,7 @@ void MainFrame::OnLoadToJmr(wxCommandEvent& e)
 	if (notebook->GetSelection() != Loads) return;
 	if (!loadsPanel->GetCurrent()) return;
 	JammersWindow jammersWindow(this);
-	jammersWindow.ShowModal();
+	if (jammersWindow.ShowModal() == wxID_CANCEL) return;
 	wxProgressDialog progressDialog("Sending load", wxString::Format("Scenario: %d/%d", 0, SCENARIOS_COUNT), SCENARIOS_COUNT, this);
 	JammersManager::SendLoad(jammersWindow.GetSerNum(), (Load*)loadsPanel->GetCurrent()->GetSource(), [&progressDialog](int progress, wxString msg) 
 							 { return progressDialog.Update(progress, msg); } );
