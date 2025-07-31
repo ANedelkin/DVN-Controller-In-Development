@@ -1,7 +1,6 @@
 #pragma once
 
-#define JAMMER_NAME "BJ130P"
-#define VERSION "1.0"
+#define JAMMER_NAME "SPJ500"
 
 #define SCENARIOS_COUNT 6
 
@@ -23,11 +22,4 @@ consteval char GetBandsCount() {
 		count += BAND_RANGES[i][3];
 	}
 	return count;
-}
-
-consteval char cstrlen(const char* str) {
-	char n = 0;
-	while (str[n])
-		n++;
-	return n;
 }

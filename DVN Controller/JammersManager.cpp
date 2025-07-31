@@ -1,6 +1,7 @@
 #include "JammersManager.h"
 #include "LoadTransferProgressFrame.h"
 #include "Log.h"
+#include "cstrlen.h"
 
 #define BAND_WRITE_CMD_FORMAT	"W%c%02d%04d%04d%c\r"
 #define BAND_WRITE_CMD_LEN		14
@@ -119,6 +120,8 @@ bool JammersManager::GetLoad(string serialNumber, Load* output, vector<tuple<cha
 	{
 		for (char j = 0; j < GetBandsCount(); j++)
 		{
+			bool broken = false;
+
 			sprintf(buff, BAND_READ_CMD_FORMAT, '1' + i, j + 1);
 			FT_Write(device, buff, BAND_READ_CMD_LEN, &byteCounter);
 			stopWatch.Start();
@@ -141,16 +144,15 @@ bool JammersManager::GetLoad(string serialNumber, Load* output, vector<tuple<cha
 					buff[BAND_STAT_POS] = '\0';
 					int parseResult;
 					if (!Validation::TryParse(buff + BAND_FREQ2_POS, &parseResult)) return false;
-					if (!scenarios[i].SetFreq(j, 1, parseResult).empty()) {
-						brokenBands->push_back(make_tuple(i, j));
-						break;
-					}
+					if (!scenarios[i].SetFreq(j, 1, parseResult).empty())
+						broken = true;
 					buff[BAND_FREQ2_POS] = '\0';
 					if (!Validation::TryParse(buff + BAND_FREQ1_POS, &parseResult)) return false;
-					if (!scenarios[i].SetFreq(j, 0, parseResult).empty()) {
+					if (!scenarios[i].SetFreq(j, 0, parseResult).empty())
+						broken = true;
+					
+					if(broken)
 						brokenBands->push_back(make_tuple(i, j));
-						break;
-					}
 					break;
 				}
 				else if (stopWatch.Time() > 100) {

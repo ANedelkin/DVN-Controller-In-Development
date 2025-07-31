@@ -276,10 +276,8 @@ void MainFrame::OnLoadFromJmr(wxCommandEvent& e)
 	if (JammersManager::GetLoad(jammersWindow.GetSerNum(), load, &brokenBands, [&progressDialog](int progress, wxString msg)
 		{ return progressDialog.Update(progress, msg); })) {
 
-		if (brokenBands.size()) {
-			ShowError(this, ToString(ConnectionError));
-			return;
-		}
+		if (brokenBands.size())
+			ShowError(this, ToString(InvalidData));
 
 		loadsPanel->NewPage(load);
 		loadsPanel->Unsave(true);

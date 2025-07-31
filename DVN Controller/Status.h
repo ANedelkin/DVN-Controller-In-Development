@@ -49,6 +49,7 @@ namespace Status {
         {InvalidFile, "The file \"%s\" is invalid and can't be opened!"},
         {ErrorMessageTooLong, "The error message the program tried to generate was too long!"},
 		{ConnectionError, "A connection error occured!"},
+        {InvalidData, "Some of the bands received by the jammer contained invalid values. These values were replaced with default ones and their bands marked with their numbers in red."}
     };
 
     extern string ToString(StatusCode code, ...);
