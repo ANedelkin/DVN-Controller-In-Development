@@ -15,3 +15,6 @@ extern const char* penSVG;
 extern const char* copySVG;
 extern const char* closeSVG;
 extern const char* deleteSVG;
+
+extern const char* OKSVG;
+extern const char* ErrorSVG;

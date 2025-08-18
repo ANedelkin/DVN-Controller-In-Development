@@ -42,6 +42,7 @@ private:
 	wxToolBar* scenariosToolBar;
 
 	void SetUpToolBars();
+	void SetUpStatusBar();
 
 	void LoadScenarios();
 	void UpdateScenarios();

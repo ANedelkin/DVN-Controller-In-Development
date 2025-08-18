@@ -16,6 +16,7 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
 	SetUpToolBars();
+	SetUpStatusBar();
 
 	notebook = new wxNotebook(mainPanel, wxID_ANY);
 	notebook->Bind(wxEVT_SET_FOCUS, [this](wxFocusEvent& e) {
@@ -100,6 +101,19 @@ void MainFrame::SetUpToolBars()
 	wxAcceleratorTable accelTable(8, entries);
 	SetAcceleratorTable(accelTable);
 }
+
+void MainFrame::SetUpStatusBar()
+{
+	wxStatusBar* statusBar = CreateStatusBar(2);
+	int height = statusBar->GetClientSize().GetHeight();
+	int widths[] = { height - FromDIP(9), -1};
+	statusBar->SetFieldsCount(2, widths);
+
+	wxStaticBitmap* icon = new wxStaticBitmap(statusBar, wxID_ANY, wxBitmapBundle::FromSVG(OKSVG, wxSize(16, 15)), FromDIP(wxPoint(2, 1)), wxSize(height - FromDIP(3), height));
+
+	statusBar->SetStatusText("Everything is OK.", 1);
+}
+
 
 void MainFrame::LoadScenarios()
 {
