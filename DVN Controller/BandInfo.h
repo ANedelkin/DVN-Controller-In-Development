@@ -25,7 +25,6 @@ struct BandInfo {
 	}
 
 	static string ValidateName(const string& name) {
-		if (name.find('|') != string::npos) return ToString(InvalidSymbols);
 		return Validation::ValidateNameBasic(name);
 	}
 };
