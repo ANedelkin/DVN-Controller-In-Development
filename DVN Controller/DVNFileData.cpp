@@ -6,7 +6,7 @@ DVNFileData::DVNFileData(const string& name) : name(name), upToDate(true)
 
 string DVNFileData::ValidateName(const string& name)
 {
-	const char* charsToSeek = "\\/:*?\"<>|";
+	const char* charsToSeek = "\\/:*?\"<>|&";
 	const char len = strlen(charsToSeek);
 
 	for (char i = 0; i < len; i++)
