@@ -79,8 +79,12 @@ void BandRow::InitForeground() {
     num->SetBackgroundColour(wxColour(255, 255, 255));
 
     name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, FromDIP(wxSize(NAME_INPUT_LEN, -1)), wxTE_PROCESS_ENTER);
-    startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 0)), wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)), wxTE_PROCESS_ENTER);
-    endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 1)), wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)), wxTE_PROCESS_ENTER);
+    startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 0)), wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)), wxTE_PROCESS_ENTER, wxTextValidator(wxFILTER_DIGITS));
+    endValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 1)), wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)), wxTE_PROCESS_ENTER, wxTextValidator(wxFILTER_DIGITS));
+
+    name->SetMaxLength(NAME_MAX_LENGTH);
+    startValue->SetMaxLength(4);
+    endValue->SetMaxLength(4);
     
     bool active = scenario->IsActive(bandNum);
     statBtn = new ColourfulBtn(this, active ? "ON" : "OFF");

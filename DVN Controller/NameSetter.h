@@ -6,6 +6,7 @@
 
 #include "Global.h"
 #include "Status.h"
+#include "Validation.h"
 
 class NameSetter : public wxDialog
 {
