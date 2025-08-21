@@ -20,21 +20,17 @@ public:
 				string stat = ToString(Success);
 				int type = (int)focused->GetClientData();
 				if (type == BandRow::Name)
-					stat = row->Rename();
+					row->Rename();
 				else if(type == BandRow::Start|| type == BandRow::End)
-					stat = row->UpdateFreq(type);
+					row->UpdateFreqs(type);
 
-				if (stat.empty()) { //Success
-					focused = nullptr;
+				focused = nullptr;
 
-					int type = (int)target->GetClientData();
-					if (t == wxEVT_CLOSE_WINDOW || wxGetMouseState().LeftIsDown() && 
-												  (type == BandRow::Name || type == BandRow::Start || type == BandRow::End || type == BandRow::StatBtn)) 
-						return Event_Skip;
-					row->Unfocus();
-				}
-				else //Failure, like me
-					focused->SetFocus();
+				type = (int)target->GetClientData();
+				if (t == wxEVT_CLOSE_WINDOW || wxGetMouseState().LeftIsDown() && 
+											  (type == BandRow::Name || type == BandRow::Start || type == BandRow::End || type == BandRow::StatBtn)) 
+					return Event_Skip;
+				row->Unfocus();
 				
 				return Event_Processed;
 			}

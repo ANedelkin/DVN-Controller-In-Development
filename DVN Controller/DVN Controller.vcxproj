@@ -183,6 +183,7 @@
     <ClCompile Include="SideNotebookContent.cpp" />
     <ClCompile Include="Split.cpp" />
     <ClCompile Include="Status.cpp" />
+    <ClCompile Include="StatusBar.cpp" />
     <ClCompile Include="Validation.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +220,7 @@
     <ClInclude Include="SideNotebookContent.h" />
     <ClInclude Include="Split.h" />
     <ClInclude Include="Status.h" />
+    <ClInclude Include="StatusBar.h" />
     <ClInclude Include="Validation.h" />
   </ItemGroup>
   <ItemGroup>

@@ -37,8 +37,17 @@ void BandRow::OnStatusChanged(wxCommandEvent& e)
     e.Skip();
 }
 
+void BandRow::OnText(wxCommandEvent& e) {
+    if (focused) {
+        focused->SetForegroundColour(*wxBLACK);
+        Refresh();
+    }
+    e.Skip();
+}
+
 void BandRow::OnTextCtrlFocus(wxFocusEvent& e) {
     focused = FindFocus();
+    statusBar.SetStatus(scenario->GetBandError(bandNum, (BandInfo::BandProperty)((int)focused->GetClientData() - 1)));
     ScrollTo();
     e.Skip();
 }
@@ -78,7 +87,7 @@ void BandRow::InitForeground() {
     num = new wxStaticText(this, wxID_ANY, to_string(bandNum + 1) + '.', wxDefaultPosition, FromDIP(wxSize(15, -1)));
     num->SetBackgroundColour(wxColour(255, 255, 255));
 
-    wxTextValidator nameValidator(wxFILTER_EXCLUDE_CHAR_LIST);
+    wxTextValidator nameValidator(wxFILTER_EXCLUDE_CHAR_LIST | wxFILTER_ASCII);
     nameValidator.SetCharExcludes("|");
     name = new wxTextCtrl(this, wxID_ANY, scenario->GetName(bandNum), wxDefaultPosition, FromDIP(wxSize(NAME_INPUT_LEN, -1)), wxTE_PROCESS_ENTER, nameValidator);
     startValue = new wxTextCtrl(this, wxID_ANY, to_string(scenario->GetFreq(bandNum, 0)), wxDefaultPosition, FromDIP(wxSize(FREQ_INPUT_LEN, -1)), wxTE_PROCESS_ENTER, wxTextValidator(wxFILTER_DIGITS));
@@ -116,6 +125,10 @@ void BandRow::BindEventHandlers()
         name->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
         startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
         endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
+
+        name->Bind(wxEVT_TEXT, &BandRow::OnText, this);
+        startValue->Bind(wxEVT_TEXT, &BandRow::OnText, this);
+        endValue->Bind(wxEVT_TEXT, &BandRow::OnText, this);
 
         name->Bind(wxEVT_CHAR_HOOK, &BandRow::OnKey, this);
         startValue->Bind(wxEVT_CHAR_HOOK, &BandRow::OnKey, this);
@@ -156,52 +169,44 @@ void BandRow::ChangeScenario(Scenario* scenario) {
     statBtn->SetForegroundColour(wxColour(active ? DARK_GREEN : *wxRED));
 }
 
-string BandRow::Rename() {
+void BandRow::Rename() {
     string newName = name->GetValue().ToUTF8().data();
-    if (newName == scenario->GetName(bandNum)) {
-        name->SetInsertionPoint(0);
-        return ToString(Success);
-    }
-    string stat = scenario->Rename(newName, bandNum);
-    if (!stat.empty()) {
-        int res = ShowError(base, stat, DIALOG);
-        if (res == wxID_CANCEL) {
-            name->SetValue(scenario->GetName(bandNum));
-            name->SetInsertionPoint(0);
-            return ToString(Success);
-        }
-    }
+
+    scenario->Rename(newName, bandNum);
+    name->SetInsertionPoint(0);
+
+    CheckIfValid(name);
+
     MarkUnsaved();
-    return stat;
 }
 
-string BandRow::UpdateFreq(int freqToChange)
+void BandRow::UpdateFreqs(int freqToChange) {
+    UpdateFreq(freqToChange);
+	UpdateFreq(freqToChange == Start ? End : Start);
+
+    MarkUnsaved();
+}
+
+void BandRow::UpdateFreq(int freqToChange)
 {
     assert(freqToChange == Start || freqToChange == End);
-    string stat;
     wxTextCtrl* ctrl = (int)freqToChange == Start ? startValue : endValue;
-    int i = (int)freqToChange == Start ? 0 : 1;
+    int i = freqToChange - 2;
     int newValue;
-    stat = Validation::TryParse(ctrl->GetValue(), &newValue) ? ToString(Success) : ToString(FreqNotPositiveNumber);
-    if (!stat.empty()) {
-        if (ShowError(base, stat, DIALOG) == wxID_CANCEL) {
-            ctrl->SetValue(to_string(scenario->GetFreq(bandNum, i)));
-            return ToString(Success);
-        }
-    }
-    else {
-        if (newValue == scenario->GetFreq(bandNum, i)) return ToString(Success);
-        stat = scenario->SetFreq(bandNum, i, newValue);
-        if (!stat.empty()) {
-            if (ShowError(base, stat, DIALOG) == wxID_CANCEL) {
-                ctrl->SetValue(to_string(scenario->GetFreq(bandNum, i)));
-                return ToString(Success);
-            }
-        }
-        else ctrl->SetValue(to_string(scenario->GetFreq(bandNum, i)));
-    }
-    MarkUnsaved();
-    return stat;
+    Validation::TryParse(ctrl->GetValue(), &newValue);
+
+    scenario->SetFreq(bandNum, i, newValue);
+    CheckIfValid(ctrl);
+}
+
+void BandRow::CheckIfValid(wxTextCtrl* ctrl) {
+    string stat = scenario->GetBandError(bandNum, BandInfo::BandProperty((int)ctrl->GetClientData() - 1));
+    if (!stat.empty())
+        ctrl->SetForegroundColour(*wxRED);
+    else
+        ctrl->SetForegroundColour(*wxBLACK);
+
+    ctrl->Refresh();
 }
 
 void BandRow::Unfocus()
@@ -217,29 +222,27 @@ void BandRow::MarkUnsaved()
 
 bool BandRow::ProcessKey(int key)
 {
-    if (key != WXK_CONTROL && wxGetKeyState(WXK_CONTROL) && key != 'A' && key != 'C' && key != 'X' && key != 'V' && key != 'Z' && 
-                                                            key != WXK_RIGHT && key != WXK_LEFT && key != WXK_BACK && key != WXK_DELETE)
+    if (wxGetKeyState(WXK_CONTROL) && key != 'A' && key != 'C' && key != 'X' && key != 'V' && key != 'Z' && 
+                                      key != WXK_RIGHT && key != WXK_LEFT && key != WXK_BACK && key != WXK_DELETE)
         return true;
     int tabDir = wxGetKeyState(WXK_SHIFT);
     if ((key == WXK_TAB || key == WXK_RETURN || key == WXK_ESCAPE)) {
-        bool updateSuccess;
         if ((int)focused->GetClientData() == Name)
-            updateSuccess = Rename().empty();
+            Rename();
         else
-            updateSuccess = UpdateFreq((int)focused->GetClientData()).empty();
+            UpdateFreqs((int)focused->GetClientData());
 
-        if (updateSuccess) {
-            wxWindow* cur = focused;
-            focused = nullptr;
-            if (key == WXK_TAB) {
-                if (tabDir)
-                    cur->Navigate(wxNavigationKeyEvent::IsBackward);
-                else
-                    cur->Navigate();
-            }
+        wxWindow* cur = focused;
+        focused = nullptr;
+        if (key == WXK_TAB) {
+            if (tabDir)
+                cur->Navigate(wxNavigationKeyEvent::IsBackward);
             else
-                Unfocus();
+                cur->Navigate();
         }
+        else
+            Unfocus();
+
         return true;
     }
     else return false;

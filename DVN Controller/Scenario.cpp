@@ -24,34 +24,45 @@ Scenario::Scenario(string name) : DVNFileData(name) {
 	//oldSaveString = SaveString();
 }
 
-string Scenario::SetBandData(char i, string name, int startValue, int endValue, bool working)
+void Scenario::SetBandData(char i, string name, int startValue, int endValue, bool working)
 {
-	string stat = ToString(Success);
-	stat = Rename(name, i);
-	if (stat.empty()) stat = SetFreq(i, 0, startValue);
-	if (stat.empty()) stat = SetFreq(i, 1, endValue);
+	Rename(name, i);
+	if (IsBandValid(i)) SetFreq(i, 0, startValue);
+	if (IsBandValid(i)) SetFreq(i, 1, endValue);
 	if (working) TurnOn(i);
 	else TurnOff(i);
-	return stat;
 }
 
-string Scenario::SetFreq(char bandIndex, char freqIndex, int value)
+void Scenario::SetFreq(char bandIndex, char freqIndex, int value)
 {
+	string stat = "";
 	if (freqIndex) { //End frequency
-		if (value == GetFreq(bandIndex, 1)) return ToString(Success);
-		if (value < GetFreq(bandIndex, 0)) return ToString(EndValueLowerThanStartValue);
-		if (value > GetEndValueBorder(bandIndex)) return ToString(EndValueOutOfBounds, GetEndValueBorder(bandIndex));
-
 		bands[bandIndex].endValue = value;
+
+		if (value < GetFreq(bandIndex, 0)) stat = ToString(EndValueLowerThanStartValue);
+		else if (value > GetEndValueBorder(bandIndex)) stat = ToString(EndValueOutOfBounds, GetEndValueBorder(bandIndex));
 	}
 	else { //Start frequency
-		if (value == GetFreq(bandIndex, 0)) return ToString(Success);
-		if (value > GetFreq(bandIndex, 1)) return ToString(StartValueHigherThanEndvalue);
-		if (value < GetStartValueBorder(bandIndex)) return ToString(StartValueOutOfBounds, GetStartValueBorder(bandIndex));
-
 		bands[bandIndex].startValue = value;
+
+		if (value > GetFreq(bandIndex, 1)) stat = ToString(StartValueHigherThanEndvalue);
+		else if (value < GetStartValueBorder(bandIndex)) stat = ToString(StartValueOutOfBounds, GetStartValueBorder(bandIndex));
 	}
-	return ToString(Success);
+	SetBandError(bandIndex, (BandInfo::BandProperty)(freqIndex + 1), stat);
+}
+
+void Scenario::SetBandError(char i, BandInfo::BandProperty property, const string error)
+{
+	bands[i].errors[property] = error;
+}
+
+string Scenario::GetBandError(char i, BandInfo::BandProperty property) {
+	return bands[i].errors[property];
+}
+
+bool Scenario::IsBandValid(char i)
+{
+	return GetBandError(i, Name).empty() && GetBandError(i, Start).empty() && GetBandError(i, End).empty();
 }
 
 //void Scenario::CheckIfFull(char i)
@@ -70,11 +81,9 @@ void Scenario::TurnOff(char i) {
 	bands[i].working = false;
 }
 string Scenario::GetName(char i) { return bands[i].name; }
-string Scenario::Rename(const string& name, char i) {
-	string stat = BandInfo::ValidateName(name);
-	if (!stat.empty()) return stat;
+void Scenario::Rename(const string& name, char i) {
+	SetBandError(i, BandInfo::Name, BandInfo::ValidateName(name));
 	bands[i].name = name;
-	return ToString(Success);
 }
 
 int Scenario::GetFreq(char bandIndex, char freqIndex) const { return freqIndex ? bands[bandIndex].endValue : bands[bandIndex].startValue; }
@@ -119,10 +128,10 @@ Scenario* Scenario::ToScenario(const string& name, stringstream& stream, bool un
 					goto NotOkay;
 				int start;
 				int end;
-				if(!Validation::TryParse(values[1], &start) || !Validation::TryParse(values[2], &end))
+				if (!Validation::TryParse(values[1], &start) || !Validation::TryParse(values[2], &end))
 					goto NotOkay;
-				else if (!scenario->SetBandData(i, values[0], stoi(values[1]), stoi(values[2]), on).empty())
-					goto NotOkay;
+				else
+					scenario->SetBandData(i, values[0], stoi(values[1]), stoi(values[2]), on);
 			}
 			else
 				goto NotOkay;

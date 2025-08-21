@@ -10,6 +10,9 @@
 #include "Split.h"
 
 using namespace Status;
+using BandInfo::BandProperty::Name;
+using BandInfo::BandProperty::Start;
+using BandInfo::BandProperty::End;
 
 class Scenario : public DVNFileData {
 private:
@@ -18,18 +21,23 @@ private:
 	static const string folder;
 	static const string extension;
 public:
+
 	static Scenario* placeHolder;
 
 	Scenario();
 	Scenario(string name);
 
-	string SetBandData(char i, string name, int startValue, int endValue, bool working);
-	string SetFreq(char bandIndex, char freqIndex, int value);
+	void SetBandData(char i, string name, int startValue, int endValue, bool working);
+	void SetFreq(char bandIndex, char freqIndex, int value);
+
+	void SetBandError(char i, BandInfo::BandProperty property, const string error);
+	string GetBandError(char i, BandInfo::BandProperty property);
+	bool IsBandValid(char i);
 
 	void TurnOn(char i);
 	void TurnOff(char i);
 	string GetName(char i);
-	string Rename(const string& name, char i);
+	void Rename(const string& name, char i);
 
 	int GetFreq(char bandIndex, char freqIndex) const;
 	int GetRangeIndex(char i) const;
