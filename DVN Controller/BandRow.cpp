@@ -47,9 +47,17 @@ void BandRow::OnText(wxCommandEvent& e) {
 
 void BandRow::OnTextCtrlFocus(wxFocusEvent& e) {
     focused = FindFocus();
-    statusBar.SetStatus(scenario->GetBandError(bandNum, (BandInfo::BandProperty)((int)focused->GetClientData() - 1)));
+    statusBar.SetStatus(scenario->GetBandStatus(bandNum, (BandInfo::BandProperty)((int)focused->GetClientData() - 1)));
     ScrollTo();
     e.Skip();
+}
+
+void BandRow::OnUnfocus(wxFocusEvent& e) {
+    if(scenario->invalidBands)
+	    statusBar.SetStatus(ToString(InvalidBands, scenario->invalidBands));
+    else
+		statusBar.SetStatus("");
+	e.Skip();
 }
 
 void BandRow::OnFocus(wxFocusEvent& e)
@@ -126,6 +134,10 @@ void BandRow::BindEventHandlers()
         startValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
         endValue->Bind(wxEVT_SET_FOCUS, &BandRow::OnTextCtrlFocus, this);
 
+        name->Bind(wxEVT_KILL_FOCUS, &BandRow::OnUnfocus, this);
+        startValue->Bind(wxEVT_KILL_FOCUS, &BandRow::OnUnfocus, this);
+        endValue->Bind(wxEVT_KILL_FOCUS, &BandRow::OnUnfocus, this);
+
         name->Bind(wxEVT_TEXT, &BandRow::OnText, this);
         startValue->Bind(wxEVT_TEXT, &BandRow::OnText, this);
         endValue->Bind(wxEVT_TEXT, &BandRow::OnText, this);
@@ -200,7 +212,7 @@ void BandRow::UpdateFreq(int freqToChange)
 }
 
 void BandRow::CheckIfValid(wxTextCtrl* ctrl) {
-    string stat = scenario->GetBandError(bandNum, BandInfo::BandProperty((int)ctrl->GetClientData() - 1));
+    string stat = scenario->GetBandStatus(bandNum, BandInfo::BandProperty((int)ctrl->GetClientData() - 1));
     if (!stat.empty())
         ctrl->SetForegroundColour(*wxRED);
     else

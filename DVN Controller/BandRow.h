@@ -42,6 +42,7 @@ private:
     void OnStatusChanged(wxCommandEvent& e);
     void OnText(wxCommandEvent& e);
     void OnTextCtrlFocus(wxFocusEvent& e);
+    void OnUnfocus(wxFocusEvent& e);
     void OnFocus(wxFocusEvent& e);
     void ScrollTo();
 public:

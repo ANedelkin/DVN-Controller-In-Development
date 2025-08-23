@@ -48,21 +48,29 @@ void Scenario::SetFreq(char bandIndex, char freqIndex, int value)
 		if (value > GetFreq(bandIndex, 1)) stat = ToString(StartValueHigherThanEndvalue);
 		else if (value < GetStartValueBorder(bandIndex)) stat = ToString(StartValueOutOfBounds, GetStartValueBorder(bandIndex));
 	}
-	SetBandError(bandIndex, (BandInfo::BandProperty)(freqIndex + 1), stat);
+
+	SetBandStatus(bandIndex, (BandInfo::BandProperty)(freqIndex + 1), stat);
 }
 
-void Scenario::SetBandError(char i, BandInfo::BandProperty property, const string error)
+void Scenario::SetBandStatus(char i, BandInfo::BandProperty property, const string error)
 {
+	bool wasValid = IsBandValid(i);
+
 	bands[i].errors[property] = error;
+
+	if (!wasValid && IsBandValid(i))
+		invalidBands--;
+	else if (wasValid && !IsBandValid(i))
+		invalidBands++;
 }
 
-string Scenario::GetBandError(char i, BandInfo::BandProperty property) {
+string Scenario::GetBandStatus(char i, BandInfo::BandProperty property) {
 	return bands[i].errors[property];
 }
 
 bool Scenario::IsBandValid(char i)
 {
-	return GetBandError(i, Name).empty() && GetBandError(i, Start).empty() && GetBandError(i, End).empty();
+	return GetBandStatus(i, Name).empty() && GetBandStatus(i, Start).empty() && GetBandStatus(i, End).empty();
 }
 
 //void Scenario::CheckIfFull(char i)
@@ -82,7 +90,7 @@ void Scenario::TurnOff(char i) {
 }
 string Scenario::GetName(char i) { return bands[i].name; }
 void Scenario::Rename(const string& name, char i) {
-	SetBandError(i, BandInfo::Name, BandInfo::ValidateName(name));
+	SetBandStatus(i, BandInfo::Name, BandInfo::ValidateName(name));
 	bands[i].name = name;
 }
 

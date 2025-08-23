@@ -21,8 +21,9 @@ private:
 	static const string folder;
 	static const string extension;
 public:
-
 	static Scenario* placeHolder;
+
+	char invalidBands = 0;
 
 	Scenario();
 	Scenario(string name);
@@ -30,8 +31,8 @@ public:
 	void SetBandData(char i, string name, int startValue, int endValue, bool working);
 	void SetFreq(char bandIndex, char freqIndex, int value);
 
-	void SetBandError(char i, BandInfo::BandProperty property, const string error);
-	string GetBandError(char i, BandInfo::BandProperty property);
+	void SetBandStatus(char i, BandInfo::BandProperty property, const string error);
+	string GetBandStatus(char i, BandInfo::BandProperty property);
 	bool IsBandValid(char i);
 
 	void TurnOn(char i);

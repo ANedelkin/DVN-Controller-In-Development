@@ -29,7 +29,7 @@ namespace Status {
         InvalidFile,
         ErrorMessageTooLong,
         ConnectionError,
-        InvalidData
+        InvalidBands
     };
     static map<StatusCode, const char*> errorMessages = {
         {StartValueOutOfBounds , "This frequency can't be below %d!"},
@@ -49,7 +49,7 @@ namespace Status {
         {InvalidFile, "The file \"%s\" is invalid and can't be opened!"},
         {ErrorMessageTooLong, "The error message the program tried to generate was too long!"},
 		{ConnectionError, "A connection error occured!"},
-        {InvalidData, "Some of the bands received by the jammer contained invalid values. These values were replaced with default ones and their bands marked with their numbers in red."}
+        {InvalidBands, "Selected scenario contains %d invalid band/s. Invalid data is marked in red. Click on invalid data to see the error in the status bar."}
     };
 
     extern string ToString(StatusCode code, ...);

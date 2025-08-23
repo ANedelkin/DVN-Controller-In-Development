@@ -279,7 +279,7 @@ void MainFrame::OnLoadFromJmr(wxCommandEvent& e)
 		{ return progressDialog.Update(progress, msg); })) {
 
 		if (brokenBands.size())
-			ShowError(this, ToString(InvalidData));
+			ShowError(this, ToString(InvalidBands));
 
 		loadsPanel->NewPage(load);
 		loadsPanel->Unsave(true);
