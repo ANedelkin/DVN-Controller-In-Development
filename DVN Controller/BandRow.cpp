@@ -176,6 +176,10 @@ void BandRow::ChangeScenario(Scenario* scenario) {
     startValue->SetValue(to_string(scenario->GetFreq(bandNum, 0)));
     endValue->SetValue(to_string(scenario->GetFreq(bandNum, 1)));
 
+    CheckIfValid(name);
+    CheckIfValid(startValue);
+    CheckIfValid(endValue);
+
     bool active = scenario->IsActive(bandNum);
     statBtn->SetLabel(active ? "ON" : "OFF");
     statBtn->SetForegroundColour(wxColour(active ? DARK_GREEN : *wxRED));
