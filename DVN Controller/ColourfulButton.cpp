@@ -5,6 +5,19 @@ ColourfulBtn::ColourfulBtn(wxWindow* parent, const wxString& label) : wxButton(p
 	SetBackgroundColour(wxColour(*wxWHITE));
 }
 
+void ColourfulBtn::SetStatus(Status status)
+{
+	if (status) { //Off
+		SetForegroundColour(*wxBLACK);
+		SetLabel("OFF");
+	}
+	else { //On
+		SetForegroundColour(DARK_GREEN);
+		SetLabel("ON");
+	}
+
+}
+
 void ColourfulBtn::Disable()
 {
 	wxButton::Disable();

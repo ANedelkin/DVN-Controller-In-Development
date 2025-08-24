@@ -25,13 +25,11 @@ void BandRow::OnStatusChanged(wxCommandEvent& e)
 {
     if (scenario->IsActive(bandNum)) {
         scenario->TurnOff(bandNum);
-        statBtn->SetForegroundColour(*wxRED);
-        statBtn->SetLabel("OFF");
+        statBtn->SetStatus(ColourfulBtn::Status::Off);
     }
     else {
         scenario->TurnOn(bandNum);
-        statBtn->SetForegroundColour(DARK_GREEN);
-        statBtn->SetLabel("ON");
+        statBtn->SetStatus(ColourfulBtn::Status::On);
     }
     MarkUnsaved();
     e.Skip();
@@ -107,7 +105,7 @@ void BandRow::InitForeground() {
     
     bool active = scenario->IsActive(bandNum);
     statBtn = new ColourfulBtn(this, active ? "ON" : "OFF");
-    statBtn->SetForegroundColour(wxColour(active ? DARK_GREEN : *wxRED));
+    statBtn->SetStatus(active ? ColourfulBtn::Status::On : ColourfulBtn::Status::Off);
 
     if (readOnly) {
         name->Disable();
@@ -181,8 +179,7 @@ void BandRow::ChangeScenario(Scenario* scenario) {
     CheckIfValid(endValue);
 
     bool active = scenario->IsActive(bandNum);
-    statBtn->SetLabel(active ? "ON" : "OFF");
-    statBtn->SetForegroundColour(wxColour(active ? DARK_GREEN : *wxRED));
+    statBtn->SetStatus(active ? ColourfulBtn::Status::On : ColourfulBtn::Status::Off);
 }
 
 void BandRow::Rename() {
