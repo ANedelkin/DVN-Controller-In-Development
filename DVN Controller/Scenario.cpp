@@ -36,17 +36,19 @@ void Scenario::SetBandData(char i, string name, int startValue, int endValue, bo
 void Scenario::SetFreq(char bandIndex, char freqIndex, int value)
 {
 	string stat = "";
+	
+	if (value < GetStartValueBorder(bandIndex)) stat = ToString(StartValueOutOfBounds, GetStartValueBorder(bandIndex));
+	else if (value > GetEndValueBorder(bandIndex)) stat = ToString(EndValueOutOfBounds, GetEndValueBorder(bandIndex));
+
 	if (freqIndex) { //End frequency
 		bands[bandIndex].endValue = value;
 
-		if (value < GetFreq(bandIndex, 0)) stat = ToString(EndValueLowerThanStartValue);
-		else if (value > GetEndValueBorder(bandIndex)) stat = ToString(EndValueOutOfBounds, GetEndValueBorder(bandIndex));
+		if (stat.empty() && value < GetFreq(bandIndex, 0)) stat = ToString(EndValueLowerThanStartValue);
 	}
 	else { //Start frequency
 		bands[bandIndex].startValue = value;
 
-		if (value > GetFreq(bandIndex, 1)) stat = ToString(StartValueHigherThanEndvalue);
-		else if (value < GetStartValueBorder(bandIndex)) stat = ToString(StartValueOutOfBounds, GetStartValueBorder(bandIndex));
+		if (stat.empty() && value > GetFreq(bandIndex, 1)) stat = ToString(StartValueHigherThanEndvalue);
 	}
 
 	SetBandStatus(bandIndex, (BandInfo::BandProperty)(freqIndex + 1), stat);
