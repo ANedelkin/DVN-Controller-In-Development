@@ -25,6 +25,8 @@ private:
 	void OnDuplicate(wxCommandEvent& e);
 	void OnDelete(wxCommandEvent& e);
 	void OnRename(wxCommandEvent& e);
+
+	void ChangeSelection(SideMenuCtrl* scenCtrl) override;
 public:
 	ScenariosPanel(wxWindow* parent, const char style = 0);
 	StatusCode NewPage(DVNFileData* data) override;

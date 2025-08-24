@@ -67,6 +67,17 @@ void ScenariosPanel::OnRename(wxCommandEvent& e) {
 	target->Refresh();
 }
 
+void ScenariosPanel::ChangeSelection(SideMenuCtrl* scenCtrl)
+{
+	SideNotebook::ChangeSelection(scenCtrl);
+
+	int invalidBands = ((Scenario*)cur->GetSource())->invalidBands;
+	if(invalidBands)
+		statusBar.SetStatus(ToString(InvalidBands, invalidBands));
+	else
+		statusBar.SetStatus("");
+}
+
 void ScenariosPanel::OnLoad(wxCommandEvent& e)
 {
 	ScenSelectDialog dialog(base);
