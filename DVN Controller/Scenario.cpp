@@ -166,7 +166,7 @@ vector<Scenario*> Scenario::LoadScenarios()
 			stringstream data;
 			data << stream.rdbuf();
 			const string name = path.stem().string();
-			Scenario* scenario = ToScenario(name, data);
+			Scenario* scenario = /*ToScenario(name, data)*/new Scenario();
 			output.push_back(scenario);
 		}
 	}

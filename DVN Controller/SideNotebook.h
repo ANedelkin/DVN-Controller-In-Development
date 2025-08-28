@@ -52,6 +52,7 @@ protected:
 	void Close(SideMenuCtrl* page);
 	virtual bool Save(SideMenuCtrl* page);
 
+	virtual void OnStatusUpdate(wxCommandEvent& e);
 	void OnSelect(wxCommandEvent& e);
 	void OnPagesBoxTabbed(wxKeyEvent& e);
 	void OnPagesBoxFocused(wxFocusEvent& e);

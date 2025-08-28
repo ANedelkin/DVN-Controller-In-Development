@@ -67,6 +67,17 @@ void ScenariosPanel::OnRename(wxCommandEvent& e) {
 	target->Refresh();
 }
 
+void ScenariosPanel::OnStatusUpdate(wxCommandEvent& e)
+{
+	int invalidBands = ((Scenario*)cur->GetSource())->invalidBands;
+	if (invalidBands)
+		cur->SetForegroundColour(DARK_RED);
+	else
+		cur->SetForegroundColour(*wxBLACK);
+
+	SideNotebook::OnStatusUpdate(e);
+}
+
 void ScenariosPanel::ChangeSelection(SideMenuCtrl* scenCtrl)
 {
 	SideNotebook::ChangeSelection(scenCtrl);

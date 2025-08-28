@@ -23,6 +23,8 @@ private:
 	void OnDelete(wxCommandEvent& e);
 	void OnClose(wxCommandEvent& e);
 	void OnRename(wxCommandEvent& e);
+
+	void OnStatusUpdate(wxCommandEvent& e) override;
 public:
 	void SaveCurrentAs();
 	LoadsPanel(wxWindow* parent);

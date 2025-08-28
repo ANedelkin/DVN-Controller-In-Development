@@ -166,3 +166,21 @@ void LoadsPanel::OnRename(wxCommandEvent& e) {
 	Rename(target);
 	target->Refresh();
 }
+
+void LoadsPanel::OnStatusUpdate(wxCommandEvent& e)
+{
+	SideNotebook::OnStatusUpdate(e);
+
+	if (!e.GetSkipped())
+		return;
+
+	for (const Scenario& scen : ((Load*)cur->GetSource())->GetScenarios())
+	{
+		if (scen.invalidBands > 0)
+		{
+			cur->SetForegroundColour(DARK_RED);
+			return;
+		}
+	}
+	cur->SetForegroundColour(*wxBLACK);
+}

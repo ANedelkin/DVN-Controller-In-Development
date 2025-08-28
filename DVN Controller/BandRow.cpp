@@ -113,12 +113,11 @@ void BandRow::InitForeground() {
         endValue->Disable();
         statBtn->Disable();
     }
-    else {
-        name->SetClientData((void*)Name);
-        startValue->SetClientData((void*)Start);
-        endValue->SetClientData((void*)End);
-        statBtn->SetClientData((void*)StatBtn);
-    }
+
+    name->SetClientData((void*)Name);
+    startValue->SetClientData((void*)Start);
+    endValue->SetClientData((void*)End);
+    statBtn->SetClientData((void*)StatBtn);
 
     SetUpSizers();
 }
@@ -215,9 +214,11 @@ void BandRow::UpdateFreq(int freqToChange)
 void BandRow::CheckIfValid(wxTextCtrl* ctrl) {
     string stat = scenario->GetBandStatus(bandNum, BandInfo::BandProperty((int)ctrl->GetClientData() - 1));
     if (!stat.empty())
-        ctrl->SetForegroundColour(*wxRED);
+        ctrl->SetBackgroundColour(LIGHT_RED);
     else
-        ctrl->SetForegroundColour(*wxBLACK);
+        ctrl->SetBackgroundColour(*wxWHITE);
+    
+    wxPostEvent(GetParent(), wxCommandEvent(EVT_STATUS_UPDATE));
 
     ctrl->Refresh();
 }
