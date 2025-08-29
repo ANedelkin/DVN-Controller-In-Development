@@ -51,7 +51,7 @@ public:
 
 	static string ValidateNameUnique(const string& name);
 
-	static Scenario* ToScenario(const string& name, stringstream& data, bool unique = false);
+	static Scenario ToScenario(const string& name, stringstream& data, bool unique = false);
 	static vector<Scenario*> LoadScenarios();
 
 	string BandSaveString(char i) const;

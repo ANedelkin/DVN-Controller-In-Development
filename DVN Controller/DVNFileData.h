@@ -16,7 +16,6 @@ protected:
 	string name;
 	string extension;
 public:
-	bool ok = true;
 	string folder;
 	string oldSaveString;
 	bool upToDate;

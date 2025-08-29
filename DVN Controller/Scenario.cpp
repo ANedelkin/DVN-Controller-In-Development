@@ -27,8 +27,9 @@ Scenario::Scenario(string name) : DVNFileData(name) {
 void Scenario::SetBandData(char i, string name, int startValue, int endValue, bool working)
 {
 	Rename(name, i);
-	if (IsBandValid(i)) SetFreq(i, 0, startValue);
-	if (IsBandValid(i)) SetFreq(i, 1, endValue);
+	SetFreq(i, 0, startValue);
+	SetFreq(i, 1, endValue);
+	SetFreq(i, 0, startValue);
 	if (working) TurnOn(i);
 	else TurnOff(i);
 }
@@ -93,7 +94,10 @@ void Scenario::TurnOff(char i) {
 string Scenario::GetName(char i) { return bands[i].name; }
 void Scenario::Rename(const string& name, char i) {
 	SetBandStatus(i, BandInfo::Name, BandInfo::ValidateName(name));
-	bands[i].name = name;
+	if (GetBandStatus(i, BandInfo::Name) == ToString(InvalidSymbols))
+		Rename("", i);
+	else
+		bands[i].name = name;
 }
 
 int Scenario::GetFreq(char bandIndex, char freqIndex) const { return freqIndex ? bands[bandIndex].endValue : bands[bandIndex].startValue; }
@@ -119,40 +123,48 @@ string Scenario::ValidateNameUnique(const string& name)
 	return ToString(Success);
 }
 
-Scenario* Scenario::ToScenario(const string& name, stringstream& stream, bool unique)
+Scenario Scenario::ToScenario(const string& name, stringstream& stream, bool unique)
 {
-	Scenario* scenario = new Scenario(name);
+	Scenario scenario(name);
 	string bandString;
-	if (!( unique ? Scenario::ValidateNameUnique(name) : Scenario::ValidateName(name) ).empty())
-		goto NotOkay;
+	if (!(unique ? Scenario::ValidateNameUnique(name) : Scenario::ValidateName(name)).empty())
+		scenario.DVNFileData::Rename("Unnamed scenario");
+
 	for (int i = 0; i < GetBandsCount(); i++) {
+		bool invalid = false;
 		if (getline(stream, bandString)) {
 			vector<string> values = Split(bandString, '|');
 			if (values.size() == 4) {
 				bool on;
 				if (values[3] == "ON")
 					on = true;
-				else  if (values[3] == "OFF")
-					on = false;
 				else
-					goto NotOkay;
+					on = false;
 				int start;
 				int end;
-				if (!Validation::TryParse(values[1], &start) || !Validation::TryParse(values[2], &end))
-					goto NotOkay;
-				else
-					scenario->SetBandData(i, values[0], stoi(values[1]), stoi(values[2]), on);
+				if (!Validation::TryParse(values[1], &start))
+					start = -1;
+				if (!Validation::TryParse(values[2], &end))
+					end = -1;
+
+				if (start == -1 || end == -1)
+					invalid = true;
+				
+				scenario.SetBandData(i, values[0], start, end, on);
 			}
-			else
-				goto NotOkay;
+			else {
+				scenario.SetBandData(i, "", -1, -1, false);
+				invalid = true;
+			}
 		}
-		else
-			goto NotOkay;
+		else {
+			scenario.SetBandData(i, "", -1, -1, false);
+			invalid = true;
+		}
+		if (invalid) 
+			scenario.invalidBands++;
 	}
-	scenario->oldSaveString = scenario->SaveString();
-	return scenario;
-NotOkay:
-	scenario->ok = false;
+	scenario.oldSaveString = scenario.SaveString();
 	return scenario;
 }
 vector<Scenario*> Scenario::LoadScenarios()
@@ -166,7 +178,7 @@ vector<Scenario*> Scenario::LoadScenarios()
 			stringstream data;
 			data << stream.rdbuf();
 			const string name = path.stem().string();
-			Scenario* scenario = /*ToScenario(name, data)*/new Scenario();
+			Scenario* scenario = new Scenario(ToScenario(name, data));
 			output.push_back(scenario);
 		}
 	}

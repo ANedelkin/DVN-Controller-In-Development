@@ -37,7 +37,7 @@ void BandRow::OnStatusChanged(wxCommandEvent& e)
 
 void BandRow::OnText(wxCommandEvent& e) {
     if (focused) {
-        focused->SetForegroundColour(*wxBLACK);
+        focused->SetBackgroundColour(*wxWHITE);
         Refresh();
     }
     e.Skip();
@@ -218,7 +218,8 @@ void BandRow::CheckIfValid(wxTextCtrl* ctrl) {
     else
         ctrl->SetBackgroundColour(*wxWHITE);
     
-    wxPostEvent(GetParent(), wxCommandEvent(EVT_STATUS_UPDATE));
+    wxCommandEvent e(EVT_STATUS_UPDATE);
+	GetParent()->GetEventHandler()->ProcessEvent(e);
 
     ctrl->Refresh();
 }

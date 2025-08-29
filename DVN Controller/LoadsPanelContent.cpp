@@ -39,3 +39,8 @@ void LoadsPanelContent::UnInit()
 	scenPanel->pagesList->Hide();
 	scenPanel->content->UnInit();
 }
+
+void LoadsPanelContent::MarkPagesValidity()
+{
+	scenPanel->MarkPagesValidity();
+}

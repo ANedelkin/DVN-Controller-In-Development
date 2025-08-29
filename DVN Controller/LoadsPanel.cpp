@@ -50,6 +50,7 @@ void LoadsPanel::ChangeSelection(SideMenuCtrl* page)
 {
 	SideNotebook::ChangeSelection(page);
 	((LoadsPanelContent*)content)->Select(0);
+	((LoadsPanelContent*)content)->MarkPagesValidity();
 }
 
 bool LoadsPanel::CheckForUnsaved()

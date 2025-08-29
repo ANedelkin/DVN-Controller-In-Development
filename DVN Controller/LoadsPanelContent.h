@@ -13,5 +13,6 @@ public:
 	void SetSource(DVNFileData* source) override;
 	void Init() override;
 	void UnInit() override;
+	void MarkPagesValidity();
 };
 

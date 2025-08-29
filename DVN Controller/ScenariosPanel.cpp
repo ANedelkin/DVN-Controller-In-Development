@@ -56,6 +56,13 @@ StatusCode ScenariosPanel::NewPage(DVNFileData* data)
 	return SideNotebook::NewPage(scen);
 }
 
+void ScenariosPanel::MarkPagesValidity()
+{
+	for (SideMenuCtrl* page : pages) {
+		MarkPageValidity(page);
+	}
+}
+
 void ScenariosPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	bool isContent = style & CONTENT;
@@ -69,11 +76,7 @@ void ScenariosPanel::OnRename(wxCommandEvent& e) {
 
 void ScenariosPanel::OnStatusUpdate(wxCommandEvent& e)
 {
-	int invalidBands = ((Scenario*)cur->GetSource())->invalidBands;
-	if (invalidBands)
-		cur->SetForegroundColour(DARK_RED);
-	else
-		cur->SetForegroundColour(*wxBLACK);
+	MarkPageValidity(cur);
 
 	SideNotebook::OnStatusUpdate(e);
 }
@@ -87,6 +90,15 @@ void ScenariosPanel::ChangeSelection(SideMenuCtrl* scenCtrl)
 		statusBar.SetStatus(ToString(InvalidBands, invalidBands));
 	else
 		statusBar.SetStatus("");
+}
+
+void ScenariosPanel::MarkPageValidity(SideMenuCtrl* page)
+{
+	int invalidBands = ((Scenario*)page->GetSource())->invalidBands;
+	if (invalidBands)
+		page->SetForegroundColour(DARK_RED);
+	else
+		page->SetForegroundColour(*wxBLACK);
 }
 
 void ScenariosPanel::OnLoad(wxCommandEvent& e)

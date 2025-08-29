@@ -110,10 +110,10 @@ void MainFrame::LoadScenarios()
 	if (scenarios.size() > 0) {
 		for (char i = 0; i < scenarios.size(); i++)
 		{
-			if (scenarios[i]->ok)
-				scenariosPanel->NewPage(scenarios[i]);
+			scenariosPanel->NewPage(scenarios[i]);
 		}
 		scenariosPanel->Select(0);
+		scenariosPanel->MarkPagesValidity();
 	}
 	Thaw();
 }
@@ -122,19 +122,27 @@ void MainFrame::UpdateScenarios()
 {
 	vector<Scenario*> scenarios = Scenario::LoadScenarios();
 	vector<SideMenuCtrl*> pages = scenariosPanel->GetPages();
+
+	Freeze();
 	for (char i = 0; i < scenarios.size(); i++)
 	{
-		if (scenarios[i]->ok) {
+		if (scenarios[i]) {
 			bool f = true;
 			for (char j = 0; j < pages.size() && f; j++)
 			{
-				if (scenarios[i]->GetPath() == pages[j]->GetSource()->GetPath())
+				if (scenarios[i]->GetPath() == pages[j]->GetSource()->GetPath()) {
+					if (pages[j]->GetSource()->upToDate)
+						*(Scenario*)pages[j]->GetSource() = *scenarios[i];
+					delete scenarios[i];
 					f = false;
+				}
 			}
 			if (f) scenariosPanel->NewPage(scenarios[i]);
-			else delete scenarios[i];
 		}
 	}
+	scenariosPanel->MarkPagesValidity();
+	scenariosPanel->Select(0);
+	Thaw();
 }
 
 void MainFrame::NewScenario()
@@ -204,7 +212,7 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 				stringstream data;
 				data << stream.rdbuf();
 				Load* load = Load::ToLoad(name, fn.GetPath().ToStdString(), data);
-				if (load->ok)
+				if (load)
 					loadsPanel->NewPage(load);
 				else
 					ShowError(this, ToString(InvalidFile, name.c_str()));
@@ -231,13 +239,9 @@ void MainFrame::OnAdd(wxCommandEvent& e)
 			if (stream.is_open()) {
 				stringstream data;
 				data << stream.rdbuf();
-				Scenario* scenario = Scenario::ToScenario(name, data, true);
-				if (scenario->ok) {
-					scenariosPanel->NewPage(scenario);
-					scenariosPanel->SaveCurrent();
-				}
-				else
-					ShowError(this, ToString(InvalidFile, name.c_str()));
+				Scenario* scenario = new Scenario(Scenario::ToScenario(name, data, true));
+				scenariosPanel->NewPage(scenario);
+				scenariosPanel->SaveCurrent();
 			}
 			else ShowError(this, ToString(FileNonexistent, name.c_str()));
 		}

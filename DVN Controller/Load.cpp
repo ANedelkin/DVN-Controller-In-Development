@@ -40,23 +40,21 @@ bool Load::AlteredFromOutside()
 Load* Load::ToLoad(const string& name, const string& folder, stringstream& data) {
 	Load* load = new Load(name, folder);
 	if (!Load::ValidateName(name).empty())
-		goto NotOkay;
+		load->Rename("Unnamed load");
 	for (char i = 0; i < SCENARIOS_COUNT; i++)
 	{
 		string scenName;
 		if (getline(data, scenName)) {
-			load->scenarios[i] = *Scenario::ToScenario(scenName, data);
-			if (!load->scenarios[i].ok)
-				goto NotOkay;
+			if (Split(scenName, '|').size() > 1)
+				i--;
+			else
+				load->scenarios[i] = Scenario::ToScenario(scenName, data);
 		}
 		else
-			goto NotOkay;
+			load->scenarios[i] = Scenario::ToScenario("Unnamed scenario", data);
 
 	}
 	load->oldSaveString = load->SaveString();
-	return load;
-NotOkay:
-	load->ok = false;
 	return load;
 }
 
