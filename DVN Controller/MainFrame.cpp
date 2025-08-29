@@ -110,7 +110,8 @@ void MainFrame::LoadScenarios()
 	if (scenarios.size() > 0) {
 		for (char i = 0; i < scenarios.size(); i++)
 		{
-			scenariosPanel->NewPage(scenarios[i]);
+			if (scenarios[i]->ok)
+				scenariosPanel->NewPage(scenarios[i]);
 		}
 		scenariosPanel->Select(0);
 		scenariosPanel->MarkPagesValidity();
@@ -212,10 +213,10 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 				stringstream data;
 				data << stream.rdbuf();
 				Load* load = Load::ToLoad(name, fn.GetPath().ToStdString(), data);
-				if (load)
+				if (load->ok)
 					loadsPanel->NewPage(load);
 				else
-					ShowError(this, ToString(InvalidFile, name.c_str()));
+					ShowError(this, ToString(InvalidFileStructure, name.c_str()));
 			}
 			else ShowError(this, ToString(FileNonexistent, name.c_str()));
 		}
@@ -240,8 +241,12 @@ void MainFrame::OnAdd(wxCommandEvent& e)
 				stringstream data;
 				data << stream.rdbuf();
 				Scenario* scenario = new Scenario(Scenario::ToScenario(name, data, true));
-				scenariosPanel->NewPage(scenario);
-				scenariosPanel->SaveCurrent();
+				if (scenario->ok) {
+					scenariosPanel->NewPage(scenario);
+					scenariosPanel->SaveCurrent();
+				}
+				else
+					ShowError(this, ToString(InvalidFileStructure, name.c_str()));
 			}
 			else ShowError(this, ToString(FileNonexistent, name.c_str()));
 		}

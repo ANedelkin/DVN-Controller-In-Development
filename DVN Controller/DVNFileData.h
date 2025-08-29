@@ -19,6 +19,7 @@ public:
 	string folder;
 	string oldSaveString;
 	bool upToDate;
+	bool ok;
 
 	DVNFileData(const string& name);
 

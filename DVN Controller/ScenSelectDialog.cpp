@@ -42,7 +42,8 @@ void ScenSelectDialog::LoadScenarios()
 	vector<Scenario*> scenarios = Scenario::LoadScenarios();
 	for (char i = 0; i < scenarios.size(); i++)
 	{
-		scenariosPanel->NewPage(scenarios[i]);
+		if (scenarios[i]->ok)
+			scenariosPanel->NewPage(scenarios[i]);
 	}
 	scenariosPanel->Select(0);
 }

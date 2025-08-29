@@ -26,7 +26,7 @@ namespace Status {
         ScenarioAlreadyExistsAs,
         FreqNotPositiveNumber,
         NameTooLong,
-        InvalidFile,
+        InvalidFileStructure,
         ErrorMessageTooLong,
         ConnectionError,
         InvalidBands
@@ -46,7 +46,7 @@ namespace Status {
         {ScenarioAlreadyExistsAs, "Scenario \"%s\"'s old name is \"%s\"! Save it before you can use this name."},
         {FreqNotPositiveNumber, "The frequency has to be a positive whole number!"},
         {NameTooLong, "The name can't be longer than %d symbols!"},
-        {InvalidFile, "The file \"%s\" is invalid and can't be opened!"},
+        {InvalidFileStructure, "The structure of the file file \"%s\" is invalid and it can't be opened!"},
         {ErrorMessageTooLong, "The error message the program tried to generate was too long!"},
 		{ConnectionError, "A connection error occured!"},
         {InvalidBands, "Selected scenario contains %d invalid band/s. Invalid data is marked in red. Click on invalid data to see the error in the status bar."}

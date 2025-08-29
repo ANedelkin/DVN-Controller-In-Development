@@ -47,12 +47,18 @@ Load* Load::ToLoad(const string& name, const string& folder, stringstream& data)
 		if (getline(data, scenName)) {
 			if (Split(scenName, '|').size() > 1)
 				i--;
-			else
+			else {
 				load->scenarios[i] = Scenario::ToScenario(scenName, data);
+				if (!load->scenarios[i].ok) {
+					load->ok = false;
+					return load;
+				}
+			}
 		}
-		else
-			load->scenarios[i] = Scenario::ToScenario("Unnamed scenario", data);
-
+		else {
+			load->ok = false;
+			return load;
+		}
 	}
 	load->oldSaveString = load->SaveString();
 	return load;

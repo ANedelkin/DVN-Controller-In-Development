@@ -158,8 +158,8 @@ Scenario Scenario::ToScenario(const string& name, stringstream& stream, bool uni
 			}
 		}
 		else {
-			scenario.SetBandData(i, "", -1, -1, false);
-			invalid = true;
+			scenario.ok = false;
+			return scenario;
 		}
 		if (invalid) 
 			scenario.invalidBands++;

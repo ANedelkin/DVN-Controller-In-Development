@@ -142,6 +142,7 @@ bool SideNotebook::Duplicate(SideMenuCtrl* page)
 	if (nameSetter.ok) {
 		source->Rename(nameSetter.name);
 		NewPage(source);
+		cur->Save();
 		return true;
 	}
 	return false;
