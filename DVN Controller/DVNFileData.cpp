@@ -44,6 +44,7 @@ string DVNFileData::SaveString() const
 void DVNFileData::Save() {
 	if (!exists(folder)) create_directory(folder);
 	ofstream stream(GetPath());
+	stream << JAMMER_NAME << endl;
 	stream << SaveString();
 	oldSaveString = SaveString();
 	stream.close();

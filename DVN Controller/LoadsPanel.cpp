@@ -99,7 +99,7 @@ bool LoadsPanel::Save(SideMenuCtrl* page)
 bool LoadsPanel::SaveAs(SideMenuCtrl* page)
 {
 	DVNFileData* curData = page->GetSource();
-	wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"", "", curData->GetNameWithExt(), "Load files (*.dvnl)|*.dvnl", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+	wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"", "", curData->GetNameWithExt(), "Load files (*.jld)|*.jld", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (dialog.ShowModal() == wxID_OK) {
 		string name = wxFileName(dialog.GetPath()).GetName().ToStdString();
 		string folder = dialog.GetDirectory().ToStdString();

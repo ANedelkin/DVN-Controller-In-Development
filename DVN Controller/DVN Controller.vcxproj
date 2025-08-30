@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClCompile Include="BandRow.cpp" />
     <ClCompile Include="BandsPanel.cpp" />
+    <ClCompile Include="CheckModel.cpp" />
     <ClCompile Include="ColourfulButton.cpp" />
     <ClCompile Include="DVNFileData.cpp" />
     <ClCompile Include="Events.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="BandInfo.h" />
     <ClInclude Include="BandRow.h" />
     <ClInclude Include="BandsPanel.h" />
+    <ClInclude Include="CheckModel.h" />
     <ClInclude Include="ColourfulButton.h" />
     <ClInclude Include="Colours.h" />
     <ClInclude Include="cstrlen.h" />

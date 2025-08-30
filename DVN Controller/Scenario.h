@@ -8,6 +8,7 @@
 #include "DVNFileData.h"
 #include "ModelConstants.h"
 #include "Split.h"
+#include "CheckModel.h"
 
 using namespace Status;
 using BandInfo::BandProperty::Name;

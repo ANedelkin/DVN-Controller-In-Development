@@ -6,6 +6,7 @@
 
 #include "Global.h"
 #include "Validation.h"
+#include "ModelConstants.h"
 
 using namespace filesystem;
 using namespace Status;

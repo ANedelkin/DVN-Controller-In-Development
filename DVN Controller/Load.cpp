@@ -1,6 +1,6 @@
 #include "Load.h"
 
-const string Load::extension = ".dvnl";
+const string Load::extension = ".jld";
 Load* Load::placeHolder = new Load();
 
 Load::Load() : Load("Unnamed load") {}

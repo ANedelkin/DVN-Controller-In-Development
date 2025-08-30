@@ -198,7 +198,7 @@ void MainFrame::OnNew(wxCommandEvent& e) {
 void MainFrame::OnOpen(wxCommandEvent& e)
 {
 	if (notebook->GetSelection() != Loads) return;
-	wxFileDialog dialog(this, "Select Load/s", "", "", "Load files (*.dvnl)|*.dvnl", wxFD_MULTIPLE);
+	wxFileDialog dialog(this, "Select Load/s", "", "", "Load files (*.jld)|*.jld", wxFD_MULTIPLE);
 	wxArrayString paths;
 
 	Freeze();
@@ -212,6 +212,10 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 			if (stream.is_open()) {
 				stringstream data;
 				data << stream.rdbuf();
+				if (!CheckModel(data)) {
+					ShowError(this, ToString(InvalidJammer, name.c_str(), JAMMER_NAME));
+					continue;
+				}
 				Load* load = Load::ToLoad(name, fn.GetPath().ToStdString(), data);
 				if (load->ok)
 					loadsPanel->NewPage(load);
@@ -227,7 +231,7 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 void MainFrame::OnAdd(wxCommandEvent& e)
 {
 	if (notebook->GetSelection() != Scenarios) return;
-	wxFileDialog dialog(this, "Select Scenario/s", "", "", "Scenario files (*.dvns)|*.dvns", wxFD_MULTIPLE);
+	wxFileDialog dialog(this, "Select Scenario/s", "", "", "Scenario files (*.jsc)|*.jsc", wxFD_MULTIPLE);
 	wxArrayString paths;
 
 	if (dialog.ShowModal() == wxID_OK) {
@@ -240,6 +244,10 @@ void MainFrame::OnAdd(wxCommandEvent& e)
 			if (stream.is_open()) {
 				stringstream data;
 				data << stream.rdbuf();
+				if (!CheckModel(data)) {
+					ShowError(this, ToString(InvalidJammer, name.c_str(), JAMMER_NAME));
+					continue;
+				}
 				Scenario* scenario = new Scenario(Scenario::ToScenario(name, data, true));
 				if (scenario->ok) {
 					scenariosPanel->NewPage(scenario);

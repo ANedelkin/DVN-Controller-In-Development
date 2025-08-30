@@ -3,7 +3,7 @@
 #include "Scenario.h"
 
 const string Scenario::folder = "./scenarios";
-const string Scenario::extension = ".dvns";
+const string Scenario::extension = ".jsc";
 Scenario* Scenario::placeHolder = new Scenario();
 
 Scenario::Scenario() : Scenario("Unnamed scenario") {}
@@ -177,6 +177,11 @@ vector<Scenario*> Scenario::LoadScenarios()
 			ifstream stream(path);
 			stringstream data;
 			data << stream.rdbuf();
+			stream.close();
+			if (!CheckModel(data)) {
+				remove(path);
+				continue;
+			}
 			const string name = path.stem().string();
 			Scenario* scenario = new Scenario(ToScenario(name, data));
 			output.push_back(scenario);
