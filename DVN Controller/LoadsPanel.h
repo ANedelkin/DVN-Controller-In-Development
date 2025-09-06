@@ -31,5 +31,6 @@ public:
 	StatusCode NewPage(Load* data);
 	void ChangeSelection(SideMenuCtrl* page) override;
 	bool CheckForUnsaved() override;
+	void MarkCurValidity();
 };
 

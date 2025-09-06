@@ -169,9 +169,12 @@ void BandRow::SetUpSizers()
 void BandRow::ChangeScenario(Scenario* scenario) {
     this->scenario = scenario;
 
+    int startFreq = scenario->GetFreq(bandNum, 0);
+    int endFreq = scenario->GetFreq(bandNum, 1);
+
     name->SetValue(scenario->GetName(bandNum));
-    startValue->SetValue(to_string(scenario->GetFreq(bandNum, 0)));
-    endValue->SetValue(to_string(scenario->GetFreq(bandNum, 1)));
+    startValue->SetValue(startFreq == -1 ? "" : to_string(startFreq));
+    endValue->SetValue(endFreq == -1 ? "" : to_string(endFreq));
 
     CheckIfValid(name);
     CheckIfValid(startValue);
@@ -205,7 +208,10 @@ void BandRow::UpdateFreq(int freqToChange)
     wxTextCtrl* ctrl = (int)freqToChange == Start ? startValue : endValue;
     int i = freqToChange - 2;
     int newValue;
-    Validation::TryParse(ctrl->GetValue(), &newValue);
+    if (ctrl->GetValue() == "")
+        newValue = -1;
+    else
+        Validation::TryParse(ctrl->GetValue(), &newValue);
 
     scenario->SetFreq(bandNum, i, newValue);
     CheckIfValid(ctrl);

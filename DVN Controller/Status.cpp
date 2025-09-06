@@ -20,7 +20,7 @@ int Status::ShowError(wxWindow* parent, string msg, int style)
 {
     if (style & DIALOG) {
         wxMessageDialog frame(parent, msg, "Error", wxOK | wxCANCEL | wxICON_ERROR);
-        frame.SetOKCancelLabels("Enter new value", "Keep old value");
+        frame.SetOKCancelLabels("Enter new name", "Keep old name");
         return frame.ShowModal();
     }
 

@@ -9,6 +9,7 @@
 #include "ModelConstants.h"
 #include "Split.h"
 #include "CheckModel.h"
+#include "NameSetter.h"
 
 using namespace Status;
 using BandInfo::BandProperty::Name;

@@ -22,7 +22,7 @@ public:
 
 	bool AlteredFromOutside();
 
-	static Load* ToLoad(const string& name, const string& folder, stringstream& data);
+	static Load* ToLoad(string& name, const string& folder, stringstream& data);
 
 	DVNFileData* Copy() const override;
 };

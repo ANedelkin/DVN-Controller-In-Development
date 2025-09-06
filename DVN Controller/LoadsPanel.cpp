@@ -137,6 +137,7 @@ void LoadsPanel::OnDelete(wxCommandEvent& e)
 			remove(target->GetSource()->GetPath());
 		}
 		Close(target);
+		MarkCurValidity();
 	}
 	else
 		target->Refresh();
@@ -158,8 +159,10 @@ void LoadsPanel::OnClose(wxCommandEvent& e) {
 			break;
 		}
 	}
-	else
+	else {
 		Close(target);
+		MarkCurValidity();
+	}
 }
 
 void LoadsPanel::OnRename(wxCommandEvent& e) {
@@ -184,4 +187,12 @@ void LoadsPanel::OnStatusUpdate(wxCommandEvent& e)
 		}
 	}
 	cur->SetForegroundColour(*wxBLACK);
+}
+
+void LoadsPanel::MarkCurValidity()
+{
+	if(pages.size())
+		((LoadsPanelContent*)content)->MarkCurValidity();
+	else
+		statusBar.SetStatus("");
 }

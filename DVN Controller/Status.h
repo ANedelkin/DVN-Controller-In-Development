@@ -12,6 +12,7 @@ using namespace std;
 namespace Status {
     enum StatusCode {
         Success,
+        EmptyFrequency,
         StartValueOutOfBounds,
         EndValueOutOfBounds,
         StartValueHigherThanEndvalue,
@@ -33,6 +34,7 @@ namespace Status {
         InvalidJammer
     };
     static map<StatusCode, const char*> errorMessages = {
+        {EmptyFrequency, "Frequencies can't be empty!"},
         {StartValueOutOfBounds , "This frequency can't be below %d!"},
         {EndValueOutOfBounds, "This frequency can't be over %d!"},
         {StartValueHigherThanEndvalue, "Start value higher than end value!"},

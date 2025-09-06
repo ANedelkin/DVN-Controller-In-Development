@@ -127,19 +127,20 @@ void MainFrame::UpdateScenarios()
 	Freeze();
 	for (char i = 0; i < scenarios.size(); i++)
 	{
-		if (scenarios[i]) {
-			bool f = true;
-			for (char j = 0; j < pages.size() && f; j++)
-			{
-				if (scenarios[i]->GetPath() == pages[j]->GetSource()->GetPath()) {
-					if (pages[j]->GetSource()->upToDate)
-						*(Scenario*)pages[j]->GetSource() = *scenarios[i];
-					delete scenarios[i];
-					f = false;
-				}
+		bool f = true;
+		for (char j = 0; j < pages.size() && f; j++)
+		{
+			if (scenarios[i]->GetPath() == pages[j]->GetSource()->GetPath()) {
+				if (!scenarios[i]->ok)
+					scenariosPanel->Close(pages[j]);
+				else if (pages[j]->GetSource()->upToDate)
+					*(Scenario*)pages[j]->GetSource() = *scenarios[i];
+				delete scenarios[i];
+				f = false;
 			}
-			if (f) scenariosPanel->NewPage(scenarios[i]);
 		}
+		if (f && scenarios[i]->ok) 
+			scenariosPanel->NewPage(scenarios[i]);
 	}
 	scenariosPanel->MarkPagesValidity();
 	scenariosPanel->Select(0);
@@ -168,6 +169,7 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 		SetToolBar(loadsToolBar);
 		scenariosToolBar->Hide();
 		loadsToolBar->Realize();
+		loadsPanel->MarkCurValidity();
 	}
 	else {
 		scenariosToolBar->Show();
@@ -208,7 +210,7 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 		{
 			ifstream stream(path.ToStdString());
 			wxFileName fn(path);
-			const string name = fn.GetName().ToStdString();
+			string name = fn.GetName().ToStdString();
 			if (stream.is_open()) {
 				stringstream data;
 				data << stream.rdbuf();
