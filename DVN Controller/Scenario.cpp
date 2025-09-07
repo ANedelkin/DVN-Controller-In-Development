@@ -3,7 +3,7 @@
 #include "Scenario.h"
 
 const string Scenario::folder = "./scenarios";
-const string Scenario::extension = ".dvns";
+const string Scenario::extension = ".jsc";
 Scenario* Scenario::placeHolder = new Scenario();
 
 Scenario::Scenario() : Scenario("Unnamed scenario") {}
@@ -24,34 +24,69 @@ Scenario::Scenario(string name) : DVNFileData(name) {
 	//oldSaveString = SaveString();
 }
 
-string Scenario::SetBandData(char i, string name, int startValue, int endValue, bool working)
+void Scenario::SetBandData(char i, string name, int startValue, int endValue, bool working)
 {
-	string stat = ToString(Success);
-	stat = Rename(name, i);
-	if (stat.empty()) stat = SetFreq(i, 0, startValue);
-	if (stat.empty()) stat = SetFreq(i, 1, endValue);
+	Rename(name, i);
+	SetFreq(i, 0, startValue);
+	SetFreq(i, 1, endValue);
+	SetFreq(i, 0, startValue);
 	if (working) TurnOn(i);
 	else TurnOff(i);
-	return stat;
 }
 
-string Scenario::SetFreq(char bandIndex, char freqIndex, int value)
+void Scenario::SetFreq(char bandIndex, char freqIndex, int value)
 {
-	if (freqIndex) { //End frequency
-		if (value == GetFreq(bandIndex, 1)) return ToString(Success);
-		if (value < GetFreq(bandIndex, 0)) return ToString(EndValueLowerThanStartValue);
-		if (value > GetEndValueBorder(bandIndex)) return ToString(EndValueOutOfBounds, GetEndValueBorder(bandIndex));
+	bool noError = true;
 
+	if (value == -1) {
+		SetBandStatus(bandIndex, (BandInfo::BandProperty)(freqIndex + 1), ToString(EmptyFrequency));
+		noError = false;
+	}
+
+	if (freqIndex) { //End frequency
 		bands[bandIndex].endValue = value;
+
+		if (noError && value < GetFreq(bandIndex, 0)) {
+			SetBandStatus(bandIndex, (BandInfo::BandProperty)(freqIndex + 1), ToString(EndValueLowerThanStartValue));
+			return;
+		}
 	}
 	else { //Start frequency
-		if (value == GetFreq(bandIndex, 0)) return ToString(Success);
-		if (value > GetFreq(bandIndex, 1)) return ToString(StartValueHigherThanEndvalue);
-		if (value < GetStartValueBorder(bandIndex)) return ToString(StartValueOutOfBounds, GetStartValueBorder(bandIndex));
-
 		bands[bandIndex].startValue = value;
+
+		if (noError && GetFreq(bandIndex, 1) != -1 && value > GetFreq(bandIndex, 1)) {
+			SetBandStatus(bandIndex, (BandInfo::BandProperty)(freqIndex + 1), ToString(StartValueHigherThanEndvalue));
+			return;
+		}
 	}
-	return ToString(Success);
+	
+	if (noError && value < GetStartValueBorder(bandIndex))
+		SetBandStatus(bandIndex, (BandInfo::BandProperty)(freqIndex + 1), ToString(StartValueOutOfBounds, GetStartValueBorder(bandIndex)));
+	else if (noError && value > GetEndValueBorder(bandIndex))
+		SetBandStatus(bandIndex, (BandInfo::BandProperty)(freqIndex + 1), ToString(EndValueOutOfBounds, GetEndValueBorder(bandIndex)));
+	else if (noError)
+		SetBandStatus(bandIndex, (BandInfo::BandProperty)(freqIndex + 1), "");
+}
+
+void Scenario::SetBandStatus(char i, BandInfo::BandProperty property, const string error)
+{
+	bool wasValid = IsBandValid(i);
+
+	bands[i].errors[property] = error;
+
+	if (!wasValid && IsBandValid(i))
+		invalidBands--;
+	else if (wasValid && !IsBandValid(i))
+		invalidBands++;
+}
+
+string Scenario::GetBandStatus(char i, BandInfo::BandProperty property) {
+	return bands[i].errors[property];
+}
+
+bool Scenario::IsBandValid(char i)
+{
+	return GetBandStatus(i, Name).empty() && GetBandStatus(i, Start).empty() && GetBandStatus(i, End).empty();
 }
 
 //void Scenario::CheckIfFull(char i)
@@ -70,11 +105,12 @@ void Scenario::TurnOff(char i) {
 	bands[i].working = false;
 }
 string Scenario::GetName(char i) { return bands[i].name; }
-string Scenario::Rename(const string& name, char i) {
-	string stat = BandInfo::ValidateName(name);
-	if (!stat.empty()) return stat;
-	bands[i].name = name;
-	return ToString(Success);
+void Scenario::Rename(const string& name, char i) {
+	SetBandStatus(i, BandInfo::Name, BandInfo::ValidateName(name));
+	if (GetBandStatus(i, BandInfo::Name) == ToString(InvalidSymbols))
+		Rename("", i);
+	else
+		bands[i].name = name;
 }
 
 int Scenario::GetFreq(char bandIndex, char freqIndex) const { return freqIndex ? bands[bandIndex].endValue : bands[bandIndex].startValue; }
@@ -100,40 +136,40 @@ string Scenario::ValidateNameUnique(const string& name)
 	return ToString(Success);
 }
 
-Scenario* Scenario::ToScenario(const string& name, stringstream& stream, bool unique)
+Scenario Scenario::ToScenario(const string& name, stringstream& stream, bool unique)
 {
-	Scenario* scenario = new Scenario(name);
+	Scenario scenario(name.substr(0, NAME_MAX_LENGTH));
 	string bandString;
-	if (!( unique ? Scenario::ValidateNameUnique(name) : Scenario::ValidateName(name) ).empty())
-		goto NotOkay;
+
 	for (int i = 0; i < GetBandsCount(); i++) {
+		bool invalid = false;
 		if (getline(stream, bandString)) {
 			vector<string> values = Split(bandString, '|');
 			if (values.size() == 4) {
 				bool on;
 				if (values[3] == "ON")
 					on = true;
-				else  if (values[3] == "OFF")
-					on = false;
 				else
-					goto NotOkay;
+					on = false;
 				int start;
 				int end;
-				if(!Validation::TryParse(values[1], &start) || !Validation::TryParse(values[2], &end))
-					goto NotOkay;
-				else if (!scenario->SetBandData(i, values[0], stoi(values[1]), stoi(values[2]), on).empty())
-					goto NotOkay;
+				if (!Validation::TryParse(values[1].substr(0, 4), &start) || start < -1)
+					start = -1;
+				if (!Validation::TryParse(values[2].substr(0, 4), &end) || end < -1)
+					end = -1;
+				
+				scenario.SetBandData(i, values[0].substr(0, NAME_MAX_LENGTH), start, end, on);
 			}
-			else
-				goto NotOkay;
+			else {
+				scenario.SetBandData(i, "", -1, -1, false);
+			}
 		}
-		else
-			goto NotOkay;
+		else {
+			scenario.ok = false;
+			return scenario;
+		}
 	}
-	scenario->oldSaveString = scenario->SaveString();
-	return scenario;
-NotOkay:
-	scenario->ok = false;
+	scenario.oldSaveString = scenario.SaveString();
 	return scenario;
 }
 vector<Scenario*> Scenario::LoadScenarios()
@@ -146,8 +182,13 @@ vector<Scenario*> Scenario::LoadScenarios()
 			ifstream stream(path);
 			stringstream data;
 			data << stream.rdbuf();
+			stream.close();
+			if (!CheckModel(data)) {
+				remove(path);
+				continue;
+			}
 			const string name = path.stem().string();
-			Scenario* scenario = ToScenario(name, data);
+			Scenario* scenario = new Scenario(ToScenario(name, data));
 			output.push_back(scenario);
 		}
 	}

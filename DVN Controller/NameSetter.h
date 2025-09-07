@@ -3,9 +3,11 @@
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
+#include <wx/valtext.h>
 
 #include "Global.h"
 #include "Status.h"
+#include "Validation.h"
 
 class NameSetter : public wxDialog
 {

@@ -40,7 +40,9 @@ private:
     void EmptyHandler(wxEvent& e);
     void OnKey(wxKeyEvent& e);
     void OnStatusChanged(wxCommandEvent& e);
+    void OnText(wxCommandEvent& e);
     void OnTextCtrlFocus(wxFocusEvent& e);
+    void OnUnfocus(wxFocusEvent& e);
     void OnFocus(wxFocusEvent& e);
     void ScrollTo();
 public:
@@ -59,8 +61,11 @@ public:
 
     void ChangeScenario(Scenario* scenario);
 
-    string Rename();
-    string UpdateFreq(int i);
+    void Rename();
+    void UpdateFreqs(int freqToChange);
+    void UpdateFreq(int freqToChange);
+
+    void CheckIfValid(wxTextCtrl* ctrl);
 
     void Unfocus();
 };

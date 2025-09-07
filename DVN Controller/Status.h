@@ -12,6 +12,7 @@ using namespace std;
 namespace Status {
     enum StatusCode {
         Success,
+        EmptyFrequency,
         StartValueOutOfBounds,
         EndValueOutOfBounds,
         StartValueHigherThanEndvalue,
@@ -26,12 +27,14 @@ namespace Status {
         ScenarioAlreadyExistsAs,
         FreqNotPositiveNumber,
         NameTooLong,
-        InvalidFile,
+        InvalidFileStructure,
         ErrorMessageTooLong,
         ConnectionError,
-        InvalidData
+        InvalidBands,
+        InvalidJammer
     };
     static map<StatusCode, const char*> errorMessages = {
+        {EmptyFrequency, "Frequencies can't be empty!"},
         {StartValueOutOfBounds , "This frequency can't be below %d!"},
         {EndValueOutOfBounds, "This frequency can't be over %d!"},
         {StartValueHigherThanEndvalue, "Start value higher than end value!"},
@@ -46,10 +49,11 @@ namespace Status {
         {ScenarioAlreadyExistsAs, "Scenario \"%s\"'s old name is \"%s\"! Save it before you can use this name."},
         {FreqNotPositiveNumber, "The frequency has to be a positive whole number!"},
         {NameTooLong, "The name can't be longer than %d symbols!"},
-        {InvalidFile, "The file \"%s\" is invalid and can't be opened!"},
+        {InvalidFileStructure, "The structure of the file file \"%s\" is invalid and it can't be opened!"},
         {ErrorMessageTooLong, "The error message the program tried to generate was too long!"},
 		{ConnectionError, "A connection error occured!"},
-        {InvalidData, "Some of the bands received by the jammer contained invalid values. These values were replaced with default ones and their bands marked with their numbers in red."}
+        {InvalidBands, "Selected scenario contains %d invalid band/s. Invalid data is marked in red. Click on invalid data to see the error in the status bar."},
+        {InvalidJammer, "The file \"%s\" is incompatible with the \"%s\" jammer!" }
     };
 
     extern string ToString(StatusCode code, ...);

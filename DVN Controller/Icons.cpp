@@ -204,3 +204,28 @@ const char* deleteSVG = R"svg(<?xml version="1.0" encoding="utf-8"?>
 </g>
 </svg>
 )svg";
+
+//OK
+
+const char* OKSVG = R"svg(<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 16 16" xml:space="preserve">
+  <g>
+    <path fill="#53BC4B"
+          d="M8,0C3.6,0,0,3.6,0,8c0,4.4,3.6,8,8,8s8-3.6,8-8C16,3.6,12.4,0,8,0z M6.9,12.3L3.3,8.7l1.4-1.4l2.3,2.4l5.3-4.4
+	l1.3,1.5L6.9,12.3z"/>
+  </g>
+</svg>)svg";
+
+//Error
+
+const char* ErrorSVG = R"svg(<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 16 16" xml:space="preserve">
+  <g>
+    <path fill="#BA4A4A"
+          d="M8,0C3.6,0,0,3.6,0,8s3.6,8,8,8c4.4,0,8-3.6,8-8S12.4,0,8,0z M12.7,11.3l-1.4,1.4L8,9.4l-3.3,3.3l-1.4-1.4
+	L6.6,8L3.3,4.7l1.4-1.4L8,6.6l3.3-3.3l1.4,1.4L9.4,8L12.7,11.3z"/>
+  </g>
+</svg>
+)svg";

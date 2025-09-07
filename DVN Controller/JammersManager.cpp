@@ -142,17 +142,18 @@ bool JammersManager::GetLoad(string serialNumber, Load* output, vector<tuple<cha
 					else
 						scenarios[i].TurnOff(j);
 					buff[BAND_STAT_POS] = '\0';
+
 					int parseResult;
-					if (!Validation::TryParse(buff + BAND_FREQ2_POS, &parseResult)) return false;
-					if (!scenarios[i].SetFreq(j, 1, parseResult).empty())
-						broken = true;
-					buff[BAND_FREQ2_POS] = '\0';
-					if (!Validation::TryParse(buff + BAND_FREQ1_POS, &parseResult)) return false;
-					if (!scenarios[i].SetFreq(j, 0, parseResult).empty())
-						broken = true;
 					
-					if(broken)
-						brokenBands->push_back(make_tuple(i, j));
+					if (!Validation::TryParse(buff + BAND_FREQ2_POS, &parseResult)) return false;
+					scenarios[i].SetFreq(j, 1, parseResult);
+					buff[BAND_FREQ2_POS] = '\0';
+
+					if (!Validation::TryParse(buff + BAND_FREQ1_POS, &parseResult)) return false;
+					scenarios[i].SetFreq(j, 0, parseResult);
+
+					scenarios[i].SetFreq(j, 1, scenarios[i].GetFreq(j, 1));
+					
 					break;
 				}
 				else if (stopWatch.Time() > 100) {

@@ -30,6 +30,7 @@ SideNotebook::SideNotebook(wxWindow* parent, string sideMenuTxt, string(*pageNam
 
 	this->SetSizerAndFit(mainSizer);
 
+	Bind(EVT_STATUS_UPDATE, &SideNotebook::OnStatusUpdate, this);
 	pagesBox->Bind(wxEVT_CHAR_HOOK, &SideNotebook::OnPagesBoxTabbed, this);
 	pagesBox->Bind(wxEVT_SET_FOCUS, &SideNotebook::OnPagesBoxFocused, this);
 }
@@ -73,6 +74,12 @@ void SideNotebook::ChangeSelection(SideMenuCtrl* page)
 	
 	DVNFileData* s = cur->GetSource();
 	content->SetSource(s);
+}
+
+void SideNotebook::OnStatusUpdate(wxCommandEvent& e)
+{
+	if(cur)
+		e.Skip();
 }
 
 void SideNotebook::OnSelect(wxCommandEvent& e)
@@ -135,6 +142,7 @@ bool SideNotebook::Duplicate(SideMenuCtrl* page)
 	if (nameSetter.ok) {
 		source->Rename(nameSetter.name);
 		NewPage(source);
+		cur->Save();
 		return true;
 	}
 	return false;

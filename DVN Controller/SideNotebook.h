@@ -14,7 +14,7 @@
 
 using namespace filesystem;
 
-//Styles:
+//Flags:
 
 #define CLOSEABLE       0b00000001
 #define DELETABLE       0b00000010
@@ -49,16 +49,17 @@ protected:
 
 	bool Duplicate(SideMenuCtrl* page);
 	bool Rename(SideMenuCtrl* page, bool renameFile = true);
-	void Close(SideMenuCtrl* page);
 	virtual bool Save(SideMenuCtrl* page);
 
+	virtual void OnStatusUpdate(wxCommandEvent& e);
 	void OnSelect(wxCommandEvent& e);
 	void OnPagesBoxTabbed(wxKeyEvent& e);
 	void OnPagesBoxFocused(wxFocusEvent& e);
 public:
 	SideNotebook(wxWindow* parent, string sideMenuTxt, string(*pageNameValidator)(const string& name));
-	
+
 	void Select(char i);
+	void Close(SideMenuCtrl* page);
 
 	void OnUnsave(wxCommandEvent& e);
 	void Unsave(bool created, SideMenuCtrl* target = nullptr);

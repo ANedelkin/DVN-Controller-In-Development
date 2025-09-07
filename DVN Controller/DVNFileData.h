@@ -6,6 +6,7 @@
 
 #include "Global.h"
 #include "Validation.h"
+#include "ModelConstants.h"
 
 using namespace filesystem;
 using namespace Status;
@@ -16,10 +17,10 @@ protected:
 	string name;
 	string extension;
 public:
-	bool ok = true;
 	string folder;
 	string oldSaveString;
 	bool upToDate;
+	bool ok;
 
 	DVNFileData(const string& name);
 

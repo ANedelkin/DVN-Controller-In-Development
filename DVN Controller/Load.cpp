@@ -1,6 +1,6 @@
 #include "Load.h"
 
-const string Load::extension = ".dvnl";
+const string Load::extension = ".jld";
 Load* Load::placeHolder = new Load();
 
 Load::Load() : Load("Unnamed load") {}
@@ -37,26 +37,31 @@ bool Load::AlteredFromOutside()
 	return folder != "" && !(exists(folder) && is_directory(folder));
 }
 
-Load* Load::ToLoad(const string& name, const string& folder, stringstream& data) {
+Load* Load::ToLoad(string& name, const string& folder, stringstream& data) {
+	name = name.substr(0, NAME_MAX_LENGTH);
 	Load* load = new Load(name, folder);
 	if (!Load::ValidateName(name).empty())
-		goto NotOkay;
+		load->Rename("Unnamed load");
 	for (char i = 0; i < SCENARIOS_COUNT; i++)
 	{
 		string scenName;
 		if (getline(data, scenName)) {
-			load->scenarios[i] = *Scenario::ToScenario(scenName, data);
-			if (!load->scenarios[i].ok)
-				goto NotOkay;
+			if (Split(scenName, '|').size() > 1)
+				i--;
+			else {
+				load->scenarios[i] = Scenario::ToScenario(scenName, data);
+				if (!load->scenarios[i].ok) {
+					load->ok = false;
+					return load;
+				}
+			}
 		}
-		else
-			goto NotOkay;
-
+		else {
+			load->ok = false;
+			return load;
+		}
 	}
 	load->oldSaveString = load->SaveString();
-	return load;
-NotOkay:
-	load->ok = false;
 	return load;
 }
 

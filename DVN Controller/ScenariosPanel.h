@@ -25,9 +25,15 @@ private:
 	void OnDuplicate(wxCommandEvent& e);
 	void OnDelete(wxCommandEvent& e);
 	void OnRename(wxCommandEvent& e);
+
+	void OnStatusUpdate(wxCommandEvent& e) override;
+
+	void ChangeSelection(SideMenuCtrl* scenCtrl) override;
+	void MarkPageValidity(SideMenuCtrl* page);
 public:
 	ScenariosPanel(wxWindow* parent, const char style = 0);
 	StatusCode NewPage(DVNFileData* data) override;
+	void MarkPagesValidity();
 
 	friend class LoadsPanelContent;
 };

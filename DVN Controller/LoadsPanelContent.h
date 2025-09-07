@@ -9,9 +9,11 @@ private:
 	ScenariosPanel* scenPanel;
 public:
 	LoadsPanelContent(wxWindow* parent);
+	void MarkCurValidity();
 	void Select(int i);
 	void SetSource(DVNFileData* source) override;
 	void Init() override;
 	void UnInit() override;
+	void MarkPagesValidity();
 };
 

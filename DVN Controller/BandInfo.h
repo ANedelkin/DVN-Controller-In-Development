@@ -14,6 +14,14 @@ struct BandInfo {
 	bool enabled = true;
 	bool working;
 
+	enum BandProperty {
+		Name,
+		Start,
+		End,
+	};
+
+	string errors[3];
+
 	BandInfo() : BandInfo(0, 0, 0) {}
 	BandInfo(int rangeIndex, int startValue, int endvalue) : BandInfo("Unnamed band", rangeIndex, startValue, endvalue, false) {}
 	BandInfo(const string& name, int rangeIndex, int startValue, int endvalue, bool working) {
@@ -25,7 +33,6 @@ struct BandInfo {
 	}
 
 	static string ValidateName(const string& name) {
-		if (name.find('|') != string::npos) return ToString(InvalidSymbols);
 		return Validation::ValidateNameBasic(name);
 	}
 };

@@ -16,6 +16,7 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, string(JAMMER_NAME) + " Cont
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
 	SetUpToolBars();
+	statusBar = StatusBar(this);
 
 	notebook = new wxNotebook(mainPanel, wxID_ANY);
 	notebook->Bind(wxEVT_SET_FOCUS, [this](wxFocusEvent& e) {
@@ -101,6 +102,7 @@ void MainFrame::SetUpToolBars()
 	SetAcceleratorTable(accelTable);
 }
 
+
 void MainFrame::LoadScenarios()
 {
 	vector<Scenario*> scenarios = Scenario::LoadScenarios();
@@ -108,10 +110,13 @@ void MainFrame::LoadScenarios()
 	if (scenarios.size() > 0) {
 		for (char i = 0; i < scenarios.size(); i++)
 		{
-			if (scenarios[i]->ok)
+			if (scenarios[i]->ok) {
 				scenariosPanel->NewPage(scenarios[i]);
+				scenarios[i]->Save();
+			}
 		}
 		scenariosPanel->Select(0);
+		scenariosPanel->MarkPagesValidity();
 	}
 	Thaw();
 }
@@ -120,19 +125,32 @@ void MainFrame::UpdateScenarios()
 {
 	vector<Scenario*> scenarios = Scenario::LoadScenarios();
 	vector<SideMenuCtrl*> pages = scenariosPanel->GetPages();
+
+	Freeze();
 	for (char i = 0; i < scenarios.size(); i++)
 	{
-		if (scenarios[i]->ok) {
-			bool f = true;
-			for (char j = 0; j < pages.size() && f; j++)
-			{
-				if (scenarios[i]->GetPath() == pages[j]->GetSource()->GetPath())
-					f = false;
+		bool f = true;
+		for (char j = 0; j < pages.size() && f; j++)
+		{
+			if (scenarios[i]->GetPath() == pages[j]->GetSource()->GetPath()) {
+				if (!scenarios[i]->ok)
+					scenariosPanel->Close(pages[j]);
+				else if (pages[j]->GetSource()->upToDate) {
+					*(Scenario*)pages[j]->GetSource() = *scenarios[i];
+					scenarios[i]->Save();
+				}
+				delete scenarios[i];
+				f = false;
 			}
-			if (f) scenariosPanel->NewPage(scenarios[i]);
-			else delete scenarios[i];
+		}
+		if (f && scenarios[i]->ok) {
+			scenariosPanel->NewPage(scenarios[i]);
+			scenarios[i]->Save();
 		}
 	}
+	scenariosPanel->MarkPagesValidity();
+	scenariosPanel->Select(0);
+	Thaw();
 }
 
 void MainFrame::NewScenario()
@@ -157,6 +175,7 @@ void MainFrame::OnTabChanged(wxNotebookEvent& e) {
 		SetToolBar(loadsToolBar);
 		scenariosToolBar->Hide();
 		loadsToolBar->Realize();
+		loadsPanel->MarkCurValidity();
 	}
 	else {
 		scenariosToolBar->Show();
@@ -187,7 +206,7 @@ void MainFrame::OnNew(wxCommandEvent& e) {
 void MainFrame::OnOpen(wxCommandEvent& e)
 {
 	if (notebook->GetSelection() != Loads) return;
-	wxFileDialog dialog(this, "Select Load/s", "", "", "Load files (*.dvnl)|*.dvnl", wxFD_MULTIPLE);
+	wxFileDialog dialog(this, "Select Load/s", "", "", "Load files (*.jld)|*.jld", wxFD_MULTIPLE);
 	wxArrayString paths;
 
 	Freeze();
@@ -197,15 +216,21 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 		{
 			ifstream stream(path.ToStdString());
 			wxFileName fn(path);
-			const string name = fn.GetName().ToStdString();
+			string name = fn.GetName().ToStdString();
 			if (stream.is_open()) {
 				stringstream data;
 				data << stream.rdbuf();
+				if (!CheckModel(data)) {
+					ShowError(this, ToString(InvalidJammer, name.c_str(), JAMMER_NAME));
+					continue;
+				}
 				Load* load = Load::ToLoad(name, fn.GetPath().ToStdString(), data);
-				if (load->ok)
+				if (load->ok) {
 					loadsPanel->NewPage(load);
+					load->Save();
+				}
 				else
-					ShowError(this, ToString(InvalidFile, name.c_str()));
+					ShowError(this, ToString(InvalidFileStructure, name.c_str()));
 			}
 			else ShowError(this, ToString(FileNonexistent, name.c_str()));
 		}
@@ -216,7 +241,7 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 void MainFrame::OnAdd(wxCommandEvent& e)
 {
 	if (notebook->GetSelection() != Scenarios) return;
-	wxFileDialog dialog(this, "Select Scenario/s", "", "", "Scenario files (*.dvns)|*.dvns", wxFD_MULTIPLE);
+	wxFileDialog dialog(this, "Select Scenario/s", "", "", "Scenario files (*.jsc)|*.jsc", wxFD_MULTIPLE);
 	wxArrayString paths;
 
 	if (dialog.ShowModal() == wxID_OK) {
@@ -229,13 +254,17 @@ void MainFrame::OnAdd(wxCommandEvent& e)
 			if (stream.is_open()) {
 				stringstream data;
 				data << stream.rdbuf();
-				Scenario* scenario = Scenario::ToScenario(name, data, true);
+				if (!CheckModel(data)) {
+					ShowError(this, ToString(InvalidJammer, name.c_str(), JAMMER_NAME));
+					continue;
+				}
+				Scenario* scenario = new Scenario(Scenario::ToScenario(name, data, true));
 				if (scenario->ok) {
 					scenariosPanel->NewPage(scenario);
 					scenariosPanel->SaveCurrent();
 				}
 				else
-					ShowError(this, ToString(InvalidFile, name.c_str()));
+					ShowError(this, ToString(InvalidFileStructure, name.c_str()));
 			}
 			else ShowError(this, ToString(FileNonexistent, name.c_str()));
 		}
@@ -277,7 +306,7 @@ void MainFrame::OnLoadFromJmr(wxCommandEvent& e)
 		{ return progressDialog.Update(progress, msg); })) {
 
 		if (brokenBands.size())
-			ShowError(this, ToString(InvalidData));
+			ShowError(this, ToString(InvalidBands));
 
 		loadsPanel->NewPage(load);
 		loadsPanel->Unsave(true);

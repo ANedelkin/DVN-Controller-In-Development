@@ -8,6 +8,10 @@ LoadsPanelContent::LoadsPanelContent(wxWindow* parent) : SideNotebookContent(par
 	SetSizerAndFit(sizer);
 }
 
+void LoadsPanelContent::MarkCurValidity() {
+	scenPanel->ChangeSelection(scenPanel->cur);
+}
+
 void LoadsPanelContent::Select(int i)
 {
 	scenPanel->Select(i);
@@ -38,4 +42,9 @@ void LoadsPanelContent::UnInit()
 	SideNotebookContent::UnInit();
 	scenPanel->pagesList->Hide();
 	scenPanel->content->UnInit();
+}
+
+void LoadsPanelContent::MarkPagesValidity()
+{
+	scenPanel->MarkPagesValidity();
 }

@@ -50,6 +50,7 @@ void LoadsPanel::ChangeSelection(SideMenuCtrl* page)
 {
 	SideNotebook::ChangeSelection(page);
 	((LoadsPanelContent*)content)->Select(0);
+	((LoadsPanelContent*)content)->MarkPagesValidity();
 }
 
 bool LoadsPanel::CheckForUnsaved()
@@ -98,7 +99,7 @@ bool LoadsPanel::Save(SideMenuCtrl* page)
 bool LoadsPanel::SaveAs(SideMenuCtrl* page)
 {
 	DVNFileData* curData = page->GetSource();
-	wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"", "", curData->GetNameWithExt(), "Load files (*.dvnl)|*.dvnl", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+	wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"", "", curData->GetNameWithExt(), "Load files (*.jld)|*.jld", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (dialog.ShowModal() == wxID_OK) {
 		string name = wxFileName(dialog.GetPath()).GetName().ToStdString();
 		string folder = dialog.GetDirectory().ToStdString();
@@ -136,6 +137,7 @@ void LoadsPanel::OnDelete(wxCommandEvent& e)
 			remove(target->GetSource()->GetPath());
 		}
 		Close(target);
+		MarkCurValidity();
 	}
 	else
 		target->Refresh();
@@ -157,12 +159,40 @@ void LoadsPanel::OnClose(wxCommandEvent& e) {
 			break;
 		}
 	}
-	else
+	else {
 		Close(target);
+		MarkCurValidity();
+	}
 }
 
 void LoadsPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	Rename(target);
 	target->Refresh();
+}
+
+void LoadsPanel::OnStatusUpdate(wxCommandEvent& e)
+{
+	SideNotebook::OnStatusUpdate(e);
+
+	if (!e.GetSkipped())
+		return;
+
+	for (const Scenario& scen : ((Load*)cur->GetSource())->GetScenarios())
+	{
+		if (scen.invalidBands > 0)
+		{
+			cur->SetForegroundColour(DARK_RED);
+			return;
+		}
+	}
+	cur->SetForegroundColour(*wxBLACK);
+}
+
+void LoadsPanel::MarkCurValidity()
+{
+	if(pages.size())
+		((LoadsPanelContent*)content)->MarkCurValidity();
+	else
+		statusBar.SetStatus("");
 }

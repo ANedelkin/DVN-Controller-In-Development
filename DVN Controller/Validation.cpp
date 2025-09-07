@@ -7,7 +7,6 @@ string Validation::ValidateNameBasic(const string& name)
     if (HasNonStdChars(name)) return ToString(InvalidSymbols);
     if (name.length() == 0) return ToString(NameWhitespace);
     if (all_of(name.begin(), name.end(), [](unsigned char c) { return isspace(c); })) return ToString(NameWhitespace);
-    if (name.length() > NAME_MAX_LENGTH) return ToString(NameTooLong, NAME_MAX_LENGTH);
     return ToString(Success);
 }
 
