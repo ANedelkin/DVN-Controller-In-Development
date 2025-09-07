@@ -110,8 +110,10 @@ void MainFrame::LoadScenarios()
 	if (scenarios.size() > 0) {
 		for (char i = 0; i < scenarios.size(); i++)
 		{
-			if (scenarios[i]->ok)
+			if (scenarios[i]->ok) {
 				scenariosPanel->NewPage(scenarios[i]);
+				scenarios[i]->Save();
+			}
 		}
 		scenariosPanel->Select(0);
 		scenariosPanel->MarkPagesValidity();
@@ -133,14 +135,18 @@ void MainFrame::UpdateScenarios()
 			if (scenarios[i]->GetPath() == pages[j]->GetSource()->GetPath()) {
 				if (!scenarios[i]->ok)
 					scenariosPanel->Close(pages[j]);
-				else if (pages[j]->GetSource()->upToDate)
+				else if (pages[j]->GetSource()->upToDate) {
 					*(Scenario*)pages[j]->GetSource() = *scenarios[i];
+					scenarios[i]->Save();
+				}
 				delete scenarios[i];
 				f = false;
 			}
 		}
-		if (f && scenarios[i]->ok) 
+		if (f && scenarios[i]->ok) {
 			scenariosPanel->NewPage(scenarios[i]);
+			scenarios[i]->Save();
+		}
 	}
 	scenariosPanel->MarkPagesValidity();
 	scenariosPanel->Select(0);
@@ -219,8 +225,10 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 					continue;
 				}
 				Load* load = Load::ToLoad(name, fn.GetPath().ToStdString(), data);
-				if (load->ok)
+				if (load->ok) {
 					loadsPanel->NewPage(load);
+					load->Save();
+				}
 				else
 					ShowError(this, ToString(InvalidFileStructure, name.c_str()));
 			}

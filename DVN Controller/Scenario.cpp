@@ -158,7 +158,7 @@ Scenario Scenario::ToScenario(const string& name, stringstream& stream, bool uni
 				if (!Validation::TryParse(values[2].substr(0, 4), &end) || end < -1)
 					end = -1;
 				
-				scenario.SetBandData(i, values[0], start, end, on);
+				scenario.SetBandData(i, values[0].substr(0, NAME_MAX_LENGTH), start, end, on);
 			}
 			else {
 				scenario.SetBandData(i, "", -1, -1, false);
