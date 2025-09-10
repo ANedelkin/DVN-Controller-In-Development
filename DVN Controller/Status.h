@@ -31,7 +31,8 @@ namespace Status {
         ErrorMessageTooLong,
         ConnectionError,
         InvalidBands,
-        InvalidJammer
+        InvalidJammer,
+        InvalidLoad
     };
     static map<StatusCode, const char*> errorMessages = {
         {EmptyFrequency, "Frequencies can't be empty!"},
@@ -53,7 +54,8 @@ namespace Status {
         {ErrorMessageTooLong, "The error message the program tried to generate was too long!"},
 		{ConnectionError, "A connection error occured!"},
         {InvalidBands, "Selected scenario contains %d invalid band/s. Invalid data is marked in red. Click on invalid data to see the error in the status bar."},
-        {InvalidJammer, "The file \"%s\" is incompatible with the \"%s\" jammer!" }
+        {InvalidJammer, "The file \"%s\" is incompatible with the \"%s\" jammer!" },
+		{InvalidLoad, "The selected load contains scenarios with errors! Fix them to be able to load it to a jammer." }
     };
 
     extern string ToString(StatusCode code, ...);
