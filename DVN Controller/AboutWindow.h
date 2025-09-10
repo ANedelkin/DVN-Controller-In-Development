@@ -1,6 +1,6 @@
 #include "ModelConstants.h"
 
-#define VERSION "1.0"
+#define VERSION "1.0.0-beta"
 
 class AboutDialog : public wxDialog {
 public:
@@ -9,7 +9,7 @@ public:
 
         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
         wxStaticText* aboutText = new wxStaticText(this, wxID_ANY,
-            format("{0} Controller\nVersion {1}\nThis is a program for creating configurations for the {0} jammer.", JAMMER_NAME, VERSION),
+            format("{0} Controller\nVersion: {1}\nThis is a program for creating configurations for the {0} jammer.", JAMMER_NAME, VERSION),
             FromDIP(wxPoint(20, 20)));
         sizer->Add(aboutText, 0, wxALL, 10);
         SetSizerAndFit(sizer);
