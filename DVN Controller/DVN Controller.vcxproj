@@ -163,6 +163,7 @@
     <ClCompile Include="ColourfulButton.cpp" />
     <ClCompile Include="DVNFileData.cpp" />
     <ClCompile Include="Events.cpp" />
+    <ClCompile Include="GetExeVersion.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="Icons.cpp" />
     <ClCompile Include="JammersManager.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="DVNFileData.h" />
     <ClInclude Include="Events.h" />
     <ClInclude Include="ftd2xx.h" />
+    <ClInclude Include="GetExeVersion.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="Icons.h" />
     <ClInclude Include="JammersManager.h" />
