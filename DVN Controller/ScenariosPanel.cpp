@@ -1,19 +1,19 @@
 #include "ScenariosPanel.h"
 #include "SideNotebookContent.h"
 
-ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style) 
-			  : SideNotebook(parent, "Scenarios", style & CONTENT ? Scenario::ValidateName : Scenario::ValidateNameUnique)
+ScenariosPanel::ScenariosPanel(wxWindow* parent, const char flags) 
+			  : SideNotebook(parent, "Scenarios", flags & CONTENT ? Scenario::ValidateName : Scenario::ValidateNameUnique)
 {
-	this->style = style;
+	this->flags = flags;
 
-	if (!(style & READ_ONLY)) {
+	if (!(flags & READ_ONLY)) {
 		contextMenu = new wxMenu();
 		wxMenuItem* rename = new wxMenuItem(contextMenu, wxID_ANY, "Rename");
 		rename->SetBitmap(wxBitmapBundle::FromSVG(penSVG, CONTEXT_MENU_ICON_SIZE));
 		contextMenu->Append(rename);
 		contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnRename, this, rename->GetId());
 
-		if (style & DELETABLE) {
+		if (flags & DELETABLE) {
 			wxMenuItem* duplicate = new wxMenuItem(contextMenu, wxID_ANY, "Duplicate");
 			duplicate->SetBitmap(wxBitmapBundle::FromSVG(copySVG, CONTEXT_MENU_ICON_SIZE));
 			contextMenu->Append(duplicate);
@@ -24,7 +24,7 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style)
 			contextMenu->Append(deleteItem);
 			contextMenu->Bind(wxEVT_MENU, &ScenariosPanel::OnDelete, this, deleteItem->GetId());
 		}
-		if (style & LOADABLE) {
+		if (flags & LOADABLE) {
 			wxMenuItem* save = new wxMenuItem(contextMenu, wxID_ANY, "Save as template");
 			save->SetBitmap(wxBitmapBundle::FromSVG(saveCMSVG, CONTEXT_MENU_ICON_SIZE));
 			contextMenu->Append(save);
@@ -37,8 +37,8 @@ ScenariosPanel::ScenariosPanel(wxWindow* parent, const char style)
 		}
 	}
 
-	SetContent(new BandsPanel(this, Scenario::placeHolder, style & READ_ONLY));
-	if (style & CONTENT) {
+	SetContent(new BandsPanel(this, Scenario::placeHolder, flags & READ_ONLY));
+	if (flags & CONTENT) {
 		SideNotebookContent* parent = dynamic_cast<SideNotebookContent*>(GetParent());
 		assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");
 		Load* source = dynamic_cast<Load*>(parent->GetSource());
@@ -65,7 +65,7 @@ void ScenariosPanel::MarkPagesValidity()
 
 void ScenariosPanel::OnRename(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
-	bool isContent = style & CONTENT;
+	bool isContent = flags & CONTENT;
 	if (Rename(target, !isContent) && isContent) {
 		SideNotebookContent* parent = dynamic_cast<SideNotebookContent*>(GetParent());
 		assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");
@@ -111,7 +111,7 @@ void ScenariosPanel::OnLoad(wxCommandEvent& e)
 		target->SetLabel(target->GetSource()->GetName());
 		target->MarkUnsaved();
 		if (cur == target) ChangeSelection(cur);
-		if (style & CONTENT) {
+		if (flags & CONTENT) {
 			SideNotebookContent* parent = dynamic_cast<SideNotebookContent*>(GetParent());
 			assert(parent != nullptr && "ScenariosPanel parent is not a SideNotebookContent or derived");
 			parent->MarkUnsaved();

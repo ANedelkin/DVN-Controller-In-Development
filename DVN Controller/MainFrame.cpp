@@ -323,6 +323,14 @@ void MainFrame::OnLoadToJmr(wxCommandEvent& e)
 {
 	if (notebook->GetSelection() != Loads) return;
 	if (!loadsPanel->GetCurrent()) return;
+
+	for (const Scenario& scen : ((Load*)loadsPanel->GetCurrent()->GetSource())->GetScenarios()) {
+		if (scen.invalidBands) {
+			ShowError(this, ToString(InvalidLoad));
+			return;
+		}
+	}
+
 	JammersWindow jammersWindow(this);
 	if (jammersWindow.ShowModal() == wxID_CANCEL) return;
 	wxProgressDialog progressDialog("Sending load", wxString::Format("Scenario: %d/%d", 0, SCENARIOS_COUNT), SCENARIOS_COUNT, this);

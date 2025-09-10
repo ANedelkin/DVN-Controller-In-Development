@@ -1,6 +1,6 @@
 #include "DVNFileData.h"
 
-DVNFileData::DVNFileData(const string& name) : name(name), upToDate(true)
+DVNFileData::DVNFileData(const string& name) : name(name), upToDate(true), ok(true)
 {
 }
 

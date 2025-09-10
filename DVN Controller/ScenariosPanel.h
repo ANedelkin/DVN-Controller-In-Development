@@ -18,7 +18,7 @@ using namespace filesystem;
 class ScenariosPanel : public SideNotebook
 {
 private:
-	char style;
+	char flags;
 
 	void OnLoad(wxCommandEvent& e);
 	void OnSave(wxCommandEvent& e);
