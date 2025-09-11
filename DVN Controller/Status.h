@@ -59,7 +59,7 @@ namespace Status {
     };
 
     extern string ToString(StatusCode code, ...);
-    extern int ShowError(wxWindow* parent, string error, int style = 0);
+    extern int ShowError(wxWindow* parent, string error, int flags = 0);
 }
 
 

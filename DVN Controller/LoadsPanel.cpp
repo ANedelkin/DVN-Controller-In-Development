@@ -102,7 +102,14 @@ bool LoadsPanel::SaveAs(SideMenuCtrl* page)
 	wxFileDialog dialog(this, "Select a folder to save \"" + curData->GetName() + "\"", "", curData->GetNameWithExt(), "Load files (*.jld)|*.jld", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (dialog.ShowModal() == wxID_OK) {
 		string name = wxFileName(dialog.GetPath()).GetName().ToStdString();
+		if (name == Load::placeHolder->GetExtension())
+			name = "";
 		string folder = dialog.GetDirectory().ToStdString();
+		string stat = Load::ValidateName(name);
+		if (!stat.empty()) {
+			ShowError(base, stat);
+			return false;
+		}
 		for (SideMenuCtrl* existing : pages) {
 			if (existing == page) continue;
 			if (existing->GetSource()->GetPath() == folder + "\\" + name + existing->GetSource()->GetExtension()) {

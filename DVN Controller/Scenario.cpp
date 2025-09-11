@@ -7,9 +7,8 @@ const string Scenario::extension = ".jsc";
 Scenario* Scenario::placeHolder = new Scenario();
 
 Scenario::Scenario() : Scenario("Unnamed scenario") {}
-Scenario::Scenario(string name) : DVNFileData(name) {
+Scenario::Scenario(string name) : DVNFileData(name, extension) {
 	DVNFileData::folder = folder;
-	DVNFileData::extension = extension;
 	int k = 0;
 	for (int i = 0; i < BAND_RANGES_COUNT; i++) {
 		BandInfo band = BandInfo(i, BAND_RANGES[i][0], BAND_RANGES[i][1]);
@@ -138,7 +137,7 @@ string Scenario::ValidateNameUnique(const string& name)
 
 Scenario Scenario::ToScenario(const string& name, stringstream& stream, bool unique)
 {
-	Scenario scenario(name.substr(0, NAME_MAX_LENGTH));
+	Scenario scenario(name);
 	string bandString;
 
 	for (int i = 0; i < GetBandsCount(); i++) {

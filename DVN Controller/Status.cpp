@@ -16,11 +16,11 @@ string Status::ToString(Status::StatusCode code, ...)
     return buffer;
 }
 
-int Status::ShowError(wxWindow* parent, string msg, int style)
+int Status::ShowError(wxWindow* parent, string msg, int flags)
 {
-    if (style & DIALOG) {
+    if (flags & DIALOG) {
         wxMessageDialog frame(parent, msg, "Error", wxOK | wxCANCEL | wxICON_ERROR);
-        frame.SetOKCancelLabels("Enter new name", "Keep old name");
+        frame.SetOKCancelLabels("Enter new name", "Cancel");
         return frame.ShowModal();
     }
 

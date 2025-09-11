@@ -217,12 +217,31 @@ void MainFrame::OnOpen(wxCommandEvent& e)
 			ifstream stream(path.ToStdString());
 			wxFileName fn(path);
 			string name = fn.GetName().ToStdString();
+			if (name == Load::placeHolder->GetExtension())
+				name = "";
 			if (stream.is_open()) {
 				stringstream data;
 				data << stream.rdbuf();
 				if (!CheckModel(data)) {
 					ShowError(this, ToString(InvalidJammer, name.c_str(), JAMMER_NAME));
 					continue;
+				}
+				else {
+					string stat = Load::ValidateName(name);
+					if (!stat.empty()) {
+						if (ShowError(this, stat, DIALOG) == wxID_OK) {
+							NameSetter nameSetter(this, "Enter load name", Load::ValidateName, name);
+							nameSetter.ShowModal();
+							if (!nameSetter.ok)
+								continue;
+							else {
+								name = nameSetter.name;
+								rename(path.ToStdString().c_str(), (fn.GetPath() + "\\" + name + fn.GetExt()).c_str());
+							}
+						}
+						else
+							continue;
+					}
 				}
 				Load* load = Load::ToLoad(name, fn.GetPath().ToStdString(), data);
 				if (load->ok) {
@@ -250,13 +269,32 @@ void MainFrame::OnAdd(wxCommandEvent& e)
 		{
 			ifstream stream(path.ToStdString());
 			wxFileName fn(path);
-			const string name = fn.GetName().ToStdString();
+			string name = fn.GetName().ToStdString();
+			if (name == Scenario::placeHolder->GetExtension())
+				name = "";
 			if (stream.is_open()) {
 				stringstream data;
 				data << stream.rdbuf();
 				if (!CheckModel(data)) {
 					ShowError(this, ToString(InvalidJammer, name.c_str(), JAMMER_NAME));
 					continue;
+				}
+				else {
+					string stat = Scenario::ValidateNameUnique(name);
+					if (!stat.empty()) {
+						if (ShowError(this, stat, DIALOG) == wxID_OK) {
+							NameSetter nameSetter(this, "Enter scenario name", Scenario::ValidateNameUnique, name);
+							nameSetter.ShowModal();
+							if (!nameSetter.ok)
+								continue;
+							else {
+								name = nameSetter.name;
+								rename(path.ToStdString().c_str(), (fn.GetPath() + "\\" + name + fn.GetExt()).c_str());
+							}
+						}
+						else
+							continue;
+					}
 				}
 				Scenario* scenario = new Scenario(Scenario::ToScenario(name, data, true));
 				if (scenario->ok) {
