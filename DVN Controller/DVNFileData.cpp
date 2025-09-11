@@ -1,7 +1,11 @@
 #include "DVNFileData.h"
 
-DVNFileData::DVNFileData(const string& name) : name(name), upToDate(true), ok(true)
+DVNFileData::DVNFileData(const string& name, const string& extension) : extension(extension), upToDate(true), ok(true)
 {
+	if (name == GetExtension())
+		Rename("");
+	else
+		Rename(name);
 }
 
 string DVNFileData::ValidateName(const string& name)

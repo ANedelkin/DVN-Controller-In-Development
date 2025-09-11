@@ -5,8 +5,7 @@ Load* Load::placeHolder = new Load();
 
 Load::Load() : Load("Unnamed load") {}
 Load::Load(const string& name) : Load(name, "") {}
-Load::Load(const string& name, const string& folder) : DVNFileData(name) {
-	DVNFileData::extension = extension;
+Load::Load(const string& name, const string& folder) : DVNFileData(name, extension) {
 	this->folder = folder;
 	for (char i = 0; i < SCENARIOS_COUNT; i++)
 	{

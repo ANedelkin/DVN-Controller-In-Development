@@ -17,7 +17,7 @@ NameSetter::NameSetter(wxWindow* parent, const wxString& title, string(*validato
 
     input = new wxTextCtrl(inputPanel, wxID_ANY, defaultValue, FromDIP(wxPoint(20, 50)), FromDIP(wxSize(200, 25)), 0, wxTextValidator(wxFILTER_ASCII));
 
-    input->SetMaxLength(NAME_MAX_LENGTH);
+    input->SetMaxLength(255);
 
     inputSizer->Add(input, 1, wxALIGN_CENTER | wxALL, FromDIP(10));
     inputPanel->SetSizerAndFit(inputSizer);

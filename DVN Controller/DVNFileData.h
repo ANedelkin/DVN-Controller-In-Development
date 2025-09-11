@@ -22,7 +22,7 @@ public:
 	bool upToDate;
 	bool ok;
 
-	DVNFileData(const string& name);
+	DVNFileData(const string& name, const string& extension);
 
 	static string ValidateName(const string& name);
 

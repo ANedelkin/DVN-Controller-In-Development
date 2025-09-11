@@ -154,6 +154,8 @@ bool SideNotebook::Rename(SideMenuCtrl* page, bool renameFile)
 	NameSetter nameSetter(base, "Enter name", pageNameValidator, page->GetSource()->GetName());
 	nameSetter.ShowModal();
 	if (nameSetter.ok && page->GetSource()->GetName() != nameSetter.name) {
+		if (exists(page->GetSource()->GetPath()))
+			ShowError(base, ToString(FileAlreadyExists, nameSetter.name.c_str()));
 		DVNFileData* source = page->GetSource();
 		string oldPath = source->GetPath();
 		source->Rename(nameSetter.name);

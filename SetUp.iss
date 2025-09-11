@@ -42,7 +42,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "x64\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "x64\Release\{#MyAppExeName}"; DestDir: "{app}"; DestName: "{#MyAppExeName}"; Flags: ignoreversion
 Source: "C:\Users\Alex\Libraries and drivers\VC_redist.x64.exe"; DestDir: "{tmp}";
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
