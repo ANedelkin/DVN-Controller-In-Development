@@ -3,7 +3,7 @@
 string Status::ToString(Status::StatusCode code, ...)
 {
     if (!code) return "";
-    char buffer[256];
+    char buffer[500];
     string msg;
 
     va_list args;

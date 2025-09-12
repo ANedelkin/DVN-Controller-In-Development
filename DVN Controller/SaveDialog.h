@@ -6,6 +6,8 @@
 
 using namespace std;
 
+#include "TrimToWidth.h"
+
 #define SAVING_MANY 0b00000010
 
 class SaveDialog : public wxDialog
@@ -20,26 +22,22 @@ public:
         ID_SKIP_ALL,
     };
 
-    SaveDialog(wxWindow* parent, const string& messageTxt, char style = 0) 
-             : wxDialog(parent, wxID_ANY, "Unsaved file")
+    SaveDialog(wxWindow* parent, const string& messageTxt, const string& nameTxt, char style = 0)
+        : wxDialog(parent, wxID_ANY, "Unsaved file")
     {
-        SetSize(FromDIP(wxSize(420, -1)));
+        SetSize(FromDIP(wxSize(400, -1)));
 
         wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-        
+
         wxPanel* content = new wxPanel(this);
         wxBoxSizer* contentSizer = new wxBoxSizer(wxVERTICAL);
 
-        wxStaticText* message = new wxStaticText(
-            content, 
-            wxID_ANY, 
-            messageTxt
-        );
-        message->SetWindowStyle(wxALIGN_CENTER);
-        message->SetFont(wxFont(15, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI"));
-        message->SetForegroundColour(wxColour(65, 103, 179));
-        message->Wrap(GetSize().GetWidth());
-        contentSizer->Add(message, 1, wxALIGN_CENTER | wxALL, FromDIP(10));
+        wxPanel* text = new wxPanel(content);
+        wxBoxSizer* textSizer = new wxBoxSizer(wxVERTICAL);
+        AddText(messageTxt, text, textSizer);
+        AddText("\"" + TrimToWidth(nameTxt, 350, wxFont(17, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI")) + "\"", text, textSizer);
+        text->SetSizerAndFit(textSizer);
+        contentSizer->Add(text, 0, wxEXPAND | wxALL, FromDIP(15));
 
         wxButton* saveButton = new wxButton(content, ID_SAVE, "Save");
         wxButton* skipButton = new wxButton(content, ID_SKIP, "Don't save");
@@ -53,49 +51,31 @@ public:
 
         mainSizer->Add(content, 1, wxEXPAND | wxALL, FromDIP(10));
 
-        saveButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSave, this);
-        skipButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSkip, this);
-        cancelButton->Bind(wxEVT_BUTTON, &SaveDialog::OnCancel, this);
-
         if (style & SAVING_MANY) {
-
             wxButton* saveAllButton = new wxButton(content, ID_SAVE_ALL, "Save all");
             wxButton* skipAllButton = new wxButton(content, ID_SKIP_ALL, "Don't save any");
-            
+
             contentSizer->Add(saveAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
             contentSizer->Add(skipAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
-            
-            saveAllButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSaveAll, this);
-            skipAllButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSkipAll, this);
         }
-        
+
         content->SetSizerAndFit(contentSizer);
         SetSizerAndFit(mainSizer);
+
+        Connect(wxEVT_BUTTON, wxCommandEventHandler(SaveDialog::OnButtonClick));
     }
 
 private:
-    void OnSave(wxCommandEvent& event)
+    void OnButtonClick(wxCommandEvent& e)
     {
-        EndModal(ID_SAVE);
+        EndModal(e.GetId());
     }
-
-    void OnSkip(wxCommandEvent& event)
-    {
-        EndModal(ID_SKIP);
-    }
-
-    void OnSaveAll(wxCommandEvent& event)
-    {
-        EndModal(ID_SAVE_ALL);
-    }
-
-    void OnSkipAll(wxCommandEvent& event)
-    {
-        EndModal(ID_SKIP_ALL);
-    }
-
-    void OnCancel(wxCommandEvent& event)
-    {
-        EndModal(ID_CANCEL);
+    void AddText(const wxString& text, wxWindow* parent, wxBoxSizer* sizer) {
+        wxStaticText* staticText = new wxStaticText(parent, wxID_ANY, text);
+        staticText->SetWindowStyle(wxALIGN_CENTER);
+        staticText->SetFont(wxFont(17, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM, false, "Segoe UI"));
+        staticText->SetForegroundColour(wxColour(65, 103, 179));
+        staticText->Wrap(GetSize().GetWidth());
+        sizer->Add(staticText, 0, wxALIGN_CENTER);
     }
 };

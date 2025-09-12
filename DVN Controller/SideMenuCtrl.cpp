@@ -81,24 +81,8 @@ void SideMenuCtrl::MarkUnsaved()
 
 void SideMenuCtrl::SetLabel(const wxString& label)
 {
-	wxString temp = label;
-	wxSize buttonSize = GetClientSize();
-	wxClientDC dc(this);
 	wxFont font = GetFont();
 	font.SetWeight(wxFONTWEIGHT_BOLD);
-	dc.SetFont(font);
 
-	int textWidth, textHeight;
-	dc.GetTextExtent(temp, &textWidth, &textHeight);
-
-	int maxWidth = GetSize().GetWidth() - FromDIP(50);
-	if (textWidth > maxWidth) {
-		do {
-			temp = temp.Left(temp.Length() - 3);
-			dc.GetTextExtent(temp, &textWidth, &textHeight);
-		} 
-		while (textWidth > maxWidth);
-		temp += "...";
-	}
-	wxButton::SetLabel(temp);
+	wxButton::SetLabel(TrimToWidth(label, GetSize().GetWidth() - FromDIP(50), font));
 }

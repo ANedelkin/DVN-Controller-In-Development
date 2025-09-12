@@ -55,24 +55,24 @@ void LoadsPanel::ChangeSelection(SideMenuCtrl* page)
 
 bool LoadsPanel::CheckForUnsaved()
 {
-	for (char i = 0; i < pages.size(); i++)
+	for (SideMenuCtrl* page : pages)
 	{
-		if (((Load*)pages[i]->GetSource())->AlteredFromOutside())
-			return RecreateSource(pages[i]);
+		if (((Load*)page->GetSource())->AlteredFromOutside())
+			if (!RecreateSource(page))
+				return false;
 	}
 	return SideNotebook::CheckForUnsaved();
 }
 
 bool LoadsPanel::RecreateSource(SideMenuCtrl* page)
 {
-	switch (SaveDialog(this, "\"" + page->GetSource()->GetName() + "\"" + " was changed from outside the program. If you don't save it somewhere else, it will be lost.").ShowModal()) {
+	switch (SaveDialog(this, "Couldn't find following file. Save it as, or it may be lost.", page->GetSource()->GetName()).ShowModal()) {
 	case SaveDialog::ID_SAVE:
 		if (!SaveAs(page)) return false;
 		page->MarkSaved();
 		return true;
 	case SaveDialog::ID_SKIP:
-		Close(page);
-		return false;
+		return true;
 	case SaveDialog::ID_CANCEL:
 		return false;
 	}
@@ -84,13 +84,10 @@ bool LoadsPanel::Save(SideMenuCtrl* page)
 	Load* curData = dynamic_cast<Load*>(page->GetSource());
 	assert(curData != nullptr && "Page's data is not load or derived.");
 	bool f = true;
-	if (curData->AlteredFromOutside())
-		return RecreateSource(page);
-	if (curData->folder == "")
+	if (curData->folder == "" || !ifstream(curData->GetPath()))
 		f = SaveAs(page);
 	if (f) {
 		SideNotebook::Save(page);
-		page->MarkSaved();
 	}
 
 	return f;
@@ -120,7 +117,7 @@ bool LoadsPanel::SaveAs(SideMenuCtrl* page)
 		curData->Rename(name);
 		page->SetLabel(name);
 		curData->folder = folder;
-		Save(page);
+		SideNotebook::Save(page);
 	}
 	else return false;
 	
@@ -153,7 +150,7 @@ void LoadsPanel::OnDelete(wxCommandEvent& e)
 void LoadsPanel::OnClose(wxCommandEvent& e) {
 	SideMenuCtrl* target = (SideMenuCtrl*)contextMenu->GetInvokingWindow();
 	if (!target->GetSource()->upToDate) {
-		switch (SaveDialog(base, "\"" + target->GetSource()->GetName() + "\"" + " is unsaved, how would you like to proceed?").ShowModal()) {
+		switch (SaveDialog(base, "Following file is unsaved, how would you like to proceed?", target->GetSource()->GetName()).ShowModal()) {
 		case SaveDialog::ID_SAVE:
 			if (Save(target))
 				Close(target);
