@@ -190,6 +190,7 @@ void SideNotebook::Close(SideMenuCtrl* page)
 bool SideNotebook::Save(SideMenuCtrl* page)
 {
 	page->GetSource()->Save();
+	page->MarkSaved();
 	return true;
 }
 
@@ -205,7 +206,8 @@ void SideNotebook::UpdateContent()
 
 void SideNotebook::SaveCurrent()
 {
-	if (cur && Save(cur)) cur->MarkSaved();
+	if (cur)
+		Save(cur);
 }
 
 SideMenuCtrl* SideNotebook::GetCurrent() {
@@ -217,7 +219,7 @@ bool SideNotebook::CheckForUnsaved()
 	for (char i = 0; i < pages.size(); i++)
 	{
 		if (!pages[i]->GetSource()->upToDate) {
-			switch (SaveDialog(this, "\"" + pages[i]->GetSource()->GetName() + "\"" + " is unsaved, how would you like to proceed?", SAVING_MANY).ShowModal()) {
+			switch (SaveDialog(this, "Following file is unsaved, how would you like to proceed?", pages[i]->GetSource()->GetName(), SAVING_MANY).ShowModal()) {
 			case SaveDialog::ID_SAVE:
 				if (!Save(pages[i])) return false;
 				break;
