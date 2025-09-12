@@ -36,8 +36,7 @@ bool Load::AlteredFromOutside()
 	return folder != "" && !(exists(folder) && is_directory(folder));
 }
 
-Load* Load::ToLoad(string& name, const string& folder, stringstream& data) {
-	name = name.substr(0, NAME_MAX_LENGTH);
+Load* Load::ToLoad(const string& name, const string& folder, stringstream& data) {
 	Load* load = new Load(name, folder);
 	if (!Load::ValidateName(name).empty())
 		load->Rename("Unnamed load");

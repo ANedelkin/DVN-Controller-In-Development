@@ -131,7 +131,8 @@ string Scenario::ValidateNameUnique(const string& name)
 	string stat = DVNFileData::ValidateName(name);
 	if (!stat.empty()) return stat;
 
-	if (ifstream(folder + "\\" + name + extension)) return ToString(ScenarioAlreadyExists, name.c_str());
+	if (ifstream(folder + "\\" + name + extension)) 
+		return ToString(ScenarioAlreadyExists, name.c_str());
 	return ToString(Success);
 }
 

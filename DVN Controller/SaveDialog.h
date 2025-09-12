@@ -53,10 +53,6 @@ public:
 
         mainSizer->Add(content, 1, wxEXPAND | wxALL, FromDIP(10));
 
-        saveButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSave, this);
-        skipButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSkip, this);
-        cancelButton->Bind(wxEVT_BUTTON, &SaveDialog::OnCancel, this);
-
         if (style & SAVING_MANY) {
 
             wxButton* saveAllButton = new wxButton(content, ID_SAVE_ALL, "Save all");
@@ -64,38 +60,17 @@ public:
             
             contentSizer->Add(saveAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
             contentSizer->Add(skipAllButton, 0, wxEXPAND | wxALL, FromDIP(5));
-            
-            saveAllButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSaveAll, this);
-            skipAllButton->Bind(wxEVT_BUTTON, &SaveDialog::OnSkipAll, this);
         }
         
         content->SetSizerAndFit(contentSizer);
         SetSizerAndFit(mainSizer);
+        Connect(wxEVT_BUTTON, wxCommandEventHandler(SaveDialog::OnButtonClick));
     }
 
 private:
-    void OnSave(wxCommandEvent& event)
+    void OnButtonClick(wxCommandEvent& e)
     {
-        EndModal(ID_SAVE);
+        EndModal(e.GetId());
     }
 
-    void OnSkip(wxCommandEvent& event)
-    {
-        EndModal(ID_SKIP);
-    }
-
-    void OnSaveAll(wxCommandEvent& event)
-    {
-        EndModal(ID_SAVE_ALL);
-    }
-
-    void OnSkipAll(wxCommandEvent& event)
-    {
-        EndModal(ID_SKIP_ALL);
-    }
-
-    void OnCancel(wxCommandEvent& event)
-    {
-        EndModal(ID_CANCEL);
-    }
 };
