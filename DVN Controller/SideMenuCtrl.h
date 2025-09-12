@@ -11,6 +11,7 @@
 #include "DVNFileData.h"
 #include "LayoutConstants.h"
 #include "Events.h"
+#include "TrimToWidth.h"
 
 class SideMenuCtrl : public wxButton {
 private:
